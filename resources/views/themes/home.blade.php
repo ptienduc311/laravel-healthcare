@@ -1,0 +1,612 @@
+@extends('layouts.app')
+
+@section('title', 'Giày đẹp, phong cách, trẻ trung')
+
+@section('content')
+<div id="main-content">
+    <div class="container">
+        <div class="swiper swiperSlider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="{{asset('assets/images/demo1.jpg')}} " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="{{asset('assets/images/demo2.png')}} " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="{{asset('assets/images/demo3.png')}} " />
+                </div>
+                {{-- <div class="swiper-slide">
+                    <img src="{{asset('assets/images/demo4.jpg')}} " />
+                </div> --}}
+            </div>
+            <div class="swiper-pagination"></div>
+
+            <div class="swiper-button-prev slick-arrow">
+                <i class="fa-solid fa-angle-left"></i>
+            </div>
+            <div class="swiper-button-next slick-arrow">
+                <i class="fa-solid fa-angle-right"></i>
+            </div>
+        </div>
+
+        <ul class="list-cates">
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-1.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Đặt lịch bác sĩ</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-2.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Đặt lịch cơ sở ý tế</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-3.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Đặt lịch gói khám</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-4.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Khám du học, XKLĐ</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-5.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Xét nghiệm tại nhà</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-6.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Chụp cộng hưởng từ</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-7.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Khám sức khỏe lái xe</div>
+                </a>
+            </li>
+            <li>
+                <a class="cate-item" href="#">
+                    <div class="cate-item-img">
+                        <img src="{{asset('assets/images/ico-cate-8.webp')}}" />
+                    </div>
+                    <div class="cate-item-text">Tắm bé, massage bà bầu</div>
+                </a>
+            </li>
+        </ul>
+
+        <div class="media-news">
+            <div class="media-title">
+                <h2>Tin tức y khoa</h2>
+            </div>
+                <div class="swiper swiperPost">
+                    <div class="swiper-wrapper list-posts">
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
+                                        gặp
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide post-item">
+                            <div class="post-thumbnail">
+                                <a href="">
+                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
+                                        alt="">
+                                </a>
+                            </div>
+                            <div class="post-detail">
+                                <div class="post-title">
+                                    <a href="">
+                                        End
+                                    </a>
+                                </div>
+                                <div class="post-description">
+                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
+                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                </div>
+                                <div class="post-action">
+                                    <a href="" class="see-detail">
+                                        <span>Xem chi tiết</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation-button swiper-button-next active">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </div>
+                    <div class="navigation-button swiper-button-prev">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            <div class="view-more-posts">
+                <a href="">Xem thêm</a>
+            </div>
+        </div>
+
+        <div class="featured-doctor">
+            <div class="media-title">
+                <h2>Bác sĩ nổi bật</h2>
+            </div>
+            <div class="swiper slideDoctor">
+                <ul class="swiper-wrapper list-featured-doctor">
+                    <li class="swiper-slide item-info">
+                        <a href="" class="link-doctor">
+                            <div class="avatar-doctor">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/11/29/103851-bs-nguyen-thanh-tuan.jpg"
+                                    alt="">
+                            </div>
+                            <div class="info-nurse">
+                                <span class="name">Tiến sĩ, Bác sĩ Nguyễn Thành Tuấn</span>
+                                <span class="specialty-doctor">Tai Mũi Họng</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="swiper-slide item-info">
+                        <a href="" class="link-doctor">
+                            <div class="avatar-doctor">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2021/01/14/160049-bs-hoai-huong.jpg"
+                                    alt="">
+                            </div>
+                            <div class="info-nurse">
+                                <span class="name">Bác sĩ chuyên khoa II Trần Thị Hoài Hương</span>
+                                <span class="specialty-doctor">Da liễu</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="swiper-slide item-info">
+                        <a href="" class="link-doctor">
+                            <div class="avatar-doctor">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/12/14/104636-bs-truong-thi-tuyet-hoa.jpg"
+                                    alt="">
+                            </div>
+                            <div class="info-nurse">
+                                <span class="name">Bác sĩ Chuyên khoa I Trương Thị Tuyết Hoa</span>
+                                <span class="specialty-doctor">Da liễu</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="swiper-slide item-info">
+                        <a href="" class="link-doctor">
+                            <div class="avatar-doctor">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/04/27/095620-151612-bsnguyen-thi-hung.jpg"
+                                    alt="">
+                            </div>
+                            <div class="info-nurse">
+                                <span class="name">Phó Giáo sư, Tiến sĩ, Bác sĩ Nguyễn Thi Hùng</span>
+                                <span class="specialty-doctor">Thần kinh</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="swiper-slide item-info">
+                        <a href="" class="link-doctor">
+                            <div class="avatar-doctor">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/06/14/103841-bs-tuan.png" alt="">
+                            </div>
+                            <div class="info-nurse">
+                                <span class="name">Bác sĩ Chuyên khoa I Nguyễn Trọng Tuân</span>
+                                <span class="specialty-doctor">Sức khỏe tâm thần</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="navigation-button swiper-button-next active">
+                    <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <div class="navigation-button swiper-button-prev">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="services">
+            <div class="media-title">
+                <h2>Các dịch vụ y tế HealthCare cung cấp</h2>
+            </div>
+            <div class="service-items">
+                <div class="service-item">
+                    <div class="service-item-info">
+                        <div class="service-item-photo">
+                            <div class="service-item-image">
+                                <img src="https://medlatec.vn/media/23252/file/kham-suc-khoe-doanh-nghiep-medlatec-68.jpg"
+                                    alt="">
+                            </div>
+                            <div class="service-item-icon">
+                                <img src="{{asset('assets/images/service1-1.png')}}" alt="" class="base">
+                                <img src="{{asset('assets/images/service1-2.png')}}" alt="" class="hover">
+                            </div>
+                        </div>
+                        <div class="service-item-details">
+                            <h3 class="service-item-title"> Khám sức khỏe cho doanh nghiệp </h3>
+                            <div class="service-item-excerpt">
+                                Tiết kiệm thời gian, chi phí, không cần xếp hạng chờ đợi, tránh lây nhiễm chéo.
+                                Theo dõi kết quả chủ động qua website, app My Medlatec, SMS
+                            </div>
+                            <div class="service-item-actions">
+                                <a href="/dich-vu/kham-suc-khoe-dinh-ky-doanh-nghiep#formKhamVaTuVan"
+                                    class="action action-book">Đặt lịch</a>
+                                <a href="/dich-vu/kham-suc-khoe-dinh-ky-doanh-nghiep"
+                                    class="action action-view">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-item-info">
+                        <div class="service-item-photo">
+                            <div class="service-item-image">
+                                <img src="https://medlatec.vn/media/23252/file/kham-suc-khoe-doanh-nghiep-medlatec-68.jpg"
+                                    alt="">
+                            </div>
+                            <div class="service-item-icon">
+                                <img src="{{asset('assets/images/service1-1.png')}}" alt="" class="base">
+                                <img src="{{asset('assets/images/service1-2.png')}}" alt="" class="hover">
+                            </div>
+                        </div>
+                        <div class="service-item-details">
+                            <h3 class="service-item-title"> Khám sức khỏe cho doanh nghiệp </h3>
+                            <div class="service-item-excerpt">
+                                Tiết kiệm thời gian, chi phí, không cần xếp hạng chờ đợi, tránh lây nhiễm chéo.
+                                Theo dõi kết quả chủ động qua website, app My Medlatec, SMS
+                            </div>
+                            <div class="service-item-actions">
+                                <a href="/dich-vu/kham-suc-khoe-dinh-ky-doanh-nghiep#formKhamVaTuVan"
+                                    class="action action-book">Đặt lịch</a>
+                                <a href="/dich-vu/kham-suc-khoe-dinh-ky-doanh-nghiep"
+                                    class="action action-view">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-item-info">
+                        <div class="service-item-photo">
+                            <div class="service-item-image">
+                                <img src="https://medlatec.vn/media/23252/file/kham-suc-khoe-doanh-nghiep-medlatec-68.jpg"
+                                    alt="">
+                            </div>
+                            <div class="service-item-icon">
+                                <img src="{{asset('assets/images/service1-1.png')}}" alt="" class="base">
+                                <img src="{{asset('assets/images/service1-2.png')}}" alt="" class="hover">
+                            </div>
+                        </div>
+                        <div class="service-item-details">
+                            <h3 class="service-item-title"> Khám sức khỏe cho doanh nghiệp </h3>
+                            <div class="service-item-excerpt">
+                                Tiết kiệm thời gian, chi phí, không cần xếp hạng chờ đợi, tránh lây nhiễm chéo.
+                                Theo dõi kết quả chủ động qua website, app My Medlatec, SMS
+                            </div>
+                            <div class="service-item-actions">
+                                <a href="/dich-vu/kham-suc-khoe-dinh-ky-doanh-nghiep#formKhamVaTuVan"
+                                    class="action action-book">Đặt lịch</a>
+                                <a href="/dich-vu/kham-suc-khoe-dinh-ky-doanh-nghiep"
+                                    class="action action-view">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="specialty">
+            <div class="media-title">
+                <h2>Các chuyên khoa y tế tại HealthCare</h2>
+            </div>
+            <div class="specialty-items swiper">
+                <div class="swiper-wrapper">
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="specialty-item swiper-slide">
+                        <a href="">
+                            <div class="specialty-item-photo">
+                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
+                                    alt="">
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class="specialty-item-name">
+                                <span>Cơ xương khớp</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="navigation-button swiper-button-next active">
+                    <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <div class="navigation-button swiper-button-prev">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

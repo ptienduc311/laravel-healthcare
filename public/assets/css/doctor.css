@@ -1,0 +1,249 @@
+.doctor-single-info .avatar{
+    position: relative;
+    width: 100%;
+    border: 1px solid #e6e6e6;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    background-image: url(../images/under.png);
+    background-position: top left;
+    background-repeat: no-repeat;
+}
+
+.avatar::before{
+    content: "";
+    clip-path: polygon(0 0, 0% 85%, 100% 0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0c9eff;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.avatar img{
+    position: relative;
+    max-width: 100%;
+    width: inherit;
+    object-fit: cover;
+    z-index: 2;
+}
+
+/* .doctor-single-detail{
+
+} */
+
+.detail-top{
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.doctor-name{
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.doctor-review{
+    display: flex;
+    align-items: center;
+}
+
+.doctor-review span{
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.doctor-review i{
+    margin-right: 5px;
+}
+
+/* -----Đặt lịch khám----- */
+.make-appointment{
+    padding: 48px 100px;
+    margin-top: 32px;
+    border: 1px solid #333;
+    border-radius: 5px;
+}
+
+.book-title{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: left;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.book-note{
+    font-size: 16px;
+    color: #534E56;
+    font-weight: 500;
+}
+
+.bookings{
+    margin-top: 32px;
+}
+
+.bookings .row [class*="col-xs"]{
+    padding-right: 12px;
+    padding-left: 12px;
+}
+
+.bookings .form-group {
+    margin-bottom: 24px;
+}
+
+.bookings .form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    display: block;
+}
+
+.bookings .form-group label sup {
+    color: #F3262D;
+}
+
+.bookings .form-control {
+    background-color: #F5F5F5;
+    border-color: #F5F5F5;
+    font-weight: 500;
+    outline: none;
+    border: none;
+}
+
+.bookings .form-control:focus{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.bookings .select-btn{
+    height: auto;
+    padding: .48rem .75rem;
+}
+
+.bookings .options-content{
+    width: 100%;
+}
+
+.filter-province{
+    position: relative;
+}
+
+.filter-province.active .select-btn i{
+    transform: rotate(-180deg);
+}
+
+.filter-province.active .options-content{
+    display: block;
+}
+
+.label-time-meet{
+    display: block;
+    border: 1px solid #534E56;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    width: auto;
+    margin: 0;
+    padding: 9px 3px;
+    position: relative;
+}
+
+.label-time-meet input.time-meet{
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    white-space: nowrap;
+    height: 10px;
+    width: 10px;
+    position: absolute;
+}
+
+.label-time-meet span{
+    color: #534E56;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.label-time-meet input.time-meet:checked + span {
+    color:#1D93E3;
+}
+
+.label-time-meet:has(input.time-meet:checked){
+    border: 1px solid #1D93E3;
+}
+
+.swiperTimeMeet .swiper-button-prev i,
+.swiperTimeMeet .swiper-button-next i{
+    font-size: 20px;
+    font-weight: normal;
+    color: #686868;
+}
+
+.swiperTimeMeet .swiper-button-prev{
+    left: 0;
+    background: linear-gradient(270deg, rgba(255, 255, 255, 0) 14.01%, #ffffff 168.3%);
+}
+
+.swiperTimeMeet .swiper-button-next{
+    right: 0;
+    width: 35px;
+    height: 100%;
+    background: linear-gradient(270deg, #ffffff 14.01%, rgba(255, 255, 255, 0) 168.3%);
+}
+
+.btn-book{
+    padding: 8px 45px;
+}
+
+/* -----Thông tin bác sĩ----- */
+.doctor-single-content{
+    margin-top: 20px;
+}
+
+.doctor-single-content .card-left,
+.doctor-single-content .card-right{
+    padding: 20px;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    margin-bottom: 24px;
+}
+
+.doctor-single-content .card-right{
+    background-color: #f2f2f2;
+}
+
+.doctor-single-content .top-title{
+    font-size: 24px;
+    font-weight: 700;
+    width: fit-content;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #505050;
+}
+
+.doctor-single-content .main-content{
+    font-size: 16px;
+}
+
+@media(max-width: 1024px){
+    .make-appointment{
+        padding: 30px 50px;
+    }
+}
+
+@media(max-width: 768px){
+    .make-appointment{
+        padding: 18px 24px;
+    }
+
+    .btn-book{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

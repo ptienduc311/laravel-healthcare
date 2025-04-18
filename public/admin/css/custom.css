@@ -1,0 +1,31 @@
+.d-flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mt-5{
+    margin-top: 5px;
+}
+
+.error{
+    font-size: 12px;
+    font-weight: 500;
+    color: red;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.edit, .delete{
+    font-size: 14px;
+    color: #000;
+    margin-right: 10px;
+}
+
+.edit:hover{
+    color: green;
+}
+
+.delete:hover{
+    color: red;
+}
