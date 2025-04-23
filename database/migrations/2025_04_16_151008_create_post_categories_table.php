@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug', 255);
             $table->tinyInteger('status');
             $table->integer('created_date_int');
+            $table->timestamps();
         });
     }
 

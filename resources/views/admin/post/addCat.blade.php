@@ -7,7 +7,7 @@
         <h2>Danh mục bài viết</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Home</a>
+                <a href="/">Trang chủ</a>
             </li>
             <li>
                 <a>Danh mục bài viết</a>
@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <form method="POST" class="form-horizontal" action="{{ route('post_category.store') }}">
+                    <form method="POST" class="form-horizontal" action="{{ route('post_category.store') }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Tên danh mục</label>

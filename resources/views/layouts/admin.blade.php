@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title')</title>
 
@@ -19,9 +20,10 @@
     <link href="{{ asset('admin/js/plugins/gritter/jquery.gritter.css') }}" rel="stylesheet">
 
     <link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/css/plugins/jasny/jasny-bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('ckeditor5/ckeditor5.css')}}" rel="stylesheet">
     <link href="{{ asset('admin/css/custom.css') }}" rel="stylesheet">
-
 </head>
 
 <body>
@@ -73,8 +75,83 @@
     <!-- Toastr -->
     <script src="{{ asset('admin/js/plugins/toastr/toastr.min.js') }}"></script>
 
+    <!-- Jasny -->
+    <script src="{{ asset('admin/js/plugins/jasny/jasny-bootstrap.min.js') }}"></script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "/ckeditor5/ckeditor5.js",
+                "ckeditor5/": "/ckeditor5/"
+            }
+        }
+    </script>
+
     <!-- Custome Js -->
     @yield('custom-js')
+
+    <script type="module">
+        import {
+            ClassicEditor, Heading, Highlight, HorizontalLine, Font, Emoji, Mention, Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline,
+            Indent, IndentBlock, CodeBlock, FindAndReplace, AutoLink, Link,
+            Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageInsert,
+            Undo , Alignment, Table, TableToolbar, List,
+            SimpleUploadAdapter
+        } from 'ckeditor5';
+
+        const editorElement = document.querySelector('#editor');
+        
+        if(editorElement) {
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                licenseKey: 'GPL',
+                plugins: [
+                    Heading, Highlight, HorizontalLine, Font, Emoji, Mention,
+                    Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline, Indent, IndentBlock,
+                    CodeBlock, FindAndReplace,
+                    Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageInsert,
+                    AutoLink, Link,
+                    Undo, Alignment, Table, TableToolbar, List,
+                    SimpleUploadAdapter
+                ],
+                toolbar: 
+                {
+                    items: [
+                        'undo', 'redo', '|', 'heading', '|',
+                        'bold', 'italic', 'underline','strikethrough', 'subscript', 'superscript', '|', 
+                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                        'highlight', 'alignment', 'emoji', '|',
+                        'link', 'insertImage', 'insertTable', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'horizontalLine', 
+                        'code', '|', 
+                        'outdent', 'indent', '|',
+                        'codeBlock', 'findAndReplace',
+                        
+                    ],
+                    shouldNotGroupWhenFull: true
+                },
+                image: {
+                    toolbar: [ 'toggleImageCaption', 'imageTextAlternative', 'insertImageViaUrl' ],
+                },
+                link: {
+                    toolbar: [ 'linkPreview', '|', 'editLink', 'linkProperties', 'unlink' ]
+                },
+                simpleUpload: {
+                    uploadUrl: '/upload-image',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(error => {
+                console.error('CKEditor initialization error:', error);
+            });
+        }
+    </script>
 
     <script>
         $(document).ready(function () {

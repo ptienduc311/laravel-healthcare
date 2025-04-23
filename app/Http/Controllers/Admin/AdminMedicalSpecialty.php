@@ -1,0 +1,284 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Image;
+use App\Models\MedicalSpecialty;
+use App\Models\PageSpecialty;
+use App\Models\ServiceSpecialty;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class AdminMedicalSpecialty extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = MedicalSpecialty::query();
+        
+        if ($request->query('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->query('keyword')) {
+            $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+
+        $medical_specialties = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+        return view('admin.medical_specialty.list', compact('medical_specialties'));
+    }
+
+    public function create()
+    {
+        return view('admin.medical_specialty.add');
+    }
+
+    public function store(Request $request)
+    {
+        $key = '';
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'string' => ':attribute phải là chuỗi',
+                'max' => ':attribute có độ dài tối đa :max ký tự',
+                'image' => 'File được chọn không phải dạng ảnh',
+                'mimes' => ':attribute phải thuộc các loại sau jpg,png,jpeg,gif,svg'
+            ],
+            [
+                'name' => "Tên chuyên khoa",
+                'image' => 'Ảnh chuyên khoa'
+            ]
+        );
+
+        if ($request->hasFile('image')) {
+            $image = $request->image;
+            $name = time() . '_' . $image->getClientOriginalName();
+            $size = $image->getSize();
+            $path = $image->storeAs('uploads', $name, 'public');
+            $key = Image::create([
+                'name' => $name,
+                'src' => $path,
+                'size' => $size,
+                'type' => 1,
+                'created_by'=> 1
+            ]);
+        }
+
+        $name = $request->input('name');
+        $slug = Str::slug($request->input('name'));
+        $status = $request->has('status') ? 1 : 2;
+        $created_by = 1;
+        $image_id = $key->id;
+        MedicalSpecialty::create([
+            'name' => $name,
+            'slug' => $slug,
+            'status' => $status,
+            'image_id' => $image_id,
+            'created_by' => $created_by,
+            'updated_by' => $created_by,
+            'created_date_int' => time()
+        ]);
+        return redirect('admin/medical-specialty')->with('status', 'Đã thêm mới thành công');
+    }
+
+    public function edit(string $id)
+    {
+        $medical_specialty = MedicalSpecialty::find($id);
+        return view('admin.medical_specialty.edit', compact('medical_specialty'));
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $medical_specialty = MedicalSpecialty::find($id);
+        $oldImage = $medical_specialty->image;
+        $key = '';
+        $image_id = $oldImage->id;
+
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'string' => ':attribute phải là chuỗi',
+                'max' => ':attribute có độ dài tối đa :max ký tự',
+                'image' => 'File được chọn không phải dạng ảnh',
+                'mimes' => ':attribute phải thuộc các loại sau jpg,png,jpeg,gif,svg'
+            ],
+            [
+                'name' => "Tên chuyên khoa",
+                'image' => 'Ảnh chuyên khoa'
+            ]
+        );
+
+        if ($request->hasFile('image')) {
+            $medical_specialty->update([
+                'image_id' => NULL,
+            ]);
+            
+            $image = $request->file('image');
+            $name = time() . '_' . $image->getClientOriginalName();
+            $size = $image->getSize();
+            $path = $image->storeAs('uploads', $name, 'public');
+            $key = Image::create([
+                'name' => $name,
+                'src' => $path,
+                'size' => $size,
+                'type' => 1,
+                'created_by'=> 1
+            ]);
+            $image_id = $key->id;
+
+            if ($oldImage && Storage::disk('public')->exists($oldImage->src)) {
+                Storage::disk('public')->delete($oldImage->src);
+                $oldImage->delete();
+            }
+        }
+
+        $name = $request->input('name');
+        $slug = Str::slug($request->input('name'));
+        $status = $request->has('status') ? 1 : 2;
+        $created_by = 1;
+        $medical_specialty->update([
+            'name' => $name,
+            'slug' => $slug,
+            'status' => $status,
+            'image_id' => $image_id,
+            'created_by' => $created_by,
+            'updated_by' => $created_by,
+            'created_date_int' => time()
+        ]);
+        return redirect('admin/medical-specialty')->with('status', 'Đã thêm mới thành công');
+    }
+
+    public function destroy(string $id)
+    {
+        $medical_specialty = MedicalSpecialty::find($id);
+        $medical_specialty->delete();
+        $oldImage = $medical_specialty->image;
+        if ($oldImage && Storage::disk('public')->exists($oldImage->src)) {
+            Storage::disk('public')->delete($oldImage->src);
+            $oldImage->delete();
+        }
+        return redirect('admin/medical-specialty')->with('status', 'Đã xóa thành công');
+    }
+
+    public function info_page(){
+        $medical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->get();
+        return view('admin.medical_specialty.info_page', compact('medical_specialties'));
+    }
+
+    public function info_page_handle(Request $request){
+        dd($request);
+        // Kiểm tra specialty_id
+        if (!$request->filled('specialty_id')) {
+            return back()->with('error', 'Bạn chưa chọn chuyên khoa.');
+        }
+        $specialtyId = $request->input('specialty_id');
+
+        // Xử lý ảnh nếu có
+        $imageId = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time() . '_' . $image->getClientOriginalName();
+            $size = $image->getSize();
+            $path = $image->storeAs('uploads', $name, 'public');
+
+            $key = Image::create([
+                'name' => $name,
+                'src' => $path,
+                'size' => $size,
+                'type' => 1,
+                'created_by'=> 1
+            ]);
+
+            $imageId = $key->id;
+        }
+
+        // Lấy hoặc tạo PageSpecialty
+        $page = PageSpecialty::where('medical_specialty_id', $specialtyId)->first();
+
+        $dataPage = [
+            'description' => $request->input('description'),
+            'content' => $request->input('content'),
+            'medical_specialty_id' => $specialtyId,
+            'created_by' => 1,
+            'created_date_int' => time()
+        ];
+        if ($imageId) {
+            $dataPage['image_id'] = $imageId;
+        }
+
+        if ($page) {
+            $page->update($dataPage);
+        } else {
+            PageSpecialty::create($dataPage);
+        }
+
+        // Xử lý ServiceSpecialty
+        // Xóa dịch vụ cũ nếu tồn tại
+        ServiceSpecialty::where('medical_specialty_id', $specialtyId)->delete();
+
+        // Tạo mới danh sách dịch vụ
+        $names = $request->input('name_service');
+        $descriptions = $request->input('description_service');
+
+        if (is_array($names) && is_array($descriptions)) {
+            foreach ($names as $index => $name) {
+                if (!empty($name) || !empty($descriptions[$index])) {
+                    ServiceSpecialty::create([
+                        'name' => $name,
+                        'description' => $descriptions[$index] ?? '',
+                        'medical_specialty_id' => $specialtyId,
+                        'created_by' => 1,
+                        'created_date_int' => time()
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->back()->with('status', 'Đã lưu thông tin chuyên khoa thành công.');
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $medical_specialties = MedicalSpecialty::when($keyword, function ($query) use ($keyword) {
+            $query->where('name', 'LIKE', "%$keyword%");
+        })->orderByDesc('created_date_int')->get();
+
+        // Trả về dạng HTML thay vì JSON để render trực tiếp
+        $html = view('admin.medical_specialty.partials.list', compact('medical_specialties'))->render();
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function select_service_handle(Request $request){
+        $service_id = $request->service_id;
+        $image = null;
+
+        $medical_specialty = MedicalSpecialty::find($service_id);
+        $page_specialty = PageSpecialty::where('medical_specialty_id', $service_id)->first();
+        if(!empty($page_specialty->image_id)){
+            $image = $page_specialty->image->src;
+        }
+        $service_specialty = ServiceSpecialty::where('medical_specialty_id', $service_id)->get();
+
+        $result = [
+            'name' => $medical_specialty->name,
+            'service_id' => $medical_specialty->id,
+            'page_specialty' => $page_specialty ? $page_specialty : null,
+            'services' => $service_specialty->isNotEmpty() ? $service_specialty : null,
+            'image' => $image,
+        ];
+
+        return response()->json(['result' => $result]);
+    }
+}

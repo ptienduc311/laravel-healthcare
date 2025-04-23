@@ -7,7 +7,7 @@
         <h2>Danh mục bài viết</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Home</a>
+                <a href="/">Trang chủ</a>
             </li>
             <li>
                 <a>Danh mục bài viết</a>
@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <form method="POST" class="form-horizontal" action="{{ route('post_category.update', ['id' => $category->id]) }}">
+                    <form method="POST" class="form-horizontal" action="{{ route('post_category.update', ['id' => $category->id]) }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Tên danh mục</label>
@@ -43,7 +43,7 @@
                             <div class="col-sm-10 mt-5">
                                 <div class="switch">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" {{$category->status == 0 ? "" : "checked"}}>
+                                        <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" {{$category->status == 1 ? "checked" : ""}}>
                                         <label class="onoffswitch-label" for="status">
                                             <span class="onoffswitch-inner"></span>
                                             <span class="onoffswitch-switch"></span>

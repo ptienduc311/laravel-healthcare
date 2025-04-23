@@ -9,24 +9,25 @@ use Illuminate\Support\Str;
 
 class AdminPostCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = PostCategory::limit(10)->offset(0)->get();
+        $query = PostCategory::query();
+        if ($request->query('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->query('keyword')) {
+            $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+        $categories = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
         return view('admin.post.listCat', compact('categories'));
     }
 
     public function create()
     {
-        // $category = PostCategory::
         return view('admin.post.addCat');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {   
         $request->validate(
@@ -43,7 +44,7 @@ class AdminPostCategoryController extends Controller
         );
 
         $name = $request->input('name');
-        $status = $request->has('status') ? 1 : 0;
+        $status = $request->has('status') ? 1 : 2;
         $slug = Str::slug($request->input('name'));
 
         PostCategory::create([
@@ -58,6 +59,7 @@ class AdminPostCategoryController extends Controller
     public function edit(string $id)
     {
         $category = PostCategory::find($id);
+        // dd($category);
         return view('admin.post.editCat', compact('category'));
     } 
 
@@ -77,7 +79,7 @@ class AdminPostCategoryController extends Controller
         );
 
         $name = $request->input('name');
-        $status = $request->has('status') ? 1 : 0;
+        $status = $request->has('status') ? 1 : 2;
         $slug = Str::slug($request->input('name'));
 
         PostCategory::find($id)->update([
@@ -92,7 +94,7 @@ class AdminPostCategoryController extends Controller
 
     public function destroy(string $id)
     {
-        $category = PostCategory::findOrFail($id)->delete();
+        PostCategory::findOrFail($id)->delete();
         return redirect('admin/post/cat')->with('status', 'Đã xóa thành công');
     }
 }

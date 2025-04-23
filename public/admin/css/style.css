@@ -1888,7 +1888,7 @@ div.dt-button-info {
   background-color: #FFFFFF;
   background-image: none;
   border: 1px solid #e5e6e7;
-  border-radius: 1px;
+  border-radius: 3px;
   color: inherit;
   display: block;
   padding: 6px 12px;
@@ -3546,6 +3546,13 @@ a:focus {
   color: #ffffff;
   background-color: #ffffff;
   height: 1px;
+  margin: 10px 0;
+}
+.hr-line-normal {
+  border-top: 1px dashed #a4a5a5;
+  color: #ffffff;
+  background-color: #ffffff;
+  height: 5px;
   margin: 10px 0;
 }
 .hr-line-solid {
