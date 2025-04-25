@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminDoctorController;
 use App\Http\Controllers\Admin\AdminMedicalSpecialty;
 use App\Http\Controllers\Admin\AdminPostCategoryController;
 use App\Http\Controllers\Admin\AdminPostController;
@@ -35,7 +36,7 @@ Route::get('tin-tuc/{slug}', [FrontedController::class, 'newsDetail']);
     Route::post('admin/post/store', [AdminPostController::class, 'store'])->name('post.store');
     Route::get('admin/post/edit/{id}', [AdminPostController::class, 'edit'])->name('post.edit');
     Route::post('admin/post/update/{id}', [AdminPostController::class, 'update'])->name('post.update');
-    Route::get('admin/post/destroy/{id}', [AdminPostController::class, 'destroy'])->name('post.destroy');  
+    Route::get('admin/post/destroy/{id}', [AdminPostController::class, 'destroy'])->name('post.destroy');
     
     //Medical specialty
     Route::get('admin/medical-specialty', [AdminMedicalSpecialty::class, 'index'])->name('medical-specialty.index');
@@ -46,11 +47,18 @@ Route::get('tin-tuc/{slug}', [FrontedController::class, 'newsDetail']);
     Route::get('admin/medical-specialty/destroy/{id}', [AdminMedicalSpecialty::class, 'destroy'])->name('medical-specialty.destroy');  
     Route::get('admin/medical-specialty/info-page', [AdminMedicalSpecialty::class, 'info_page'])->name('medical-specialty.info-page');
     Route::post('admin/medical-specialty/info-page-handle', [AdminMedicalSpecialty::class, 'info_page_handle'])->name('medical-specialty.info-page-handle');
-    
     Route::post('admin/medical-specialty/select-service-handle', [AdminMedicalSpecialty::class, 'select_service_handle'])->name('medical-specialty.select-service-handle');
     Route::post('admin/medical-specialty/search', [AdminMedicalSpecialty::class, 'search'])->name('medical-specialty.search');
 
     //Upload image
     Route::post('/upload-image', [UploadController::class, 'upload']);
+
+    //Doctor
+    Route::get('admin/doctor', [AdminDoctorController::class, 'index'])->name('doctor.index');
+    Route::get('admin/doctor/add', [AdminDoctorController::class, 'create'])->name('doctor.add');
+    Route::post('admin/doctor/store', [AdminDoctorController::class, 'store'])->name('doctor.store');
+    Route::get('admin/doctor/edit/{id}', [AdminDoctorController::class, 'edit'])->name('doctor.edit');
+    Route::post('admin/doctor/update/{id}', [AdminDoctorController::class, 'update'])->name('doctor.update');
+    Route::get('admin/doctor/destroy/{id}', [AdminDoctorController::class, 'destroy'])->name('doctor.destroy');
 
 // });

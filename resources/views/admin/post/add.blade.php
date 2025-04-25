@@ -29,7 +29,7 @@
                     <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('post.store') }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Tiêu đề bài viết</label>
+                            <label class="col-sm-2 control-label">Tiêu đề bài viết<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="title" value="{{old('title')}}">
                                 @error('title')
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Mô tả bài viết</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="description" value="{{old('description')}}">
+                                <textarea class="form-control message-input" name="description">{{old('description')}}</textarea>
                                 @error('description')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
@@ -49,9 +49,9 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Nội dung bài viết</label>
+                            <label class="col-sm-2 control-label">Nội dung bài viết<span class="claim">*</span></label>
                             <div class="col-sm-10">
-                                <textarea id="editor" name="content">{{old('content')}}</textarea>
+                                <textarea id="editor" class="form-control message-input" name="content">{{old('content')}}</textarea>
                                 @error('content')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
@@ -59,7 +59,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Danh mục bài viết</label>
+                            <label class="col-sm-2 control-label">Danh mục bài viết<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <select class="form-control m-b" name="category_id">
                                     <option value="">Chọn danh mục</option>
@@ -76,7 +76,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Ảnh bìa</label>
+                            <label class="col-sm-2 control-label">Ảnh bìa<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                     <div>
@@ -97,7 +97,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Trạng thái</label>
-                            <div class="col-sm-10 mt-5">
+                            <div class="col-sm-10 mt-2">
                                 <div class="switch">
                                     <div class="onoffswitch">
                                         <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" checked>
@@ -112,7 +112,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-primary" type="submit">Tạo danh mục</button>
+                                <button class="btn btn-primary" type="submit">Thêm bài viết</button>
                             </div>
                         </div>
                     </form>
@@ -121,27 +121,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('custom-js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fileinput = document.querySelector('.fileinput');
-
-        const preview = fileinput.querySelector('.fileinput-preview');
-
-        const updatePreviewVisibility = () => {
-            if (fileinput.classList.contains('fileinput-exists')) {
-            preview.style.display = 'block';
-            } else {
-            preview.style.display = 'none';
-            }
-        };
-
-        updatePreviewVisibility();
-
-        const observer = new MutationObserver(updatePreviewVisibility);
-        observer.observe(fileinput, { attributes: true, attributeFilter: ['class'] });
-    });
-</script>
 @endsection

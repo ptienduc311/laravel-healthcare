@@ -13,7 +13,7 @@
                 <a>Danh mục bài viết</a>
             </li>
             <li class="active">
-                <strong>Đăng ký danh mục</strong>
+                <strong>Thêm danh mục</strong>
             </li>
         </ol>
     </div>
@@ -29,7 +29,7 @@
                     <form method="POST" class="form-horizontal" action="{{ route('post_category.store') }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Tên danh mục</label>
+                            <label class="col-sm-2 control-label">Tên danh mục<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" value="{{old('name')}}">
                                 @error('name')
@@ -40,7 +40,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Trạng thái</label>
-                            <div class="col-sm-10 mt-5">
+                            <div class="col-sm-10 mt-2">
                                 <div class="switch">
                                     <div class="onoffswitch">
                                         <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" checked>
@@ -55,7 +55,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-primary" type="submit">Tạo danh mục</button>
+                                <button class="btn btn-primary" type="submit">Thêm danh mục</button>
                             </div>
                         </div>
                     </form>

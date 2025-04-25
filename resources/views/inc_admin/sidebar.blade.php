@@ -65,6 +65,20 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ request()->is('admin/doctor*') ? 'active' : '' }}">
+                <a href="{{ url('admin/doctor') }}">
+                    <i class="fa fa-th-large"></i> <span class="nav-label">Bác sĩ</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/doctor') ? 'active' : '' }}">
+                        <a href="{{ url('admin/doctor') }}">Danh sách bác sĩ</a>
+                    </li>
+                    <li class="{{ request()->is('admin/doctor/add') ? 'active' : '' }}">
+                        <a href="{{ url('admin/doctor/add') }}">Thêm bác sĩ</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

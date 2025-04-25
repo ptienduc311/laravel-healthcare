@@ -29,7 +29,7 @@
                     <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('medical-specialty.store') }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Tên chuyên khoa</label>
+                            <label class="col-sm-2 control-label">Tên chuyên khoa<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" value="{{old('name')}}">
                                 @error('name')
@@ -39,7 +39,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Ảnh chuyên khoa</label>
+                            <label class="col-sm-2 control-label">Ảnh chuyên khoa<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                     <div>
@@ -60,7 +60,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Trạng thái</label>
-                            <div class="col-sm-10 mt-5">
+                            <div class="col-sm-10 mt-2">
                                 <div class="switch">
                                     <div class="onoffswitch">
                                         <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" checked>
@@ -75,7 +75,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-primary" type="submit">Tạo chuyên khoa</button>
+                                <button class="btn btn-primary" type="submit">Thêm chuyên khoa</button>
                             </div>
                         </div>
                     </form>
@@ -84,27 +84,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('custom-js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fileinput = document.querySelector('.fileinput');
-
-        const preview = fileinput.querySelector('.fileinput-preview');
-
-        const updatePreviewVisibility = () => {
-            if (fileinput.classList.contains('fileinput-exists')) {
-            preview.style.display = 'block';
-            } else {
-            preview.style.display = 'none';
-            }
-        };
-
-        updatePreviewVisibility();
-
-        const observer = new MutationObserver(updatePreviewVisibility);
-        observer.observe(fileinput, { attributes: true, attributeFilter: ['class'] });
-    });
-</script>
 @endsection

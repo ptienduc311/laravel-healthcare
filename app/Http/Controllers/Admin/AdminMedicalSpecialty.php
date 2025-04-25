@@ -9,6 +9,7 @@ use App\Models\PageSpecialty;
 use App\Models\ServiceSpecialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AdminMedicalSpecialty extends Controller
@@ -36,7 +37,7 @@ class AdminMedicalSpecialty extends Controller
 
     public function store(Request $request)
     {
-        $key = '';
+        $image_id = null;
         $request->validate(
             [
                 'name' => 'required|string|max:255',
@@ -67,20 +68,19 @@ class AdminMedicalSpecialty extends Controller
                 'type' => 1,
                 'created_by'=> 1
             ]);
+            $image_id = $key->id;
         }
 
         $name = $request->input('name');
         $slug = Str::slug($request->input('name'));
         $status = $request->has('status') ? 1 : 2;
         $created_by = 1;
-        $image_id = $key->id;
         MedicalSpecialty::create([
             'name' => $name,
             'slug' => $slug,
             'status' => $status,
             'image_id' => $image_id,
             'created_by' => $created_by,
-            'updated_by' => $created_by,
             'created_date_int' => time()
         ]);
         return redirect('admin/medical-specialty')->with('status', 'Đã thêm mới thành công');
@@ -96,8 +96,7 @@ class AdminMedicalSpecialty extends Controller
     {
         $medical_specialty = MedicalSpecialty::find($id);
         $oldImage = $medical_specialty->image;
-        $key = '';
-        $image_id = $oldImage->id;
+        $image_id = $oldImage->id ?? null;
 
         $request->validate(
             [
@@ -140,6 +139,13 @@ class AdminMedicalSpecialty extends Controller
                 $oldImage->delete();
             }
         }
+        elseif ($request->input('remove_image') == 1 && $oldImage) {
+            if (Storage::disk('public')->exists($oldImage->src)) {
+                Storage::disk('public')->delete($oldImage->src);
+            }
+            $oldImage->delete();
+            $image_id = null;
+        }
 
         $name = $request->input('name');
         $slug = Str::slug($request->input('name'));
@@ -151,7 +157,6 @@ class AdminMedicalSpecialty extends Controller
             'status' => $status,
             'image_id' => $image_id,
             'created_by' => $created_by,
-            'updated_by' => $created_by,
             'created_date_int' => time()
         ]);
         return redirect('admin/medical-specialty')->with('status', 'Đã thêm mới thành công');
@@ -175,15 +180,15 @@ class AdminMedicalSpecialty extends Controller
     }
 
     public function info_page_handle(Request $request){
-        dd($request);
-        // Kiểm tra specialty_id
         if (!$request->filled('specialty_id')) {
             return back()->with('error', 'Bạn chưa chọn chuyên khoa.');
         }
-        $specialtyId = $request->input('specialty_id');
 
-        // Xử lý ảnh nếu có
-        $imageId = null;
+        $specialtyId = $request->input('specialty_id');
+        $page = PageSpecialty::where('medical_specialty_id', $specialtyId)->first();
+        $oldImage = $page ? $page->image : null;
+        $image_id = $oldImage->id ?? null;
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name = time() . '_' . $image->getClientOriginalName();
@@ -197,12 +202,20 @@ class AdminMedicalSpecialty extends Controller
                 'type' => 1,
                 'created_by'=> 1
             ]);
+            $image_id = $key->id;
 
-            $imageId = $key->id;
+            if ($oldImage && Storage::disk('public')->exists($oldImage->src)) {
+                Storage::disk('public')->delete($oldImage->src);
+                $oldImage->delete();
+            }
         }
-
-        // Lấy hoặc tạo PageSpecialty
-        $page = PageSpecialty::where('medical_specialty_id', $specialtyId)->first();
+        elseif ($request->input('remove_image') == 1 && $oldImage) {
+            if (Storage::disk('public')->exists($oldImage->src)) {
+                Storage::disk('public')->delete($oldImage->src);
+            }
+            $oldImage->delete();
+            $image_id = null;
+        }
 
         $dataPage = [
             'description' => $request->input('description'),
@@ -211,8 +224,8 @@ class AdminMedicalSpecialty extends Controller
             'created_by' => 1,
             'created_date_int' => time()
         ];
-        if ($imageId) {
-            $dataPage['image_id'] = $imageId;
+        if ($image_id) {
+            $dataPage['image_id'] = $image_id;
         }
 
         if ($page) {
@@ -221,20 +234,18 @@ class AdminMedicalSpecialty extends Controller
             PageSpecialty::create($dataPage);
         }
 
-        // Xử lý ServiceSpecialty
-        // Xóa dịch vụ cũ nếu tồn tại
         ServiceSpecialty::where('medical_specialty_id', $specialtyId)->delete();
 
         // Tạo mới danh sách dịch vụ
         $names = $request->input('name_service');
-        $descriptions = $request->input('description_service');
+        $descriptions = $request->input('description_service');        
 
         if (is_array($names) && is_array($descriptions)) {
             foreach ($names as $index => $name) {
                 if (!empty($name) || !empty($descriptions[$index])) {
                     ServiceSpecialty::create([
                         'name' => $name,
-                        'description' => $descriptions[$index] ?? '',
+                        'description' => $descriptions[$index],
                         'medical_specialty_id' => $specialtyId,
                         'created_by' => 1,
                         'created_date_int' => time()
@@ -243,7 +254,7 @@ class AdminMedicalSpecialty extends Controller
             }
         }
 
-        return redirect()->back()->with('status', 'Đã lưu thông tin chuyên khoa thành công.');
+        return redirect()->back()->with('status', 'Đã lưu thông tin trang chuyên khoa thành công.');
     }
 
     public function search(Request $request)

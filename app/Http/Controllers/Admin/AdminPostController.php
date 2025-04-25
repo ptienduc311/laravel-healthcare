@@ -50,11 +50,11 @@ class AdminPostController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $key = '';
+        $image_id = null;
         $request->validate(
             [
                 'title' => 'required|string|max:255',
-                'description' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
                 'content' => 'required',
                 'category_id' => 'required',
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
@@ -87,6 +87,7 @@ class AdminPostController extends Controller
                 'type' => 1,
                 'created_by'=> 1
             ]);
+            $image_id = $key->id;
         }
 
         $title = $request->input('title');
@@ -96,7 +97,6 @@ class AdminPostController extends Controller
         $status = $request->has('status') ? 1 : 2;
         $category_id = $request->input('category_id');
         $created_by = 1;
-        $image_id = $key->id;
         Post::create([
             'title' => $title,
             'slug' => $slug,
@@ -106,7 +106,7 @@ class AdminPostController extends Controller
             'category_id' => $category_id,
             'image_id' => $image_id,
             'created_by' => $created_by,
-            'updated_by' => $created_by
+            'created_date_int' => time()
         ]);
         return redirect('admin/post')->with('status', 'Đã thêm mới thành công');
     }
@@ -125,13 +125,12 @@ class AdminPostController extends Controller
     {
         $post = Post::find($id);
         $oldImage = $post->image;
-        $key = '';
-        $image_id = $oldImage->id;
+        $image_id = $oldImage->id ?? null;
 
         $request->validate(
             [
                 'title' => 'required|string|max:255',
-                'description' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
                 'content' => 'required',
                 'category_id' => 'required',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
@@ -151,16 +150,17 @@ class AdminPostController extends Controller
                 'image' => 'Ảnh bìa'
             ]
         );
-        // dd($request);
+
         if ($request->hasFile('image')) {
             $post->update([
-                'image_id' => NULL,
+                'image_id' => null,
             ]);
-            
+
             $image = $request->file('image');
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
+
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
@@ -174,6 +174,11 @@ class AdminPostController extends Controller
                 Storage::disk('public')->delete($oldImage->src);
                 $oldImage->delete();
             }
+        }
+        elseif ($request->input('remove_image') == 1 && $oldImage) {
+            return back()
+            ->withErrors(['image' => 'Bạn cần chọn ảnh bìa.'])
+            ->withInput();
         }
 
         $title = $request->input('title');
@@ -191,8 +196,7 @@ class AdminPostController extends Controller
             'status' => $status,
             'category_id' => $category_id,
             'image_id' => $image_id,
-            'created_by' => $created_by,
-            'updated_by' => $created_by
+            'created_by' => $created_by
         ]);
 
         return redirect('admin/post')->with('status', 'Đã cập nhật thành công');

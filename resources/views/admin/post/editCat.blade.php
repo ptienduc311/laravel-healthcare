@@ -29,7 +29,7 @@
                     <form method="POST" class="form-horizontal" action="{{ route('post_category.update', ['id' => $category->id]) }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Tên danh mục</label>
+                            <label class="col-sm-2 control-label">Tên danh mục<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" value="{{$category->name}}">
                                 @error('name')
@@ -40,7 +40,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Trạng thái</label>
-                            <div class="col-sm-10 mt-5">
+                            <div class="col-sm-10 mt-2">
                                 <div class="switch">
                                     <div class="onoffswitch">
                                         <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" {{$category->status == 1 ? "checked" : ""}}>

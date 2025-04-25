@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('doctor_works', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 120);
-            $table->string('src', 120);
-            $table->integer('size');
-            $table->tinyInteger('type');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('time_work', 255)->nullable();
+            $table->text('content_work');
+            $table->foreignId('doctor_id')->nullable()->constrained('doctors')->nullOnDelete();
             $table->integer('created_date_int');
             $table->timestamps();
         });
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('doctor_works');
     }
 };

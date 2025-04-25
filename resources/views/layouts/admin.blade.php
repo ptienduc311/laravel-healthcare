@@ -23,6 +23,7 @@
     <link href="{{ asset('admin/css/plugins/jasny/jasny-bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('ckeditor5/ckeditor5.css')}}" rel="stylesheet">
+    <link href="{{ asset('admin/css/bootstrap-define.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/custom.css') }}" rel="stylesheet">
 </head>
 
@@ -86,8 +87,9 @@
             }
         }
     </script>
-
+    
     <!-- Custome Js -->
+    <script src="{{ asset('admin/js/custom.js') }}"></script>
     @yield('custom-js')
 
     <script type="module">
