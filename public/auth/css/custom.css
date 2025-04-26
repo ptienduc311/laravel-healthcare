@@ -6,6 +6,17 @@
     margin-bottom: 0;
 }
 
+.toggle-password{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.toggle-password > img{
+    width: 100%;
+    height: auto;
+}
+
 /* Toastr custom style */
 #toast-container > .toast {
     background-image: none !important;

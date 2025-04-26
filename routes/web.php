@@ -36,7 +36,7 @@ Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name(
 Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
 
 
-// Route::middleware(['auth', 'checkAdminRole'])->group(function () {
+Route::middleware(['auth', 'checkRole'])->group(function () {
     #ADMIN
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     
@@ -80,4 +80,4 @@ Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->n
     Route::post('admin/doctor/update/{id}', [AdminDoctorController::class, 'update'])->name('doctor.update');
     Route::get('admin/doctor/destroy/{id}', [AdminDoctorController::class, 'destroy'])->name('doctor.destroy');
 
-// });
+});

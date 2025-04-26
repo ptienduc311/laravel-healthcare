@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AdminPostCategoryController extends Controller
@@ -25,6 +26,7 @@ class AdminPostCategoryController extends Controller
 
     public function create()
     {
+        // dd(Auth::user());
         return view('admin.post.addCat');
     }
     

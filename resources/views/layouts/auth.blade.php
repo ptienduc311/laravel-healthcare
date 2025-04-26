@@ -48,7 +48,12 @@
     <script src="{{ asset('auth/js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ asset('auth/js/plugins/toastr.min.js') }}"></script>
 
-    {{-- <script src="{{ asset('auth/js/app.min.js') }}"></script> --}}
+    <script>
+        const eyeShow = "{{ asset('auth/eye-show.svg') }}";
+        const eyeHide = "{{ asset('auth/eye-hide.svg') }}";
+    </script>
+    
+    <script src="{{ asset('auth/js/app.js') }}"></script>
 
     @yield('custom-js')
 </body>

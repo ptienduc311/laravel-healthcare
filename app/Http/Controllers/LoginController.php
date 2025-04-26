@@ -61,13 +61,12 @@ class LoginController extends Controller
                 Auth::logout();
                 return redirect()->back()->with('error', 'Vui lòng kiểm tra email để xác nhận');
             }
-
-            // if ($user->roles->contains('name', 'Member')) {
-            //     return redirect()->route('home');
-            // } else {
-            //     return redirect()->intended('dashboard');
-            // }
-            dd("oke");
+            
+            if ($user->roles->contains('name', 'user')) {
+                return redirect()->route('home');
+            } else {
+                return redirect()->intended('admin/dashboard');
+            }
         } else {
             return redirect()->back()->withErrors(['password' => 'Mật khẩu không đúng.'])->withInput();
         }
