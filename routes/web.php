@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AdminMedicalSpecialty;
 use App\Http\Controllers\Admin\AdminPostCategoryController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\FrontedController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +16,25 @@ Route::get('doi-ngu-chuyen-gia', [FrontedController::class, 'listDoctor']);
 Route::get('doi-ngu-chuyen-gia/{slug}', [FrontedController::class, 'doctor']);
 Route::get('dat-lich-kham', [FrontedController::class, 'book']);
 Route::get('tin-tong-hop', [FrontedController::class, 'newsSummary']);
-Route::get('{slug}', [FrontedController::class, 'newsList']);
+// Route::get('{slug}', [FrontedController::class, 'newsList']);
 Route::get('tin-tuc/{slug}', [FrontedController::class, 'newsDetail']);
+
+//Login
+Route::get('login', [LoginController::class, 'login'])->name('login');
+Route::post('login/handle', [LoginController::class, 'handle'])->name('login.handle');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+//Register
+Route::get('register', [RegisterController::class, 'register'])->name('register');
+Route::post('register/handle', [RegisterController::class, 'handle'])->name('register.handle');
+Route::get('register/active/{confirm_token}', [RegisterController::class, 'active'])->name('register.active');
+
+//Reset Password
+Route::get('reset', [LoginController::class, 'reset'])->name('reset.pass');
+Route::post('send-link-reset', [LoginController::class, 'sendLinkResetEmail'])->name('reset.send_code');
+Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name('new.pass');
+Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
+
 
 // Route::middleware(['auth', 'checkAdminRole'])->group(function () {
     #ADMIN

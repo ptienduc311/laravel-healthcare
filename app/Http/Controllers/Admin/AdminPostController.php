@@ -108,7 +108,7 @@ class AdminPostController extends Controller
             'created_by' => $created_by,
             'created_date_int' => time()
         ]);
-        return redirect('admin/post')->with('status', 'Đã thêm mới thành công');
+        return redirect('admin/post')->with('success', 'Đã thêm mới thành công');
     }
 
     public function edit(string $id)
@@ -199,7 +199,7 @@ class AdminPostController extends Controller
             'created_by' => $created_by
         ]);
 
-        return redirect('admin/post')->with('status', 'Đã cập nhật thành công');
+        return redirect('admin/post')->with('success', 'Đã cập nhật thành công');
     }
 
     public function destroy(string $id)
@@ -211,6 +211,6 @@ class AdminPostController extends Controller
             Storage::disk('public')->delete($oldImage->src);
             $oldImage->delete();
         }
-        return redirect('admin/post')->with('status', 'Đã xóa thành công');
+        return redirect('admin/post')->with('success', 'Đã xóa thành công');
     }
 }

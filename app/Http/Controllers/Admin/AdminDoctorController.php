@@ -204,7 +204,7 @@ class AdminDoctorController extends Controller
             }
         }
 
-        return redirect('admin/doctor')->with('status', 'Đã thêm mới thành công');
+        return redirect('admin/doctor')->with('success', 'Đã thêm mới thành công');
     }
 
     public function edit(string $id)
@@ -367,7 +367,7 @@ class AdminDoctorController extends Controller
             }
         }
 
-        return redirect('admin/doctor')->with('status', 'Cập nhật thành công');
+        return redirect('admin/doctor')->with('success', 'Cập nhật thành công');
     }
 
     public function destroy(string $id)
@@ -382,6 +382,6 @@ class AdminDoctorController extends Controller
             Storage::disk('public')->delete($oldImage->src);
             $oldImage->delete();
         }
-        return redirect('admin/doctor')->with('status', 'Đã xóa thành công');
+        return redirect('admin/doctor')->with('success', 'Đã xóa thành công');
     }
 }

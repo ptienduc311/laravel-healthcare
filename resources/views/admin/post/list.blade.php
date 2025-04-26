@@ -99,7 +99,7 @@
 @endsection
 
 @section('custom-js')
-    @if (session('status'))
+    @if (session('success'))
         <script>
             toastr.options = {
                 "closeButton": false,
@@ -118,7 +118,7 @@
                 "hideMethod": "fadeOut"
             }
 
-            toastr.success("{{session('status')}}")
+            toastr.success("{{session('success')}}")
         </script>
     @endif
 @endsection

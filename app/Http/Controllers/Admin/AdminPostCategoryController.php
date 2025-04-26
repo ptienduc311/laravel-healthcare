@@ -53,7 +53,7 @@ class AdminPostCategoryController extends Controller
             'status' => $status,
             'created_date_int' => time()
         ]);
-        return redirect('admin/post/cat')->with('status', 'Đã thêm mới thành công');
+        return redirect('admin/post/cat')->with('success', 'Đã thêm mới thành công');
     }
 
     public function edit(string $id)
@@ -89,12 +89,12 @@ class AdminPostCategoryController extends Controller
             'created_date_int' => time()
         ]);
 
-        return redirect('admin/post/cat')->with('status', 'Đã cập nhật thành công');
+        return redirect('admin/post/cat')->with('success', 'Đã cập nhật thành công');
     }
 
     public function destroy(string $id)
     {
         PostCategory::findOrFail($id)->delete();
-        return redirect('admin/post/cat')->with('status', 'Đã xóa thành công');
+        return redirect('admin/post/cat')->with('success', 'Đã xóa thành công');
     }
 }

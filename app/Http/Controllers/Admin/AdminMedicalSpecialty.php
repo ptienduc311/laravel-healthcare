@@ -9,7 +9,6 @@ use App\Models\PageSpecialty;
 use App\Models\ServiceSpecialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AdminMedicalSpecialty extends Controller
@@ -83,7 +82,7 @@ class AdminMedicalSpecialty extends Controller
             'created_by' => $created_by,
             'created_date_int' => time()
         ]);
-        return redirect('admin/medical-specialty')->with('status', 'Đã thêm mới thành công');
+        return redirect('admin/medical-specialty')->with('success', 'Đã thêm mới thành công');
     }
 
     public function edit(string $id)
@@ -159,7 +158,7 @@ class AdminMedicalSpecialty extends Controller
             'created_by' => $created_by,
             'created_date_int' => time()
         ]);
-        return redirect('admin/medical-specialty')->with('status', 'Đã thêm mới thành công');
+        return redirect('admin/medical-specialty')->with('success', 'Đã thêm mới thành công');
     }
 
     public function destroy(string $id)
@@ -171,7 +170,7 @@ class AdminMedicalSpecialty extends Controller
             Storage::disk('public')->delete($oldImage->src);
             $oldImage->delete();
         }
-        return redirect('admin/medical-specialty')->with('status', 'Đã xóa thành công');
+        return redirect('admin/medical-specialty')->with('success', 'Đã xóa thành công');
     }
 
     public function info_page(){
@@ -254,7 +253,7 @@ class AdminMedicalSpecialty extends Controller
             }
         }
 
-        return redirect()->back()->with('status', 'Đã lưu thông tin trang chuyên khoa thành công.');
+        return redirect()->back()->with('success', 'Đã lưu thông tin trang chuyên khoa thành công.');
     }
 
     public function search(Request $request)
