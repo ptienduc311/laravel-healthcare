@@ -207,7 +207,12 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        $("#specialty-list").html(response.html);
+                        if(response?.html){
+                            $("#specialty-list").html(response.html);
+                        }
+                        else{
+                            $("#specialty-list").html('<p class="error">Không tìm thấy chuyên khoa</p>');
+                        }
                     }
                 });
             });

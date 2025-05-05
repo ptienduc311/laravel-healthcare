@@ -72,13 +72,17 @@
                         @foreach($posts as $key => $item)
                             <tr>
                                 <td>{{$key + 1}}</td>
-                                <td>{{$item->title}}</td>
+                                <td class="title-col">{{$item->title}}</td>
                                 <td>
                                     <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}" class="thumb">
                                 </td>
-                                <td>{{$item->category->name}}</td>
+                                <td>
+                                    <span class="{{ $item->category?->status == 1 ? 'active-cat' : 'inactive-cat' }}">{{$item->category?->name}}</span>
+                                </td>
                                 <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                <td>{{$item->user?->name}}</td>
+                                <td>
+                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                </td>
                                 <td>
                                     <a href="{{ route('post.edit', $item->id) }}" title="Sửa" class="edit">
                                         <i class="fa fa-pencil"></i>

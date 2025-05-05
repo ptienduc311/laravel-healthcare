@@ -3,7 +3,8 @@
         <div class="header-content">
             <div class="header-logo">
                 <a href="/" title="Health Care">
-                    <img src="https://medlatec.vn/media/115/content/logo-pc.png" alt="Health Care">
+                    <img src="{{asset('logo.png')}}" alt="Health Care">
+                    {{-- <img src="https://medlatec.vn/media/115/content/logo-pc.png" alt="Health Care"> --}}
                 </a>
             </div>
             <div class="header-search">
@@ -102,8 +103,20 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="has-submenu">
                     <a href="#">Tin tức</a>
+                    <i class="fa-solid fa-angle-down submenu-toggle"></i>
+                    <ul class="sub-menu">
+                        <strong class="menu-title">Tin tức</strong>
+                        <li>
+                            <a href="/tin-tuc-tong-hop">Tin tức tổng hợp</a>
+                        </li>
+                        @foreach ($menu_post_categories as $item)
+                            <li>
+                                <a href="">{{ $item->name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </li>
             </ul>
             <div class="header-nav-bottom">

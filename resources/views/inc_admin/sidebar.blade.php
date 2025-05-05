@@ -6,14 +6,13 @@
                         <img alt="image" class="img-circle" src="{{asset('admin/img/profile_small.jpg')}}" />
                     </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David
-                                    Williams</strong>
-                            </span> <span class="text-muted text-xs block">Art Director <b
+                        <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ Auth::user()->name }}</strong>
+                            </span> <span class="text-muted text-xs block">{{ Auth::user()->roles?->pluck('name')->join(', ') }} <b
                                     class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="/admin/profile">Hồ sơ</a></li>
                         <li class="divider"></li>
-                        <li><a href="login.html">Logout</a></li>
+                        <li><a href="javscript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">
@@ -36,7 +35,7 @@
             </li>
             <li class="{{ request()->is('admin/post*') && !request()->is('admin/post/cat*') ? 'active' : '' }}">
                 <a href="{{ url('admin/post') }}">
-                    <i class="fa fa-th-large"></i> <span class="nav-label">Bài viết</span>
+                    <i class="fa fa-newspaper-o"></i> <span class="nav-label">Bài viết</span>
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -50,7 +49,7 @@
             </li>
             <li class="{{ request()->is('admin/medical-specialty*') ? 'active' : '' }}">
                 <a href="{{ url('admin/medical-specialty') }}">
-                    <i class="fa fa-th-large"></i> <span class="nav-label">Chuyên khoa</span>
+                    <i class="fa fa-stethoscope"></i> <span class="nav-label">Chuyên khoa</span>
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -65,9 +64,9 @@
                     </li>
                 </ul>
             </li>
-            <li class="{{ request()->is('admin/doctor*') ? 'active' : '' }}">
+            <li class="{{ (request()->is('admin/doctor*') || request()->is('admin/appointment*')) ? 'active' : '' }}">
                 <a href="{{ url('admin/doctor') }}">
-                    <i class="fa fa-th-large"></i> <span class="nav-label">Bác sĩ</span>
+                    <i class="fa fa-user-md"></i> <span class="nav-label">Bác sĩ</span>
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -76,6 +75,20 @@
                     </li>
                     <li class="{{ request()->is('admin/doctor/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor/add') }}">Thêm bác sĩ</a>
+                    </li>
+                    <li class="{{ request()->is('admin/appointment') ? 'active' : '' }}">
+                        <a href="{{ url('admin/appointment') }}">Lịch khám</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="{{ request()->is('admin/site') ? 'active' : '' }}">
+                <a href="{{ url('admin/site') }}">
+                    <i class="fa fa-sitemap"></i> <span class="nav-label">Site</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/site') ? 'active' : '' }}">
+                        <a href="{{ url('admin/site') }}">Thiết lập site</a>
                     </li>
                 </ul>
             </li>

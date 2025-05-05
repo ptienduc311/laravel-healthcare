@@ -28,10 +28,9 @@
                         <div class="container mx-auto flex flex-col flex-auto items-center justify-center min-w-0 h-full">
                             <div class="card min-w-[320px] md:min-w-[450px] card-shadow" role="presentation">
                                 <div class="card-body md:p-10">
-                                    <div class="text-center">
-                                        <div class="logo">
-                                            <img class="mx-auto" src="img/logo/logo-light-streamline.png"
-                                                alt="Elstar logo">
+                                    <div class="text-center logo">
+                                        <div class="logo-img">
+                                            <img class="mx-auto avatar-img" src="{{ asset('logo-big.png') }}" alt="HealthCare logo">
                                         </div>
                                     </div>
                                     @yield('content')

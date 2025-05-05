@@ -36,7 +36,7 @@
                 </div>
                 <div class="flex justify-between mb-6">
                     <label class="checkbox-label mb-0">
-                        <input class="checkbox" type="checkbox" name="remember" value="true" checked>
+                        <input class="checkbox" type="checkbox" name="remember" value="true">
                         <span class="ltr:ml-2 rtl:mr-2">Ghi nhớ đăng nhập</span>
                     </label>
                     <a class="text-primary-600 hover:underline" href="{{ route('reset.pass') }}">Quên mật khẩu?</a>

@@ -9931,6 +9931,7 @@ hr{
   }
   .md\:p-10{
     padding: 2.5rem;
+    padding-top: 10px;
   }
   .md\:px-8{
     padding-left: 2rem;

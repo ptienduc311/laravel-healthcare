@@ -21,581 +21,78 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-8">
-                <div class="featured-news cat-news">
-                    <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
-                    </div>
-                    <div class="block-content">
-                        <div class="blog-lag">
-                            <div class="post-item">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-excerpt">
-                                            Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                        </div>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                @foreach($post_categories as $category)
+                    <div class="{{ $loop->first ? 'featured-news ' : '' }}cat-news">
+                        <div class="block-title">
+                            <h2>{{ $category->name }}</h2>
+                            @if (!$category->posts->isEmpty())
+                                <a href="{{ $category->slug }}" class="action">Xem thêm</a>
+                            @endif
                         </div>
-                        <div class="blog-small">
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
+                
+                        <div class="block-content">
+                            @if ($category->posts->isEmpty())
+                                <p class="error">Chưa có bài viết nào</p>
+                            @else
+                                @php $first = true; @endphp
+                
+                                @foreach($category->posts as $post)
+                                    @if ($first)
+                                        <div class="blog-lag">
+                                            <div class="post-item">
+                                                <div class="post-item-info">
+                                                    <div class="post-item-photo">
+                                                        <a href="/tin-tuc/{{ $post->slug }}-{{ $post->id }}" class="post-image-container">
+                                                            <img src="{{ Storage::url($post->image?->src) }}" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div class="post-item-details">
+                                                        <h3 class="post-item-title">
+                                                            <a href="/tin-tuc/{{ $post->slug }}-{{ $post->id }}">{{ $post->title }}</a>
+                                                        </h3>
+                                                        <div class="post-item-excerpt">
+                                                            {{ $post->description }}
+                                                        </div>
+                                                        <div class="post-item-date">
+                                                            <i class="fa-regular fa-clock"></i>
+                                                            {{ date('d/m/Y', $post->created_date_int) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
+                
+                                        <div class="blog-small">
+                                        @php $first = false; @endphp
+                                    @else
+                                        <div class="post-item post-item-list">
+                                            <div class="post-item-info">
+                                                <div class="post-item-photo">
+                                                    <a href="/tin-tuc/{{ $post->slug }}-{{ $post->id }}" class="post-image-container">
+                                                        <img src="{{ Storage::url($post->image?->src) }}" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="post-item-details">
+                                                    <h3 class="post-item-title">
+                                                        <a href="/tin-tuc/{{ $post->slug }}-{{ $post->id }}">{{ $post->title }}</a>
+                                                    </h3>
+                                                    <div class="post-item-date">
+                                                        <i class="fa-regular fa-clock"></i>
+                                                        {{ date('d/m/Y', $post->created_date_int) }}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
+                                    @endif
+                
+                                    @if ($loop->last)
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    @endif
+                                @endforeach
+                            @endif
                         </div>
                     </div>
-                </div>
-                <div class="cat-news">
-                    <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
-                    </div>
-                    <div class="block-content">
-                        <div class="blog-lag">
-                            <div class="post-item">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-excerpt">
-                                            Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                        </div>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="blog-small">
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cat-news">
-                    <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
-                    </div>
-                    <div class="block-content">
-                        <div class="blog-lag">
-                            <div class="post-item">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-excerpt">
-                                            Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                        </div>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="blog-small">
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cat-news">
-                    <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
-                    </div>
-                    <div class="block-content">
-                        <div class="blog-lag">
-                            <div class="post-item">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-excerpt">
-                                            Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                        </div>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="blog-small">
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cat-news">
-                    <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
-                    </div>
-                    <div class="block-content">
-                        <div class="blog-lag">
-                            <div class="post-item">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-excerpt">
-                                            Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                        </div>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="blog-small">
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-item post-item-list">
-                                <div class="post-item-info">
-                                    <div class="post-item-photo">
-                                        <a href="" class="post-image-container">
-                                            <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-item-details">
-                                        <h3 class="post-item-title">
-                                            <a href="">
-                                                Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                            </a>
-                                        </h3>
-                                        <div class="post-item-date">
-                                            <i class="fa-regular fa-clock"></i>
-                                            Thứ Bảy, 29 tháng 3, 2025
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
             <div class="col-xs-12 col-md-4">
                 <div class="sidebar-hotline" style="background-image: url(https://medlatec.vn/med/images/contactsidebar.png);">
@@ -623,102 +120,34 @@
                 </div>
                 <div class="latest-news">
                     <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
+                        <h2>Tin tức mới nhất</h2>
                     </div>
                     <div class="block-content">
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
+                        @foreach ($list_lastest_news as $item)
+                            <div class="post-item post-item-list">
+                                <div class="post-item-info">
+                                    <div class="post-item-photo">
+                                        <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}" class="post-image-container">
+                                            <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}">
                                         </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
+                                    </div>
+                                    <div class="post-item-details">
+                                        <div class="post-item-date">
+                                            <i class="fa-regular fa-clock"></i>
+                                            {{ date('d/m/Y', $item->created_date_int) }}
+                                        </div>
+                                        <h3 class="post-item-title">
+                                            <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}">
+                                                {{ $item->title }}
+                                            </a>
+                                        </h3>
+                                        <div class="post-item-excerpt">
+                                            {{ $item->description }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

@@ -39,6 +39,36 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Ảnh icon chuyên khoa<span class="claim">*</span></label>
+                            <div class="col-sm-10">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div>
+                                      <span class="btn btn-default btn-file">
+                                        <span class="fileinput-new">Chọn ảnh</span>
+                                        <span class="fileinput-exists">Thay đổi</span>
+                                        <input type="file" name="image_icon" accept="image/*">
+                                      </span>
+                                      <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Xóa</a>
+                                    </div>
+                                    <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; border:none;"></div>
+                                    @error('image_icon')
+                                        <p class="error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Mô tả chuyên khoa</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control message-input" name="description">{{old('description')}}</textarea>
+                                @error('description')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">Ảnh chuyên khoa<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">

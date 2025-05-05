@@ -62,17 +62,17 @@
                             <label class="col-sm-2 control-label">Danh mục bài viết<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <select class="form-control m-b" name="category_id">
-                                    <option>Chọn danh mục</option>
+                                    <option value="">Chọn danh mục</option>
                                     @foreach ($categories as $item)
                                         <option value="{{ $item->id }}" {{ $post->category_id == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                            </div>                            
-                            @error('category_id')
-                                <p class="error">{{ $message }}</p>
-                            @enderror
+                                @error('category_id')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -97,6 +97,7 @@
                                     @enderror
                                 </div>
                             </div>
+                            <input type="hidden" name="remove_image" value="0" class="remove-image-flag">
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -114,7 +115,6 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
-                        <input type="hidden" name="remove_image" value="0" id="remove-image-flag">
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">Sửa bài viết</button>

@@ -67,7 +67,9 @@
                                     <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}" class="thumb">
                                 </td>
                                 <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                <td>{{$item->user?->name}}</td>
+                                <td>
+                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                </td>
                                 <td>
                                     <a href="{{ route('medical-specialty.edit', $item->id) }}" title="Sửa" class="edit">
                                         <i class="fa fa-pencil"></i>

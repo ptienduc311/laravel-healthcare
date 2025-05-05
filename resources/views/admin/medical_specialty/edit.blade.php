@@ -39,6 +39,41 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Ảnh icon chuyên khoa<span class="claim">*</span></label>
+                            <div class="col-sm-10">
+                                <div class="fileinput {{ !empty($medical_specialty->image_icon_id) ? "fileinput-exists" : "fileinput-new"}}" data-provides="fileinput">
+                                    <div>
+                                      <span class="btn btn-default btn-file">
+                                        <span class="fileinput-new">Chọn ảnh</span>
+                                        <span class="fileinput-exists">Thay đổi</span>
+                                        <input type="file" name="image_icon" accept="image/*" value="{{$medical_specialty->image_icon_id}}">
+                                      </span>
+                                      <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Xóa</a>
+                                    </div>
+                                    <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="{{ !empty($medical_specialty->image_icon_id) ? 'display: block;' : ''}}width: 200px; height: 200px; border:none; line-height: 200px;">
+                                        @if($medical_specialty->image_icon_id)
+                                            <img src="{{ Storage::url($medical_specialty->image_icon->src) }}" alt="Ảnh bìa" style="max-width: 100%; max-height: 100%;">
+                                        @endif
+                                    </div>
+                                    @error('image_icon')
+                                        <p class="error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                            <input type="hidden" name="remove_image_icon" class="remove-image-flag" value="0">
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Mô tả chuyên khoa</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control message-input" name="description">{{$medical_specialty->description}}</textarea>
+                                @error('description')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">Ảnh chuyên khoa<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <div class="fileinput {{ !empty($medical_specialty->image_id) ? "fileinput-exists" : "fileinput-new"}}" data-provides="fileinput">
@@ -60,6 +95,7 @@
                                     @enderror
                                 </div>
                             </div>
+                            <input type="hidden" name="remove_image" class="remove-image-flag" value="0">
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -77,7 +113,6 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
-                        <input type="hidden" name="remove_image" value="0" id="remove-image-flag">
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">Sửa chuyên khoa</button>

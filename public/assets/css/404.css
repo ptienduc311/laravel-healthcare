@@ -1,0 +1,29 @@
+.page-404{
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.page-404-content{
+    width: 100%;
+}
+
+.img-fluid{
+    max-width: 100%;
+    height: auto;
+}
+
+.page-404-content a{
+    font-size: 20px;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 25px;
+    background-color: #4046ff;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.page-404-content a:hover{
+    background-color: #292ff1;
+}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,6 @@ class AdminPostCategoryController extends Controller
 
     public function create()
     {
-        // dd(Auth::user());
         return view('admin.post.addCat');
     }
     
@@ -46,13 +46,15 @@ class AdminPostCategoryController extends Controller
         );
 
         $name = $request->input('name');
-        $status = $request->has('status') ? 1 : 2;
         $slug = Str::slug($request->input('name'));
+        $status = $request->has('status') ? 1 : 2;
+        $created_by = Auth::id();
 
         PostCategory::create([
             'name' => $name,
             'slug' => $slug,
             'status' => $status,
+            'created_by'=>$created_by,
             'created_date_int' => time()
         ]);
         return redirect('admin/post/cat')->with('success', 'Đã thêm mới thành công');
@@ -60,8 +62,7 @@ class AdminPostCategoryController extends Controller
 
     public function edit(string $id)
     {
-        $category = PostCategory::find($id);
-        // dd($category);
+        $category = PostCategory::findOrFail($id);
         return view('admin.post.editCat', compact('category'));
     } 
 
@@ -80,15 +81,20 @@ class AdminPostCategoryController extends Controller
             ]
         );
 
+        $postCategory = PostCategory::findOrFail($id);
+        $postCategoryKhac = PostCategory::where('slug', 'khac')->first();
+        if($postCategoryKhac && $postCategory->id == $postCategoryKhac->id){
+            return redirect('admin/post/cat')->with('error', 'Không được cập nhật danh mục này');
+        }
+
         $name = $request->input('name');
         $status = $request->has('status') ? 1 : 2;
         $slug = Str::slug($request->input('name'));
 
-        PostCategory::find($id)->update([
+        $postCategory->update([
             'name' => $name,
             'slug' => $slug,
-            'status' => $status,
-            'created_date_int' => time()
+            'status' => $status
         ]);
 
         return redirect('admin/post/cat')->with('success', 'Đã cập nhật thành công');
@@ -96,7 +102,20 @@ class AdminPostCategoryController extends Controller
 
     public function destroy(string $id)
     {
-        PostCategory::findOrFail($id)->delete();
+        $postCategory = PostCategory::findOrFail($id);
+        $postCategoryKhac = PostCategory::where('slug', 'khac')->first();
+        if($postCategoryKhac && $postCategory->id == $postCategoryKhac->id){
+            return redirect('admin/post/cat')->with('error', 'Không được xóa danh mục này');
+        }
+        
+        if( Post::where('category_id', $id)->exists()){
+            if(!$postCategoryKhac){
+                return redirect('admin/post/cat')->with('error', 'Vui lòng tạo danh mục "Khác" để lưu trữ bài viết trước khi xóa danh mục này');
+            }
+            Post::where("category_id", $id)->update(['category_id' => $postCategoryKhac->id]);
+        }
+
+        $postCategory->delete();
         return redirect('admin/post/cat')->with('success', 'Đã xóa thành công');
     }
 }

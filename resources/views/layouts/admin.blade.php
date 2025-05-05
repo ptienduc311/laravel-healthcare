@@ -13,16 +13,15 @@
     <link href="{{ asset('admin/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
 
-    <!-- Toastr style -->
     <link href="{{ asset('admin/css/plugins/toastr/toastr.min.css') }}" rel="stylesheet">
-
-    <!-- Gritter -->
     <link href="{{ asset('admin/js/plugins/gritter/jquery.gritter.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/jasny/jasny-bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('ckeditor5/ckeditor5.css')}}" rel="stylesheet">
+
+    <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/bootstrap-define.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/custom.css') }}" rel="stylesheet">
 </head>
@@ -60,6 +59,9 @@
 
     <!-- jQuery UI -->
     <script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+
+    <!-- Data picker -->
+    <script src="{{ asset('admin/js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
 
     <!-- GITTER -->
     <script src="{{ asset('admin/js/plugins/gritter/jquery.gritter.min.js') }}"></script>
@@ -167,7 +169,6 @@
             //     toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
 
             // }, 1300);
-
 
             var data1 = [
                 [0, 4], [1, 8], [2, 5], [3, 10], [4, 4], [5, 16], [6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]

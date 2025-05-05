@@ -83,7 +83,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Ảnh đại diện</th>
-                                <th>Tên bác sĩ</th>
+                                <th colspan="2">Tên bác sĩ</th>
                                 <th>Chuyên khoa</th>
                                 <th>Học hàm</th>
                                 <th>Học vị</th>
@@ -96,16 +96,28 @@
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td>
-                                    @if (!empty($item->image_id))
-                                        <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{ $item->title }}" class="thumb">
+                                    <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}" class="thumb">
+                                </td>
+                                <td>
+                                    <span>{{ $item->name }}</span>
+                                    <a href="{{ route('appointment.add', $item->id) }}" class="link-appointment">Thêm lịch khám</a>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold {{ $item->gender == 1 ? "text-danger" : "text-info" }}">Bác sĩ {{ $item->gender == 1 ? "nam" : "nữ" }}</span>
+                                </td>
+                                <td>
+                                    @if ($item->specialty_id)
+                                        <span class="{{ $item->specialty?->status == 1 ? 'active-cat' : 'inactive-cat' }}">{{ $item->specialty?->name }}</span>
+                                    @else
+                                        <span class="no-cat">Chưa chọn chuyên khoan</span>
                                     @endif
-                                </td>                                
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->specialty?->name }}</td>
+                                </td>
                                 <td>{{ $academicTitles[$item->academic_title] ?? '' }}</td>
                                 <td>{{ $degrees[$item->degree] ?? '' }}</td>
                                 <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                <td>{{$item->user?->name}}</td>
+                                <td>
+                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                </td>
                                 <td>
                                     <a href="{{ route('doctor.edit', $item->id) }}" title="Sửa" class="edit">
                                         <i class="fa fa-pencil"></i>

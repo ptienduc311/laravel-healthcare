@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tin y khoa') {{-- Truyền biến --}}
+@section('title', $post_category->name) {{-- Truyền biến --}}
 @section('custom-css')
 <link rel="stylesheet" href="{{ asset('assets/css/news.css ') }}">
 @stop
@@ -14,7 +14,7 @@
                 <li>
                     <a href="/">Trang chủ</a>
                 </li>
-                <li class="active">Tin tổng hợp</li>
+                <li class="active">{{ $post_category->name }}</li>
             </ol>
         </div>
     </div>
@@ -22,224 +22,63 @@
         <div class="row">
             <div class="col-xs-12 col-md-8">
                 <div class="blog-category  ">
-                    <h2>Tin tức y khoa</h2>
+                    <h2>{{ $post_category->name }}</h2>
                     <div class="filter"></div>
                 </div>
                 <div class="hot-news">
+                    @php $firstPost = $posts->first(); @endphp
                     <div class="post-item post-item-list">
                         <div class="post-item-info">
                             <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
+                                <a href="/tin-tuc/{{ $firstPost->slug }}-{{ $firstPost->id }}" class="post-image-container">
+                                    <img src="{{ Storage::url($firstPost->image?->src) }}" alt="Ảnh {{ $firstPost->title }}">
                                 </a>
                             </div>
                             <div class="post-item-details">
-                                <div class="post-item-cat">Tin tức hot nhất</div>
                                 <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
+                                    <a href="/tin-tuc/{{ $firstPost->slug }}-{{ $firstPost->id }}">
+                                        {{ $firstPost->title }}
                                     </a>
                                 </h3>
                                 <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
+                                    {{ $firstPost->description }}
                                 </div>
                                 <div class="post-item-date">
                                     <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
+                                    {{ date('d/m/Y', $firstPost->created_date_int) }}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="post-list">
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
+                    @foreach ($posts->skip(1) as $item)
+                        <div class="post-item post-item-list">
+                            <div class="post-item-info">
+                                <div class="post-item-photo">
+                                    <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}" class="post-image-container">
+                                        <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{ $item->title }}">
                                     </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
+                                </div>
+                                <div class="post-item-details">
+                                    <div class="post-item-date">
+                                        <i class="fa-regular fa-clock"></i>
+                                        {{ date('d/m/Y', $item->created_date_int) }}
+                                    </div>
+                                    <h3 class="post-item-title">
+                                        <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}">
+                                            {{ $item->title }}
+                                        </a>
+                                    </h3>
+                                    <div class="post-item-excerpt">
+                                        {{ $item->description }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                    </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                    </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                    </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                    </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                    </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-item post-item-list">
-                        <div class="post-item-info">
-                            <div class="post-item-photo">
-                                <a href="" class="post-image-container">
-                                    <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                </a>
-                            </div>
-                            <div class="post-item-details">
-                                <div class="post-item-date">
-                                    <i class="fa-regular fa-clock"></i>
-                                    Thứ Bảy, 29 tháng 3, 2025
-                                </div>
-                                <h3 class="post-item-title">
-                                    <a href="">
-                                        Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                    </a>
-                                </h3>
-                                <div class="post-item-excerpt">
-                                    Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này mắc các triệu chứng rất điển hình của bệnh nhiễm khuẩn huyết.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-                <div class="navigation">
-                    <ul class="pagination">
-                        <li class="disabled page-item">
-                            <a href="#" class="previous page-link" title="Trước">
-                                <i class="fa-solid fa-angle-left"></i>
-                            </a>
-                        </li>
-                        <li class="page-item active">
-                            <a href="" class="page-link" title="Trang 1">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="" class="page-link" title="Trang 2">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="" class="page-link" title="Trang 3">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="" class="page-link" title="Trang 4">4</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="" class="next page-link" title="Trước">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                {{ $posts->links('vendor.pagination.custom-pagination') }}
             </div>
             <div class="col-xs-12 col-md-4">
                 <div class="sidebar-hotline" style="background-image: url(https://medlatec.vn/med/images/contactsidebar.png);">
@@ -267,102 +106,34 @@
                 </div>
                 <div class="latest-news">
                     <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
+                        <h2>Tin mới nhấy</h2>
                     </div>
                     <div class="block-content">
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
+                        @foreach ($list_lastest_news as $item)
+                            <div class="post-item post-item-list">
+                                <div class="post-item-info">
+                                    <div class="post-item-photo">
+                                        <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}" class="post-image-container">
+                                            <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}">
                                         </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
+                                    </div>
+                                    <div class="post-item-details">
+                                        <div class="post-item-date">
+                                            <i class="fa-regular fa-clock"></i>
+                                            {{ date('d/m/Y', $item->created_date_int) }}
+                                        </div>
+                                        <h3 class="post-item-title">
+                                            <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}">
+                                                {{ $item->title }}
+                                            </a>
+                                        </h3>
+                                        <div class="post-item-excerpt">
+                                            {{ $item->description }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

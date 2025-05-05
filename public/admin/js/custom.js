@@ -1,22 +1,28 @@
 $(document).ready(function () {
-    //Thay đổi chọn/xóa ảnh
-    const fileinput = $(".fileinput");
-    const preview = fileinput.find(".fileinput-preview");
+    $(".fileinput").each(function () {
+        // Chọn ảnh
+        const fileinput = $(this);
+        const preview = fileinput.find(".fileinput-preview");
 
-    const updatePreviewVisibility = () => {
-        if (fileinput.hasClass("fileinput-exists")) {
-            preview.show();
-        } else {
-            preview.hide();
-        }
-    };
-    updatePreviewVisibility();
-    new MutationObserver(updatePreviewVisibility)
-        .observe(fileinput[0], { attributes: true, attributeFilter: ["class"] });
+        const updatePreviewVisibility = () => {
+            if (fileinput.hasClass("fileinput-exists")) {
+                preview.show();
+            } else {
+                preview.hide();
+            }
+        };
+        updatePreviewVisibility();
+        new MutationObserver(updatePreviewVisibility).observe(this, {
+            attributes: true,
+            attributeFilter: ["class"]
+        });
 
-    //Kiểm tra xóa ảnh
-    $('[data-dismiss="fileinput"]').on('click', function () {
-        $('#remove-image-flag').val(1);
+        // Xóa ảnh
+        fileinput.find('[data-dismiss="fileinput"]').on('click', function () {
+            const parent = fileinput.closest('.form-group');
+            const inputFlag = parent.find('input.remove-image-flag');
+            inputFlag.val(1);
+        });
     });
 
     // Nhân bản item

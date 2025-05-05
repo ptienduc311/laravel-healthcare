@@ -60,6 +60,24 @@
                                     @enderror
                                 </div>
                             </div>
+                            <input type="hidden" name="remove_image" value="0" class="remove-image-flag">
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="gender">Giới tính<span class="claim">*</span></label>
+                            <div class="col-sm-10 mt-2">
+                                <div class="radio radio-danger radio-inline pt-0">
+                                    <input type="radio" id="male" value="1" name="gender"{{ $doctor->gender == 1 ? " checked" : "" }}>
+                                    <label for="male">Nam</label>
+                                </div>
+                                <div class="radio radio-info radio-inline pt-0">
+                                    <input type="radio" id="female" value="2" name="gender"{{ $doctor->gender == 2 ? " checked" : "" }}>
+                                    <label for="female">Nữ</label>
+                                </div>
+                                @error('gender')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -142,6 +160,7 @@
                             </div>
                         </div>
 
+                        <div class="hr-line-dashed"></div>
                         <!-- Training process -->
                         <div class="form-group dynamic-group" data-container="#training-process" data-item=".training-process-item">
                             <label class="col-sm-2 control-label">Quá trình đào tạo</label>
@@ -321,6 +340,16 @@
 
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label" for="is_outstanding">Bác sĩ nổi bật</label>
+                            <div class="col-sm-10 mt-2">
+                                <div class="checkbox checkbox-danger pt-0">
+                                    <input id="is_outstanding" type="checkbox" name="is_outstanding" {{ $doctor->is_outstanding == 1 ? 'checked' : '' }}>
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">Trạng thái</label>
                             <div class="col-sm-10 mt-2">
                                 <div class="switch">
@@ -335,7 +364,6 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
-                        <input type="hidden" name="remove_image" value="0" id="remove-image-flag">
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">Cập nhật</button>

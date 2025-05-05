@@ -54,6 +54,7 @@
                                 <th>#</th>
                                 <th>Tên danh mục</th>
                                 <th>Trạng thái</th>
+                                <th>Người tạo</th>
                                 <th>Hoạt động</th>
                             </tr>
                         </thead>
@@ -63,12 +64,17 @@
                                 <td>{{$item->name}}</td>
                                 <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
                                 <td>
-                                    <a href="{{ route('post_category.edit', $item->id) }}" title="Sửa" class="edit">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a href="{{ route('post_category.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
+                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                </td>
+                                <td>
+                                    @if ($item->slug != 'khac')
+                                        <a href="{{ route('post_category.edit', $item->id) }}" title="Sửa" class="edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="{{ route('post_category.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -102,6 +108,28 @@
             }
 
             toastr.success("{{session('success')}}")
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": true,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
         </script>
     @endif
 @endsection

@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,8 +15,7 @@ class AdminPostController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = PostCategory::where('status', 1)
-            ->orderBy('created_date_int', 'desc')
+        $categories = PostCategory::orderBy('created_date_int', 'desc')
             ->limit(15)
             ->get();
 
@@ -44,12 +44,13 @@ class AdminPostController extends Controller
         ->orderBy('created_date_int', 'desc')
         ->limit(15)
         ->get();
+
         return view('admin.post.add', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
         $image_id = null;
         $request->validate(
             [
@@ -80,12 +81,13 @@ class AdminPostController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
+            $created_by = Auth::id();
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> 1
+                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
         }
@@ -96,7 +98,7 @@ class AdminPostController extends Controller
         $content = $request->input('content');
         $status = $request->has('status') ? 1 : 2;
         $category_id = $request->input('category_id');
-        $created_by = 1;
+        $created_by = Auth::id();
         Post::create([
             'title' => $title,
             'slug' => $slug,
@@ -160,13 +162,14 @@ class AdminPostController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
+            $created_by = Auth::id();
 
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> 1
+                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
 
@@ -187,7 +190,6 @@ class AdminPostController extends Controller
         $content = $request->input('content');
         $status = $request->has('status') ? 1 : 2;
         $category_id = $request->input('category_id');
-        $created_by = 1;
         $post->update([
             'title' => $title,
             'slug' => $slug,
@@ -195,8 +197,7 @@ class AdminPostController extends Controller
             'content' => $content,
             'status' => $status,
             'category_id' => $category_id,
-            'image_id' => $image_id,
-            'created_by' => $created_by
+            'image_id' => $image_id
         ]);
 
         return redirect('admin/post')->with('success', 'Đã cập nhật thành công');

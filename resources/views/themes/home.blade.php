@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Giày đẹp, phong cách, trẻ trung')
+@section('title', 'HealthCare')
 
 @section('content')
 <div id="main-content">
@@ -103,224 +103,45 @@
             </div>
                 <div class="swiper swiperPost">
                     <div class="swiper-wrapper list-posts">
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
+                        @foreach ($posts as $item)
+                            <div class="swiper-slide post-item">
+                                <div class="post-thumbnail">
+                                    <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}">
+                                        <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}">
                                     </a>
                                 </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
+                                <div class="post-detail">
+                                    <div class="post-title">
+                                        <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}">
+                                            {{ $item->title }}
+                                        </a>
+                                    </div>
+                                    <div class="post-description">
+                                        {{ $item->description }}
+                                    </div>
+                                    <div class="post-action">
+                                        <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}" class="see-detail">
+                                            <span>Xem chi tiết</span>
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        Xuất hiện khối vùng đầu bé trai 11 tuổi đi khám phát hiện bệnh ác tính hiếm
-                                        gặp
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide post-item">
-                            <div class="post-thumbnail">
-                                <a href="">
-                                    <img src="https://medlatec.vn/media/45579/content/mo-benh-hoc.jpg?size=512"
-                                        alt="">
-                                </a>
-                            </div>
-                            <div class="post-detail">
-                                <div class="post-title">
-                                    <a href="">
-                                        End
-                                    </a>
-                                </div>
-                                <div class="post-description">
-                                    Thấy bé trai xuất hiện khối ở vùng đầu, gia đình cho con đi khám thì phát hiện
-                                    mắc bệnh ác tính thể hiếm gặp và chuyển điều
-                                </div>
-                                <div class="post-action">
-                                    <a href="" class="see-detail">
-                                        <span>Xem chi tiết</span>
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                            </div>               
+                        @endforeach
                     </div>
-                    <div class="navigation-button swiper-button-next active">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </div>
-                    <div class="navigation-button swiper-button-prev">
-                        <i class="fa-solid fa-angle-left"></i>
-                    </div>
-                    <div class="swiper-pagination"></div>
+                    @if (count($posts) > 4)
+                        <div class="navigation-button swiper-button-next active">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </div>
+                        <div class="navigation-button swiper-button-prev">
+                            <i class="fa-solid fa-angle-left"></i>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    @endif
+
                 </div>
             <div class="view-more-posts">
-                <a href="">Xem thêm</a>
+                <a href="/tin-tuc-tong-hop">Xem thêm</a>
             </div>
         </div>
 
@@ -330,72 +151,28 @@
             </div>
             <div class="swiper slideDoctor">
                 <ul class="swiper-wrapper list-featured-doctor">
-                    <li class="swiper-slide item-info">
-                        <a href="" class="link-doctor">
-                            <div class="avatar-doctor">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/11/29/103851-bs-nguyen-thanh-tuan.jpg"
-                                    alt="">
-                            </div>
-                            <div class="info-nurse">
-                                <span class="name">Tiến sĩ, Bác sĩ Nguyễn Thành Tuấn</span>
-                                <span class="specialty-doctor">Tai Mũi Họng</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="swiper-slide item-info">
-                        <a href="" class="link-doctor">
-                            <div class="avatar-doctor">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2021/01/14/160049-bs-hoai-huong.jpg"
-                                    alt="">
-                            </div>
-                            <div class="info-nurse">
-                                <span class="name">Bác sĩ chuyên khoa II Trần Thị Hoài Hương</span>
-                                <span class="specialty-doctor">Da liễu</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="swiper-slide item-info">
-                        <a href="" class="link-doctor">
-                            <div class="avatar-doctor">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/12/14/104636-bs-truong-thi-tuyet-hoa.jpg"
-                                    alt="">
-                            </div>
-                            <div class="info-nurse">
-                                <span class="name">Bác sĩ Chuyên khoa I Trương Thị Tuyết Hoa</span>
-                                <span class="specialty-doctor">Da liễu</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="swiper-slide item-info">
-                        <a href="" class="link-doctor">
-                            <div class="avatar-doctor">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/04/27/095620-151612-bsnguyen-thi-hung.jpg"
-                                    alt="">
-                            </div>
-                            <div class="info-nurse">
-                                <span class="name">Phó Giáo sư, Tiến sĩ, Bác sĩ Nguyễn Thi Hùng</span>
-                                <span class="specialty-doctor">Thần kinh</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="swiper-slide item-info">
-                        <a href="" class="link-doctor">
-                            <div class="avatar-doctor">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2022/06/14/103841-bs-tuan.png" alt="">
-                            </div>
-                            <div class="info-nurse">
-                                <span class="name">Bác sĩ Chuyên khoa I Nguyễn Trọng Tuân</span>
-                                <span class="specialty-doctor">Sức khỏe tâm thần</span>
-                            </div>
-                        </a>
-                    </li>
+                    @foreach ($doctors as $item)
+                        <li class="swiper-slide item-info">
+                            <a href="" class="link-doctor">
+                                <div class="avatar-doctor">
+                                    <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}">
+                                </div>
+                                <div class="info-nurse">
+                                    <span class="name">{{$item->name}}</span>
+                                    <span class="specialty-doctor">{{$item->specialty?->name}}</span>
+                                </div>
+                            </a>
+                        </li>     
+                    @endforeach
                 </ul>
-                <div class="navigation-button swiper-button-next active">
-                    <i class="fa-solid fa-angle-right"></i>
-                </div>
-                <div class="navigation-button swiper-button-prev">
-                    <i class="fa-solid fa-angle-left"></i>
-                </div>
+                @if (count($doctors) > 4)
+                    <div class="navigation-button swiper-button-next active">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </div>
+                    <div class="navigation-button swiper-button-prev">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -492,119 +269,22 @@
             <div class="media-title">
                 <h2>Các chuyên khoa y tế tại HealthCare</h2>
             </div>
-            <div class="specialty-items swiper">
-                <div class="swiper-wrapper">
-                    <div class="specialty-item swiper-slide">
+            <div class="specialty-items">
+                @foreach ($specialties as $item)
+                    <div class="specialty-item">
                         <a href="">
                             <div class="specialty-item-photo">
                                 <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
                                     alt="">
                             </div>
                         </a>
-                        <a href="">
-                            <div class="specialty-item-name">
+                        <div class="specialty-item-name">
+                            <a href="">
                                 <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="specialty-item swiper-slide">
-                        <a href="">
-                            <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
-                            </div>
-                        </a>
-                        <a href="">
-                            <div class="specialty-item-name">
-                                <span>Cơ xương khớp</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="navigation-button swiper-button-next active">
-                    <i class="fa-solid fa-angle-right"></i>
-                </div>
-                <div class="navigation-button swiper-button-prev">
-                    <i class="fa-solid fa-angle-left"></i>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

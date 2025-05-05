@@ -10,6 +10,7 @@ use App\Models\DoctorWork;
 use App\Models\Image;
 use App\Models\MedicalSpecialty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -40,7 +41,7 @@ class AdminDoctorController extends Controller
             $query->where('name', 'like', '%' . $request->keyword . '%');
         }
 
-        $mdical_specialties = MedicalSpecialty::where('status', 1)->orderByDesc('created_date_int')->get();
+        $mdical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->limit(15)->get();
 
         //Học hàm, học vị
         $academicTitles = [
@@ -76,6 +77,7 @@ class AdminDoctorController extends Controller
                 'name' => 'required|string|max:255',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'experience' => 'nullable|string|max:255',
+                'gender' => 'required'
             ],
             [
                 'required' => ':attribute không được để trống',
@@ -87,7 +89,8 @@ class AdminDoctorController extends Controller
             [
                 'name' => "Tên bác sĩ",
                 'experience' => "Số năm kinh nghiệm",
-                'avatar' => 'Ảnh đại diện'
+                'avatar' => "Ảnh đại diện",
+                'gender' => "Giới tính"
             ]
         );
 
@@ -124,18 +127,20 @@ class AdminDoctorController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
+            $created_by = Auth::id();
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> 1
+                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
         }
 
         $name = $request->input('name');
         $slug_name = Str::slug($request->input('name'));
+        $gender = $request->input('gender');
         $specialty_id = $request->input('specialty_id');
         $experience = $request->input('experience');
         $academic_title = $request->input('academic_title');
@@ -143,11 +148,13 @@ class AdminDoctorController extends Controller
         $regency = $request->input('regency');
         $introduce = $request->input('introduce');
         $status = $request->has('status') ? 1 : 2;
-        $created_by = 1;
+        $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
+        $created_by = Auth::id();
         $doctor = Doctor::create([
             'name' => $name,
             'slug_name' => $slug_name,
             'image_id' => $image_id,
+            'gender' => $gender,
             'specialty_id' => $specialty_id ?? null,
             'experience' => $experience,
             'academic_title' => $academic_title,
@@ -155,6 +162,7 @@ class AdminDoctorController extends Controller
             'regency' => $regency,
             'introduce' => $introduce,
             'status' => $status,
+            'is_outstanding' => $is_outstanding,
             'created_by' => $created_by,
             'created_date_int' => time()
         ]);
@@ -225,6 +233,7 @@ class AdminDoctorController extends Controller
                 'name' => 'required|string|max:255',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'experience' => 'nullable|string|max:255',
+                'gender' => 'required'
             ],
             [
                 'required' => ':attribute không được để trống',
@@ -236,7 +245,8 @@ class AdminDoctorController extends Controller
             [
                 'name' => "Tên bác sĩ",
                 'experience' => "Số năm kinh nghiệm",
-                'avatar' => 'Ảnh đại diện'
+                'avatar' => 'Ảnh đại diện',
+                'gender' => "Giới tính"
             ]
         );
 
@@ -272,12 +282,13 @@ class AdminDoctorController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
+            $created_by = Auth::id();
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> 1
+                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
 
@@ -296,6 +307,7 @@ class AdminDoctorController extends Controller
 
         $name = $request->input('name');
         $slug_name = Str::slug($request->input('name'));
+        $gender = $request->input('gender');
         $specialty_id = $request->input('specialty_id');
         $experience = $request->input('experience');
         $academic_title = $request->input('academic_title');
@@ -303,11 +315,13 @@ class AdminDoctorController extends Controller
         $regency = $request->input('regency');
         $introduce = $request->input('introduce');
         $status = $request->has('status') ? 1 : 2;
-        $created_by = 1;
+        $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
+        $created_by = Auth::id();
         $doctor->update([
             'name' => $name,
             'slug_name' => $slug_name,
             'image_id' => $image_id,
+            'gender' => $gender,
             'specialty_id' => $specialty_id ?? null,
             'experience' => $experience,
             'academic_title' => $academic_title,
@@ -315,6 +329,7 @@ class AdminDoctorController extends Controller
             'regency' => $regency,
             'introduce' => $introduce,
             'status' => $status,
+            'is_outstanding' => $is_outstanding,
             'created_by' => $created_by,
         ]);
 
