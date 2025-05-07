@@ -51,3 +51,12 @@ img{
     min-width: 32px;
     height: 32px;
 }
+
+.not-found{
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0;
+    color: #ff0303;
+    min-height: 100px;
+}

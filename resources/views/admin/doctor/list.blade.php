@@ -92,6 +92,7 @@
                                 <th>Hoạt động</th>
                             </tr>
                         </thead>
+                        <tbody>
                         @foreach($doctors as $key => $item)
                             <tr>
                                 <td>{{$key + 1}}</td>
@@ -128,6 +129,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        </tbody>
                     </table>
                     {{$doctors->links()}}
                 </div>

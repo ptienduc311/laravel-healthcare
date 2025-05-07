@@ -153,7 +153,7 @@
                 <ul class="swiper-wrapper list-featured-doctor">
                     @foreach ($doctors as $item)
                         <li class="swiper-slide item-info">
-                            <a href="" class="link-doctor">
+                            <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}" class="link-doctor">
                                 <div class="avatar-doctor">
                                     <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}">
                                 </div>

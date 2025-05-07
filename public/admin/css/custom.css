@@ -158,3 +158,33 @@ label.timeline-item:has(input:checked) {
     background-color: #fb2f2f;
     color: #fff;
 }
+
+.card{
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+
+.card-header{
+    border-bottom: 1px solid #bdbdbd;
+    padding: 10px 20px;
+    background-color: #dfdfdf;
+}
+
+.card-body{
+    padding: 10px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-body label.checkbox-inline{
+    margin: 0 !important;
+}
+
+.form-control[readonly]{
+    cursor: not-allowed;
+    background-color: #eee;
+    opacity: 1;
+}

@@ -62,4 +62,14 @@ class User extends Authenticatable
     {
         return $this->roles->contains('name', $role);
     }
+
+    public function hasPermission($permission)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->permissions->where('slug', $permission)->count() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

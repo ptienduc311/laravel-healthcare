@@ -19,6 +19,8 @@
                     Admin+
                 </div>
             </li>
+
+            @canany(['post_category.index', 'post_category.add', 'post_category.edit', 'post_category.destroy'])
             <li class="{{ request()->is('admin/post/cat*') ? 'active' : '' }}">
                 <a href="{{ url('admin/post/cat') }}">
                     <i class="fa fa-th-large"></i> <span class="nav-label">Danh mục bài viết</span>
@@ -33,6 +35,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanany
+
+            @canany(['post.index', 'post.add', 'post.edit', 'post.destroy'])
             <li class="{{ request()->is('admin/post*') && !request()->is('admin/post/cat*') ? 'active' : '' }}">
                 <a href="{{ url('admin/post') }}">
                     <i class="fa fa-newspaper-o"></i> <span class="nav-label">Bài viết</span>
@@ -47,6 +52,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanany
+
+            @canany(['medical-specialty.index', 'medical-specialty.add', 'medical-specialty.edit', 'medical-specialty.destroy', 'medical-specialty.info-page'])
             <li class="{{ request()->is('admin/medical-specialty*') ? 'active' : '' }}">
                 <a href="{{ url('admin/medical-specialty') }}">
                     <i class="fa fa-stethoscope"></i> <span class="nav-label">Chuyên khoa</span>
@@ -64,6 +72,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanany
+
+            @canany(['doctor.index', 'doctor.add', 'doctor.edit', 'doctor.destroy', 'appointment.index', 'appointment.add', 'appointment.edit', 'appointment.destroy'])
             <li class="{{ (request()->is('admin/doctor*') || request()->is('admin/appointment*')) ? 'active' : '' }}">
                 <a href="{{ url('admin/doctor') }}">
                     <i class="fa fa-user-md"></i> <span class="nav-label">Bác sĩ</span>
@@ -81,9 +92,63 @@
                     </li>
                 </ul>
             </li>
+            @endcanany
+
+            @canany(['permission.index', 'permission.add', 'permission.edit', 'permission.destroy'])
+            <li class="{{ request()->is('admin/permission*') ? 'active' : '' }}">
+                <a href="{{ url('admin/permission') }}">
+                    <i class="fa fa-sitemap"></i> <span class="nav-label">Phân quyền</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
+                        <a href="{{ url('admin/permission') }}">Danh sách quyền</a>
+                    </li>
+                    <li class="{{ request()->is('admin/permission/add') ? 'active' : '' }}">
+                        <a href="{{ url('admin/permission/add') }}">Thêm quyền</a>
+                    </li>
+                </ul>
+            </li>
+            @endcanany
+
+            @canany(['role.index', 'role.add', 'role.edit', 'role.destroy'])
+            <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
+                <a href="{{ url('admin/role') }}">
+                    <i class="fa fa-sitemap"></i> <span class="nav-label">Vai trò</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
+                        <a href="{{ url('admin/role') }}">Danh sách vai trò</a>
+                    </li>
+                    <li class="{{ request()->is('admin/role/add') ? 'active' : '' }}">
+                        <a href="{{ url('admin/role/add') }}">Thêm vai trò</a>
+                    </li>
+                </ul>
+            </li>
+            @endcanany
+
+            @canany(['user.index', 'user.add', 'user.edit', 'user.destroy'])
+            <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                <a href="{{ url('admin/user') }}">
+                    <i class="fa fa-users"></i> <span class="nav-label">Người dùng</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                        <a href="{{ url('admin/user') }}">Danh sách người dùng</a>
+                    </li>
+                    <li class="{{ request()->is('admin/user/add') ? 'active' : '' }}">
+                        <a href="{{ url('admin/user/add') }}">Thêm người dùng</a>
+                    </li>
+                </ul>
+            </li>
+            @endcanany
+
+            @canany(['site.edit'])
             <li class="{{ request()->is('admin/site') ? 'active' : '' }}">
                 <a href="{{ url('admin/site') }}">
-                    <i class="fa fa-sitemap"></i> <span class="nav-label">Site</span>
+                    <i class="fa fa-cubes"></i> <span class="nav-label">Site</span>
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
@@ -92,6 +157,8 @@
                     </li>
                 </ul>
             </li>
+            @endcanany
+
         </ul>
     </div>
 </nav>

@@ -22,7 +22,7 @@ class CheckRole
             return redirect('/login');
         }
 
-        if ($user->roles->contains('name', 'admin') || $user->roles->contains('name', 'doctor')) {
+        if ($user->roles->contains('name', 'Admin') || $user->roles->contains('name', 'doctor')) {
             return $next($request);
         }
 

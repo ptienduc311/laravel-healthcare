@@ -11,7 +11,8 @@
     <div class="page-404">
         <div class="page-404-content">
             <img class="img-fluid" src="{{ asset('404.png') }}">
-            <p>Thật tiếc trang của bạn yêu cầu không tồn tại.<br>Vui lòng thử trang khác hoặc liên hệ trực tiếp với healthcare nhé!</p>
+            <h3>Thật tiếc trang của bạn yêu cầu không tồn tại.</h3>
+            <p>Vui lòng thử trang khác hoặc liên hệ trực tiếp với HealthCare nhé!</p>
             <a href="/">Trang chủ</a>
         </div>
     </div>

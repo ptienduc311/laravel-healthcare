@@ -21,18 +21,52 @@ class FrontedController extends Controller
             ->limit(4)
             ->get();
 
-        $doctors = Doctor::where('status', 1)->orderByDesc('created_date_int')->limit(8)->get();
+        $doctors = Doctor::where('status', 1)->where('is_outstanding', 1)->orderByDesc('created_date_int')->limit(8)->get();
         $specialties = MedicalSpecialty::where('status', 1)->get();
 
         return view('themes.home', compact('posts', 'doctors', 'specialties'));
     }
 
-    public function listDoctor(){
-        return view('themes.list-doctor');
+    public function listDoctor(Request $request){
+        $specialties = MedicalSpecialty::where('status', 1)->get();
+        //Học hàm, học vị
+        $academicTitles = [
+            1 => 'Giáo sư',
+            2 => 'Phó giáo sư',
+        ];
+        
+        $degrees = [
+            1 => 'Bác sĩ nội trú',
+            2 => 'Bác sĩ',
+            3 => 'Tiến sĩ',
+            4 => 'Thạc sĩ',
+            5 => 'Bác sĩ chuyên khoa II',
+            6 => 'Bác sĩ chuyên khoa I',
+            7 => 'Bác sĩ cao cấp',
+        ];
+
+        $query = Doctor::query();
+
+        if ($request->query('specialty_id')) {
+            $query->where('specialty_id', $request->specialty_id);
+        }
+    
+        if ($request->query('acedemic_id')) {
+            $query->where('academic_title', $request->acedemic_id);
+        }
+    
+        if ($request->query('degree_id')) {
+            $query->where('degree', $request->degree_id);
+        }
+    
+        $doctors = $query->orderbyDesc('created_date_int')->paginate(12);
+
+        return view('themes.list-doctor', compact('doctors', 'specialties', 'academicTitles', 'degrees'));
     }
 
-    public function doctor(){
-        return view('themes.doctor');
+    public function doctor(string $slug){
+        $doctor = Doctor::where('slug_name', $slug)->where('status', 1)->firstOrFail();
+        return view('themes.doctor', compact('doctor'));
     }
 
     public function newsSummary(){

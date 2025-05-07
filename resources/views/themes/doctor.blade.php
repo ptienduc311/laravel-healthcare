@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bác sĩ Nguyễn Tú') {{-- Truyền biến --}}
+@section('title', $doctor->name) {{-- Truyền biến --}}
 @section('custom-css')
     <link rel="stylesheet" href="{{ asset('assets/css/listdoctor.css ') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/doctor.css ') }}">
@@ -18,7 +18,7 @@
                 <li>
                     <a href="">Đội ngũ chuyên gia</a>
                 </li>
-                <li class="active">TTND.GS.AHLĐ.BSCC Nguyễn Anh Trí</li>
+                <li class="active">{{ $doctor->name }}</li>
             </ol>
         </div>
     </div>
@@ -27,16 +27,18 @@
             <div class="doctor-single-info row">
                 <div class="col-md-4">
                     <div class="avatar">
-                        <img src="https://medlatec.vn/media/1505/catalog/quocdung-1.png?size=256" alt="">
+                        <img src="{{ $doctor->avatar_url }}" alt="Ảnh {{$doctor->name}}">
                     </div>
                 </div>
                 <div class="doctor-single-detail col-md-8">
                     <div class="detail-top">
-                        <div class="doctor-name">PGS.TS.BSCC Nguyễn Quốc Dũng</div>
+                        <div class="doctor-name">{{$doctor->name}}</div>
                         <div class="doctor-review"><span style="color: #1D93E3;">Đánh giá:</span> <i class="fa-solid fa-star" style="color: #FFD43B;"></i>5/5</div>
                     </div>
                     <div class="detail-end">
-                        <div class="doctor-special"><strong style="color: #1D93E3;">Chuyên khoa:</strong> Chẩn đoán hình ảnh</div>
+                        @if ($doctor->specialty && $doctor->specialty->status == 1)
+                            <div class="doctor-special"><strong style="color: #1D93E3;">Chuyên khoa:</strong> {{ $doctor->specialty->name }}</div>
+                        @endif
                         <div class="doctor-level"><strong style="color: #1D93E3;">Trình độ:</strong> Phó giáo sư</div>
                         <div class="doctor-experience"><strong style="color: #1D93E3;">Số năm kinh nghiệm:</strong> hơn 40 năm</div>
                         <div class="doctor-price"><i class="fa-solid fa-hand-holding-dollar" style="color: #1D93E3;"></i> 500.000đ</div>

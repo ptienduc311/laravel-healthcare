@@ -175,4 +175,13 @@ small {
 .w-100 {
     width: 100% !important;
 }
+.text-muted {
+    --bs-text-opacity: 1;
+    color: var(--bs-secondary-color) !important;
+}
+.form-text {
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: var(--bs-secondary-color);
+}
 /* End bootstrap */

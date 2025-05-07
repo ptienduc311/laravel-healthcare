@@ -142,7 +142,7 @@
                     toolbar: [ 'linkPreview', '|', 'editLink', 'linkProperties', 'unlink' ]
                 },
                 simpleUpload: {
-                    uploadUrl: '/upload-image',
+                    uploadUrl: 'admin/upload-image',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }

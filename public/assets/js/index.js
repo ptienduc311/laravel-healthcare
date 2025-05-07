@@ -152,53 +152,72 @@ var swiper4 = new Swiper(".specialty-items", {
 });
 
 //Teams Filter
-document.querySelectorAll(".type-filter").forEach(typeFilter => {
+document.querySelectorAll(".type-filter[data-type]").forEach(typeFilter => {
+    const typeKey = typeFilter.getAttribute("data-type");
     const selectBtn = typeFilter.querySelector(".select-btn");
-    const options = typeFilter.querySelector(".options");
+    const optionsWrapper = typeFilter.querySelector(".options");
     const searchInp = typeFilter.querySelector(".search-input");
-    
-    const listItems = typeFilter.querySelectorAll("li");
-    const countryNames = Array.from(listItems).map(item => item.textContent.trim());
-    const listCountries = [...new Set(countryNames)];
+    const listItems = Array.from(optionsWrapper.querySelectorAll("li"));
 
-    selectBtn.addEventListener("click", (event) => {
-        document.querySelectorAll(".type-filter").forEach(tf => {
-            if (tf !== typeFilter) tf.classList.remove("active");
+    const originalData = listItems.map(item => ({
+        id: item.getAttribute("data-id"),
+        name: item.textContent.trim()
+    }));
+
+    const hiddenInput = document.getElementById(typeKey);
+
+    function renderOptions(data, selectedId = null) {
+        optionsWrapper.innerHTML = data.map(item => 
+            `<li data-id="${item.id}" class="${item.id === selectedId ? 'selected' : ''}">${item.name}</li>`
+        ).join('');
+    }
+
+    if (selectBtn) {
+        selectBtn.addEventListener("click", (event) => {
+            document.querySelectorAll(".type-filter").forEach(tf => {
+                if (tf !== typeFilter) tf.classList.remove("active");
+            });
+            typeFilter.classList.toggle("active");
+            event.stopPropagation();
         });
+    }
 
-        typeFilter.classList.toggle("active");
+    // Click chọn item
+    if (optionsWrapper) {
+        optionsWrapper.addEventListener("click", (event) => {
+            if (event.target.tagName === "LI") {
+                const selectedText = event.target.innerText;
+                const selectedId = event.target.getAttribute("data-id");
 
-        event.stopPropagation();
-    });
+                selectBtn.querySelector("span").innerText = selectedText;
 
-    options.addEventListener("click", (event) => {
-        if (event.target.tagName === "LI") {
-            const selectedText = event.target.innerText;
-            
-            options.innerHTML = listCountries.map(data => 
-                `<li class="${data === selectedText ? 'selected' : ''}">${data}</li>`
-            ).join("");
+                if (hiddenInput) {
+                    hiddenInput.value = selectedId;
+                }
 
-            typeFilter.classList.remove("active");
-            selectBtn.firstElementChild.innerText = selectedText;
-            searchInp.value = "";
-        }
-    });
+                typeFilter.classList.remove("active");
+                searchInp.value = "";
 
-    // Xử lý tìm kiếm
-    searchInp.addEventListener("keyup", () => {
-        let searchVal = searchInp.value.toLowerCase();
-        let arr = listCountries.filter(data => 
-            data.toLowerCase().startsWith(searchVal)
-        ).map(data => `<li>${data}</li>`).join("");
+                renderOptions(originalData, selectedId);
+            }
+        });
+    }
 
-        options.innerHTML = arr ? arr : `<p>Không tìm thấy!</p>`;
-    });
+    // Tìm kiếm
+    if (searchInp) {
+        searchInp.addEventListener("keyup", () => {
+            const searchVal = searchInp.value.toLowerCase();
+            const filtered = originalData.filter(item =>
+                item.name.toLowerCase().includes(searchVal)
+            );
+            if (filtered.length) {
+                renderOptions(filtered, hiddenInput?.value);
+            } else {
+                optionsWrapper.innerHTML = `<p>Không tìm thấy!</p>`;
+            }
+        });
+    }
 });
-
-// document.addEventListener("click", () => {
-//     document.querySelectorAll(".type-filter").forEach(tf => tf.classList.remove("active"));
-// });
 
 const buttonFilter = document.querySelector(".teams-filter-collapse")
 const teamFilterContent = document.querySelector(".teams-filter-content")

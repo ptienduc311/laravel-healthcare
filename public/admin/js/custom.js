@@ -55,3 +55,48 @@ $(document).ready(function () {
         }
     });
 });
+
+//CheckAll
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("hehe");    
+    const checkAll = document.getElementById("check-all");
+    const groupChecks = document.querySelectorAll(".group-check");
+    const allPermissionChecks = document.querySelectorAll(".permission-checkbox");
+
+    // Chọn tất cả
+    checkAll.addEventListener("change", function () {
+        const checked = this.checked;
+        groupChecks.forEach(group => group.checked = checked);
+        allPermissionChecks.forEach(item => item.checked = checked);
+    });
+
+    // Khi tick group cha
+    groupChecks.forEach(groupCheckbox => {
+        groupCheckbox.addEventListener("change", function () {
+            const groupDiv = this.closest(".permission-group");
+            const children = groupDiv.querySelectorAll(".permission-checkbox");
+            children.forEach(child => child.checked = this.checked);
+
+            updateCheckAll();
+        });
+    });
+
+    // Khi tick quyền con thì cập nhật group cha và check-all
+    allPermissionChecks.forEach(childCheckbox => {
+        childCheckbox.addEventListener("change", function () {
+            const groupDiv = this.closest(".permission-group");
+            const groupCheckbox = groupDiv.querySelector(".group-check");
+            const children = groupDiv.querySelectorAll(".permission-checkbox");
+
+            const allChecked = Array.from(children).every(child => child.checked);
+            groupCheckbox.checked = allChecked;
+
+            updateCheckAll();
+        });
+    });
+
+    function updateCheckAll() {
+        const allGroupsChecked = Array.from(groupChecks).every(group => group.checked);
+        checkAll.checked = allGroupsChecked;
+    }
+});
