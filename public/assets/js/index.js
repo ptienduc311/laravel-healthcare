@@ -243,9 +243,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const districtSelect = document.getElementById("district");
         const wardSelect = document.getElementById("ward");
     
-        let listProvince = []; // Danh sách tỉnh/thành phố
-        let listDistricts = []; // Danh sách quận/huyện
-        let listWards = []; // Danh sách phường/xã
+        let listProvince = [];
+        let listDistricts = [];
+        let listWards = [];
     
         districtSelect.disabled = true;
         wardSelect.disabled = true;
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
         provinceList.parentNode.insertBefore(errorApi, provinceList.nextSibling);
     
         // Lấy danh sách tỉnh/thành phố
-        fetch("https://open.oapi.vn/location/provinces?page=0&size=64")
+        fetch("/api-get-provinces")
             .then(response => response.json())
             .then(data => {
                 if (data && data.data) {
@@ -308,6 +308,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 wardSelect.disabled = true;
     
                 loadDistricts(selectedId);
+                document.getElementById("province-id").value = selectedId;
+                document.getElementById("district-id").value = '';
+                document.getElementById("ward-id").value = '';
             }
         });
     
@@ -315,11 +318,11 @@ document.addEventListener("DOMContentLoaded", function () {
         function loadDistricts(provinceId) {
             districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
             districtSelect.disabled = true;
-    
-            fetch(`https://open.oapi.vn/location/districts/${provinceId}?page=0&size=30`)
+        
+            fetch(`/api-get-districts?province_id=${provinceId}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data && data.data) {
+                    if (data.status === 'success') {
                         listDistricts = data.data;
                         listDistricts.forEach(district => {
                             const option = document.createElement("option");
@@ -328,13 +331,20 @@ document.addEventListener("DOMContentLoaded", function () {
                             districtSelect.appendChild(option);
                         });
                         districtSelect.disabled = false;
+                    } else {
+                        alert(data.message || 'Không thể tải danh sách quận/huyện.');
                     }
+                })
+                .catch(() => {
+                    alert('Lỗi khi lấy dữ liệu quận/huyện.');
                 });
-        }
+        }        
     
         // Chọn quận/huyện
         districtSelect.addEventListener("change", function () {
             const districtId = this.value;
+            document.getElementById("district-id").value = districtId;
+            document.getElementById("ward-id").value = '';
             if (districtId) {
                 loadWards(districtId);
             }
@@ -344,11 +354,11 @@ document.addEventListener("DOMContentLoaded", function () {
         function loadWards(districtId) {
             wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
             wardSelect.disabled = true;
-    
-            fetch(`https://open.oapi.vn/location/wards/${districtId}?page=0&size=30`)
+        
+            fetch(`/api-get-wards?district_id=${districtId}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data && data.data) {
+                    if (data.status === 'success') {
                         listWards = data.data;
                         listWards.forEach(ward => {
                             const option = document.createElement("option");
@@ -357,9 +367,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             wardSelect.appendChild(option);
                         });
                         wardSelect.disabled = false;
+                    } else {
+                        alert(data.message || 'Không thể tải danh sách phường/xã.');
                     }
+                })
+                .catch(() => {
+                    alert('Lỗi khi lấy dữ liệu phường/xã.');
                 });
         }
+        
+        wardSelect.addEventListener("change", function () {
+            const wardId = this.value;
+            document.getElementById("ward-id").value = wardId;
+        });
     
         // Xử lý tìm kiếm tỉnh/thành phố
         function setupSearchEvent() {
@@ -375,111 +395,223 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-//Swipper
 document.addEventListener("DOMContentLoaded", function () {
-    const timeMeetWrapper = document.querySelector(".swiperTimeMeet .swiper-wrapper");
-    if(timeMeetWrapper){
-        // Tạo danh sách thời gian từ 6h00 đến 23h30
-        function generateTimeSlots() {
-            let times = [];
-            for (let h = 6; h <= 23; h++) {
-                times.push({ value: h, label: `${h.toString().padStart(2, "0")}h00` });
-                if (h < 23) {
-                    times.push({ value: h + 0.5, label: `${h.toString().padStart(2, "0")}h30` });
-                }
+    const dateInput = document.getElementById("appointmentDate");
+    const doctorId = document.getElementById("doctor-id").value;
+    const timeSlotList = document.getElementById("time-slot-list");
+
+    dateInput.addEventListener("change", function () {
+        const date = dateInput.value;
+        if (!date) return;
+
+        timeSlotList.innerHTML = `<div class="loading">Đang tải giờ khám...</div>`;
+
+        fetch(`/api-get-available-times?doctor_id=${doctorId}&date=${date}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            const listTimes = document.querySelector(".list-times");
+            listTimes.innerHTML = "";
+    
+            if (data.status === 'error') {
+                listTimes.innerHTML = `<div class="error-message">${data.message}</div>`;
+                return;
             }
-            return times;
-        }
-
-        // Lấy index mốc thời gian gần nhất với thời gian hiện tại
-        function getNearestTimeSlotIndex(timeSlots) {
-            const now = new Date();
-            let currentHour = now.getHours();
-            let currentMinute = now.getMinutes();
-            let currentValue = currentHour + (currentMinute >= 30 ? 0.5 : 0);
-
-            for (let i = 0; i < timeSlots.length; i++) {
-                if (timeSlots[i].value >= currentValue) {
-                    return i;
-                }
+    
+            const hours = data.data;
+            if (!hours.length) {
+                listTimes.innerHTML = `<div class="error-message">Không có giờ khám nào cho ngày này.</div>`;
+                return;
             }
-            return 0;
-        }
-
-        // Đổ dữ liệu vào Swiper
-        const timeSlots = generateTimeSlots();
-        timeMeetWrapper.innerHTML = "";
-
-        timeSlots.forEach((time) => {
-            let slide = document.createElement("div");
-            slide.classList.add("swiper-slide");
-
-            slide.innerHTML = `
-                <label class="label-time-meet">
-                    <input type="radio" name="time-meet" class="time-meet" value="${time.value}">
-                    <span>${time.label}</span>
-                </label>
-            `;
-
-            timeMeetWrapper.appendChild(slide);
+    
+            hours.forEach(item => {
+                const disabled = item.is_appointment == 1 ? 'disabled' : '';
+                const labelClass = item.is_appointment == 1 ? 'disabled-label' : '';
+    
+                const label = document.createElement("label");
+                label.className = `label-time-meet ${labelClass}`;
+                label.innerHTML = `
+                    <input type="radio" name="appointment_id" class="time-meet" value="${item.id}" ${disabled}>
+                    <span>${item.hour_examination}</span>
+                `;
+                listTimes.appendChild(label);
+            });
         });
-
-        const startIndex = getNearestTimeSlotIndex(timeSlots);
-
-        // Khởi tạo Swiper
-        let swiper5 = new Swiper(".swiperTimeMeet", {
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            slidesPerView: 1,
-            spaceBetween: 10,
-            initialSlide: Math.max(startIndex - 1, 0),
-            breakpoints: {
-                450: {
-                    slidesPerView: 2,
-                    spaceBetween: 10,
-                },  
-                660: {
-                    slidesPerView: 3,
-                    spaceBetween: 20
-                },
-                800: {
-                slidesPerView: 4,
-                spaceBetween: 30
-                },
-                980: {
-                slidesPerView: 5,
-                spaceBetween: 30
-                }
-            },
-            on: {
-                init: function () {
-                    updatePrevButtonState(this);
-                },
-                slideChange: function () {
-                    if (this.activeIndex < startIndex) {
-                        this.slideTo(startIndex, 200);
-                    }
-                    updatePrevButtonState(this);
-                },
-                reachBeginning: function () {
-                    updatePrevButtonState(this);
-                }
-            }
-        });
-
-        // Cập nhật trạng thái của nút prev
-        function updatePrevButtonState(swiper) {
-            const prevButton = document.querySelector(".swiper-button-prev");
-            if (swiper.activeIndex === startIndex) {
-                prevButton.classList.add("swiper-button-disabled");
-            } else {
-                prevButton.classList.remove("swiper-button-disabled");
-            }
-        }
-
-        // Đánh dấu radio có mốc gần nhất
-        document.querySelectorAll(".time-meet")[startIndex].checked = true;
-    }
+    });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+
+    function showError(id, message) {
+        const errorDiv = document.getElementById(id + '-error');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.color = 'red';
+        }
+    }
+
+    function clearError(id) {
+        const errorDiv = document.getElementById(id + '-error');
+        if (errorDiv) {
+            errorDiv.textContent = '';
+        }
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function isValidPhone(phone) {
+        return /^[0-9]{9,11}$/.test(phone);
+    }
+
+    function getInputValue(id) {
+        return document.getElementById(id)?.value?.trim();
+    }
+
+    function addInputEventListener(id, validateFunc) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                validateFunc();
+            });
+        }
+    }
+
+    form.addEventListener('submit', function (e) {
+        let isValid = true;
+
+        const name = getInputValue('patientName');
+        if (!name) {
+            showError('patientName', 'Vui lòng nhập họ tên');
+            isValid = false;
+        } else {
+            clearError('patientName');
+        }
+
+        const phone = getInputValue('phone');
+        if (!phone) {
+            showError('phone', 'Vui lòng nhập số điện thoại');
+            isValid = false;
+        } else if (!isValidPhone(phone)) {
+            showError('phone', 'Số điện thoại không hợp lệ');
+            isValid = false;
+        } else {
+            clearError('phone');
+        }
+
+        const birth = getInputValue('patientBirthDate');
+        if (!birth) {
+            showError('patientBirthDate', 'Vui lòng chọn ngày sinh');
+            isValid = false;
+        } else {
+            clearError('patientBirthDate');
+        }
+
+        const email = getInputValue('email');
+        if (!email) {
+            showError('email', 'Vui lòng nhập email');
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            showError('email', 'Email không hợp lệ');
+            isValid = false;
+        } else {
+            clearError('email');
+        }
+
+        const sex = document.getElementById('patientSex').value;
+        if (!sex || sex === 'Chọn giới tính') {
+            showError('patientSex', 'Vui lòng chọn giới tính');
+            isValid = false;
+        } else {
+            clearError('patientSex');
+        }
+
+        const provinceId = document.getElementById('province-id').value;
+        if (!provinceId) {
+            showError('province', 'Vui lòng chọn tỉnh/thành');
+            isValid = false;
+        } else {
+            clearError('province');
+        }
+
+        const districtId = document.getElementById('district-id').value;
+        if (!districtId) {
+            showError('district', 'Vui lòng chọn quận/huyện');
+            isValid = false;
+        } else {
+            clearError('district');
+        }
+
+        const wardId = document.getElementById('ward-id').value;
+        if (!wardId) {
+            showError('ward', 'Vui lòng chọn phường/xã');
+            isValid = false;
+        } else {
+            clearError('ward');
+        }
+
+        const address = getInputValue('address');
+        if (!address) {
+            showError('address', 'Vui lòng nhập địa chỉ');
+            isValid = false;
+        } else {
+            clearError('address');
+        }
+
+        const appointmentDate = getInputValue('appointmentDate');
+        if (!appointmentDate) {
+            showError('appointmentDate', 'Vui lòng chọn ngày khám');
+            isValid = false;
+        } else {
+            clearError('appointmentDate');
+        }
+
+        const note = getInputValue('reasonNote');
+        if (!note) {
+            showError('reasonNote', 'Vui lòng nhập nội dung yêu cầu');
+            isValid = false;
+        } else {
+            clearError('reasonNote');
+        }
+
+        const selectedTime = document.querySelector('input[name="appointment_id"]:checked');
+        const timeSlotList = document.getElementById("time-slot-list");
+        const existingTimeError = timeSlotList.querySelector('.time-error');
+    
+        if (existingTimeError) existingTimeError.remove(); // Xóa lỗi cũ nếu có
+    
+        if (!selectedTime) {
+            showError('time', 'Vui lòng chọn giờ khám');
+            isValid = false;
+        }
+        else{
+            clearError('time');
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    const fieldsToWatch = [
+        'patientName', 'phone', 'patientBirthDate', 'email', 'patientSex',
+        'address', 'appointmentDate', 'reasonNote'
+    ];
+
+    fieldsToWatch.forEach(id => {
+        addInputEventListener(id, () => clearError(id));
+    });
+    ['province-id', 'district-id', 'ward-id'].forEach((id, index) => {
+        document.getElementById(id).addEventListener('change', () => {
+            const errorField = ['province', 'district', 'ward'][index];
+            clearError(errorField);
+        });
+    });
+
+    document.getElementById('patientSex').addEventListener('change', () => {
+        clearError('patientSex');
+    });
+});
+

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminPostCategoryController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\FrontedController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -129,6 +130,14 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
     });
    
 });
+
+//API
+Route::get('api-get-provinces', [ApiController::class, 'getProvince']);
+Route::get('api-get-districts', [ApiController::class, 'getDistrict']);
+Route::get('api-get-wards', [ApiController::class, 'getWard']);
+Route::get('api-get-available-times', [ApiController::class, 'getAvailabelTimes']);
+Route::post('api-save-book', [ApiController::class, 'saveBook']);
+Route::get('confirm-book/{code}', [ApiController::class, 'confirmBook'])->name('book.confirm');
 
 Route::get('/', [FrontedController::class, 'index']);
 Route::get('doi-ngu-chuyen-gia', [FrontedController::class, 'listDoctor']);

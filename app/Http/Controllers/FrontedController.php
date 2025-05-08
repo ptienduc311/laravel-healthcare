@@ -65,8 +65,23 @@ class FrontedController extends Controller
     }
 
     public function doctor(string $slug){
+        //Học hàm, học vị
+        $academicTitles = [
+            1 => 'Giáo sư',
+            2 => 'Phó giáo sư',
+        ];
+        
+        $degrees = [
+            1 => 'Bác sĩ nội trú',
+            2 => 'Bác sĩ',
+            3 => 'Tiến sĩ',
+            4 => 'Thạc sĩ',
+            5 => 'Bác sĩ chuyên khoa II',
+            6 => 'Bác sĩ chuyên khoa I',
+            7 => 'Bác sĩ cao cấp',
+        ];
         $doctor = Doctor::where('slug_name', $slug)->where('status', 1)->firstOrFail();
-        return view('themes.doctor', compact('doctor'));
+        return view('themes.doctor', compact('doctor', 'academicTitles', 'degrees'));
     }
 
     public function newsSummary(){

@@ -267,14 +267,17 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="flex-grow-1 me-4 mb-3 d-flex align-items-center">
-                                            <input type="text" class="form-control w-25 me-2" name="time_work_process[]" placeholder="Thời gian công tác">
-                                            <input type="text" class="form-control w-75" name="content_work_process[]" placeholder="Nội dung công tác">   
+                                    <div class="work-process-item dynamic-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="flex-grow-1 me-4 mb-3 d-flex align-items-center">
+                                                <input type="text" class="form-control w-25 me-2" name="time_work_process[]" placeholder="Thời gian công tác">
+                                                <input type="text" class="form-control w-75" name="content_work_process[]" placeholder="Nội dung công tác">   
+                                            </div>
+                                            <button class="btn btn-danger btn-circle btn-remove" type="button">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </div>
-                                        <button class="btn btn-danger btn-circle btn-remove" type="button">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                        <div class="hr-line-normal"></div>
                                     </div>
                                 @endif
                                 <button class="btn btn-info btn-circle btn-add" type="button">
@@ -289,7 +292,7 @@
                             <div class="col-sm-10" id="prize">
                                 @php
                                     $oldContentPrize = old('content_prize', ['']);
-                                    $hasDoctorPrize = !empty($doctor->doctor_prize) && count($doctor->doctor_prize) > 0;
+                                    $hasDoctorPrize = !empty($doctor->doctor_prizes) && count($doctor->doctor_prizes) > 0;
                                 @endphp
                                 @if ($hasOld)
                                     @foreach ($oldContentPrize as $i => $content)

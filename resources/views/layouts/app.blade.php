@@ -13,11 +13,11 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet" href="{{ asset('assets/components/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/components/swiper/css/swiper-bundle.min.css') }}">
+    <!-- Toastr style -->
+    <link href="{{ asset('assets/css/plugins/toastr.min.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('assets/css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/global.css ') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css ') }}">
@@ -40,7 +40,10 @@
         <!-- end footer -->
     </div>
 
+    <script src="{{asset('assets/js/jquery-3.1.1.min.js')}}"></script>
     <script src="{{asset('assets/components/swiper/js/swiper-bundle.min.js')}}"></script>
+    <!-- Toastr script -->
+    <script src="{{asset('assets/js/plugins/toastr.min.js') }}"></script>
     <script src="{{asset('assets/js/index.js')}}"></script>
     @yield('custom-js')
 </body>

@@ -143,7 +143,7 @@
                                         <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
                                     </div>
                                     <div class="team-item-book">
-                                        <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}">Đặt lịch khám</a>
+                                        <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}#book-doctor">Đặt lịch khám</a>
                                     </div>
                                 </div>
                             </div>

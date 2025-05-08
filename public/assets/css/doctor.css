@@ -140,6 +140,20 @@
     display: block;
 }
 
+/* Danh sách thời gian */
+.list-times{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.list-times .label-time-meet{
+    flex-basis: calc(20% - 10px);
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
 .label-time-meet{
     display: block;
     border: 1px solid #534E56;
@@ -171,6 +185,12 @@
     line-height: 24px;
 }
 
+.label-time-meet.disabled-label {
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
+
 .label-time-meet input.time-meet:checked + span {
     color:#1D93E3;
 }
@@ -179,28 +199,21 @@
     border: 1px solid #1D93E3;
 }
 
-.swiperTimeMeet .swiper-button-prev i,
-.swiperTimeMeet .swiper-button-next i{
-    font-size: 20px;
-    font-weight: normal;
-    color: #686868;
-}
-
-.swiperTimeMeet .swiper-button-prev{
-    left: 0;
-    background: linear-gradient(270deg, rgba(255, 255, 255, 0) 14.01%, #ffffff 168.3%);
-}
-
-.swiperTimeMeet .swiper-button-next{
-    right: 0;
-    width: 35px;
-    height: 100%;
-    background: linear-gradient(270deg, #ffffff 14.01%, rgba(255, 255, 255, 0) 168.3%);
-}
-
 .btn-book{
     padding: 8px 45px;
 }
+
+.error-message{
+    color: red;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.loading{
+    color: #0b74fb;
+    font-weight: 500;
+}
+/* End danh sách thời gian */
 
 /* -----Thông tin bác sĩ----- */
 .doctor-single-content{
@@ -235,6 +248,10 @@
     .make-appointment{
         padding: 30px 50px;
     }
+    
+    .list-times .label-time-meet{
+        flex-basis: calc(25% - 10px);
+    }
 }
 
 @media(max-width: 768px){
@@ -245,5 +262,15 @@
     .btn-book{
         width: 100%;
         margin-bottom: 10px;
+    }
+    
+    .list-times .label-time-meet{
+        flex-basis: calc(33.33% - 10px);
+    }
+}
+
+@media(max-width: 540px){
+    .list-times .label-time-meet{
+        flex-basis: calc(100%);
     }
 }
