@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{{ asset('assets/components/swiper/css/swiper-bundle.min.css') }}">
     <!-- Toastr style -->
     <link href="{{ asset('assets/css/plugins/toastr.min.css') }}" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="{{ asset('assets/css/plugins/sweetalert.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('assets/css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/global.css ') }}">
@@ -44,6 +46,8 @@
     <script src="{{asset('assets/components/swiper/js/swiper-bundle.min.js')}}"></script>
     <!-- Toastr script -->
     <script src="{{asset('assets/js/plugins/toastr.min.js') }}"></script>
+    <!-- Sweet alert -->
+    <script src="{{asset('assets/js/plugins/sweetalert.min.js') }}"></script>
     <script src="{{asset('assets/js/index.js')}}"></script>
     @yield('custom-js')
 </body>

@@ -7,7 +7,7 @@
                     </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ Auth::user()->name }}</strong>
-                            </span> <span class="text-muted text-xs block">{{ Auth::user()->roles?->pluck('name')->join(', ') }} <b
+                            </span> <span class="text-white text-xs block">{{ Auth::user()->roles?->pluck('name')->join(', ') }} <b
                                     class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="/admin/profile">Hồ sơ</a></li>
@@ -94,6 +94,23 @@
             </li>
             @endcanany
 
+            @canany(['book.index', 'book.show'])
+            <li class="{{ request()->is('admin/book*') ? 'active' : '' }}">
+                <a href="{{ url('admin/book') }}">
+                    <i class="fa fa-calendar"></i> <span class="nav-label">Lịch hẹn</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/book') ? 'active' : '' }}">
+                        <a href="{{ url('admin/book') }}">Danh sách lịch hẹn</a>
+                    </li>
+                    {{-- <li class="{{ request()->is('admin/book/add') ? 'active' : '' }}">
+                        <a href="{{ url('admin/book/add') }}">Thêm lịch hẹn</a>
+                    </li> --}}
+                </ul>
+            </li>
+            @endcanany
+
             @canany(['permission.index', 'permission.add', 'permission.edit', 'permission.destroy'])
             <li class="{{ request()->is('admin/permission*') ? 'active' : '' }}">
                 <a href="{{ url('admin/permission') }}">
@@ -101,9 +118,9 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
-                    <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
                         <a href="{{ url('admin/permission') }}">Danh sách quyền</a>
-                    </li>
+                    </li> --}}
                     <li class="{{ request()->is('admin/permission/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/permission/add') }}">Thêm quyền</a>
                     </li>
@@ -138,9 +155,9 @@
                     <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
                         <a href="{{ url('admin/user') }}">Danh sách người dùng</a>
                     </li>
-                    <li class="{{ request()->is('admin/user/add') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('admin/user/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/user/add') }}">Thêm người dùng</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             @endcanany

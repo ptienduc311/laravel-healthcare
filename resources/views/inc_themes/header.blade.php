@@ -13,13 +13,13 @@
                 </a>
                 <div class="search-form">
                     <input type="text" id="keyword" class="form-control" placeholder="Tìm kiếm">
-                    <button class="btn-search"></button>
+                    <button class="btn-search" id="btn_search"></button>
                 </div>
             </div>
             <div class="header-hotline">
-                <a href="tel:0338237724">
+                <a href="tel:{{ $site->hotline }}">
                     <span>Đường dây nóng</span>
-                    <strong>0338237724</strong>
+                    <strong>{{ $site->hotline }}</strong>
                 </a>
             </div>
             <div class="header-contact">
@@ -57,32 +57,13 @@
                     <a href="/">Trang chủ</a>
                 </li>
                 <li>
-                    <a href="#">Giới thiệu</a>
+                    <a href="/gioi-thieu">Giới thiệu</a>
                 </li>
                 <li>
                     <a href="/doi-ngu-chuyen-gia">Đội ngũ chuyên gia</a>
                 </li>
-                <li class="has-submenu">
-                    <a href="#">Dịch vụ y tế</a>
-                    <i class="fa-solid fa-angle-down submenu-toggle"></i>
-                    <ul class="sub-menu">
-                        <strong class="menu-title">Dịch vụ y tế</strong>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                    </ul>
+                <li>
+                    <a href="/tra-cuu-lich-hen">Tra cứu lịch hẹn</a>
                 </li>
                 <li class="has-submenu">
                     <a href="/">Chuyên gia</a>

@@ -52,7 +52,7 @@
     margin-left: 5px;
 }
 
-.edit, .delete{
+.edit, .delete, .start{
     font-size: 14px;
     color: #000;
     margin-right: 10px;
@@ -64,6 +64,10 @@
 
 .delete:hover{
     color: red;
+}
+
+.start:hover{
+    color: #007bff;
 }
 
 .ck-editor__editable_inline {
@@ -187,4 +191,72 @@ label.timeline-item:has(input:checked) {
     cursor: not-allowed;
     background-color: #eee;
     opacity: 1;
+}
+
+.group-input-doctor .input-sm {
+    width: 100%;
+    /* padding-left: 120px; */
+    box-sizing: border-box;
+    height: 32px;
+}
+
+.doctor-badge {
+    background: #d1dade;
+    color: #5e5e5e;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 3px;
+    left: 8px;
+    height: 26px;
+    max-width: calc(100% - 16px);
+    border-radius: 10px;
+    padding-right: 22px;
+    overflow: hidden;
+    z-index: 99;
+}
+
+.badge-content {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    padding-left: 6px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.doctor-dropdown {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.doctor-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.doctor-item:hover {
+    background-color: #f0f0f0;
 }

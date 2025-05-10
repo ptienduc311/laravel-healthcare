@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('birth', 255)->nullable();
             $table->string('email', 255)->nullable();
             $table->string('gender', 255)->nullable();
+            $table->string('date_examination', 255)->nullable();
             $table->text('address')->nullable();
             $table->text('reason')->nullable();
             $table->integer('created_date_int');
-            $table->tinyInteger('status')->default(1)->comment('1-chưa xác nhận, 2-đã xác nhận, 3-đã khám, 4-đang đợi kết quả, 5-đã có kết quả');
+            $table->tinyInteger('status')->default(1)->comment('1-chưa xác nhận, 2-đã xác nhận, 3-hủy, 4-đang khám, 5-đang đợi kết quả, 6-đã có kết quả');
             $table->foreignId('province_id')->nullable()->constrained('provinces')->nullOnDelete();
             $table->foreignId('district_id')->nullable()->constrained('districts')->nullOnDelete();
             $table->foreignId('ward_id')->nullable()->constrained('wards')->nullOnDelete();

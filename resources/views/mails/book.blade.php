@@ -88,12 +88,7 @@
               </a>
               <p style="margin-top: 20px;">Vui lòng đến đúng giờ và mang theo mã lịch hẹn để được hỗ trợ tốt nhất.</p>
               <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
-              <p>Trân trọng,<br><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">Phòng khám ABC</strong></p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 15px; background-color: #eeeeee; text-align: center; font-size: 12px; color: #777;">
-              Email này được gửi tự động, vui lòng không trả lời.
+              <p>Trân trọng,<br><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">HealthCare</strong></p>
             </td>
           </tr>
         </table>

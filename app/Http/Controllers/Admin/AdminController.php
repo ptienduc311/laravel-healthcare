@@ -71,6 +71,6 @@ class AdminController extends Controller
             'link_youtube' => $link_youtube,
         ]);        
     
-        return back()->with('success', 'Cập nhật tài khoản thành công.');
+        return back()->with('success', 'Cập nhật thông tin thành công.');
     }
 }

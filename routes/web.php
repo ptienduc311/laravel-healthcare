@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminBookController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminDoctorController;
 use App\Http\Controllers\Admin\AdminMakeAppointmentController;
@@ -129,6 +130,18 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
         Route::get('/destroy/{user}', [AdminUserController::class, 'destroy'])->name('destroy')->middleware('can:user.destroy');
     });
    
+    //Book
+    Route::group(['prefix' => 'book', 'as' => 'book.'], function() {
+        Route::get('/', [AdminBookController::class, 'index'])->name('index')->middleware('can:book.index');
+        // Route::get('/add', [AdminBookController::class, 'create'])->name('add')->middleware('can:book.show');
+        // Route::post('/store', [AdminBookController::class, 'store'])->name('store')->middleware('can:book.show');
+        Route::get('/show/{book}', [AdminBookController::class, 'show'])->name('show')->middleware('can:book.show');
+        Route::post('/update/{book}', [AdminBookController::class, 'update'])->name('update')->middleware('can:book.show');
+        Route::get('/start-examination/{book}', [AdminBookController::class, 'startExamination'])->name('start_examination')->middleware('can:book.show');
+        
+        Route::get('/search-doctor', [AdminBookController::class, 'searchDoctor'])->middleware('can:book.show');
+        Route::post('/cancel-appointment', [AdminBookController::class, 'cancelAppointment'])->name('cancel')->middleware('can:book.show');
+    });
 });
 
 //API
@@ -138,11 +151,16 @@ Route::get('api-get-wards', [ApiController::class, 'getWard']);
 Route::get('api-get-available-times', [ApiController::class, 'getAvailabelTimes']);
 Route::post('api-save-book', [ApiController::class, 'saveBook']);
 Route::get('confirm-book/{code}', [ApiController::class, 'confirmBook'])->name('book.confirm');
+Route::get('api-get-book-appointment', [ApiController::class, 'getBookAppointment']);
 
 Route::get('/', [FrontedController::class, 'index']);
+Route::get('tim-kiem-bac-si', [FrontedController::class, 'searchDoctor']);
+Route::get('tim-kiem-bai-viet', [FrontedController::class, 'searchPost']);
+Route::get('gioi-thieu', [FrontedController::class, 'introduce']);
 Route::get('doi-ngu-chuyen-gia', [FrontedController::class, 'listDoctor']);
 Route::get('doi-ngu-chuyen-gia/{slug}', [FrontedController::class, 'doctor']);
+Route::get('tra-cuu-lich-hen', [FrontedController::class, 'lookAppointment']);
 Route::get('dat-lich-kham', [FrontedController::class, 'book']);
 Route::get('tin-tuc-tong-hop', [FrontedController::class, 'newsSummary']);
-Route::get('{slug}', [FrontedController::class, 'newsList']);
 Route::get('tin-tuc/{slug_id}', [FrontedController::class, 'newsDetail']);
+Route::get('{slug}', [FrontedController::class, 'newsList']);

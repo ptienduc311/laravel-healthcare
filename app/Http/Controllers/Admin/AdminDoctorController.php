@@ -41,7 +41,7 @@ class AdminDoctorController extends Controller
             $query->where('name', 'like', '%' . $request->keyword . '%');
         }
 
-        $mdical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->limit(15)->get();
+        $medical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->limit(15)->get();
 
         //Học hàm, học vị
         $academicTitles = [
@@ -60,7 +60,7 @@ class AdminDoctorController extends Controller
         ];
 
         $doctors = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
-        return view('admin.doctor.list', compact('mdical_specialties', 'academicTitles', 'degrees', 'doctors'));
+        return view('admin.doctor.list', compact('medical_specialties', 'academicTitles', 'degrees', 'doctors'));
     }
 
     public function create()

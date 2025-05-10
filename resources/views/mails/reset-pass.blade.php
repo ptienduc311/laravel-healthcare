@@ -287,7 +287,7 @@
                                     </tr>
                                     <tr>
                                         <td class="content-block">
-                                            HealthCare
+                                            <strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">HealthCare</strong>
                                         </td>
                                     </tr>
                                 </table>

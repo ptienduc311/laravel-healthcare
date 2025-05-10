@@ -18,6 +18,7 @@
     <link href="{{ asset('admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/jasny/jasny-bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/css/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('ckeditor5/ckeditor5.css')}}" rel="stylesheet">
 
@@ -80,6 +81,9 @@
 
     <!-- Jasny -->
     <script src="{{ asset('admin/js/plugins/jasny/jasny-bootstrap.min.js') }}"></script>
+    
+    <!-- Sweet alert -->
+    <script src="{{ asset('admin/js/plugins/sweetalert/sweetalert.min.js') }}"></script>
 
     <script type="importmap">
         {

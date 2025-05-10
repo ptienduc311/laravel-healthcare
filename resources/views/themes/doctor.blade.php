@@ -56,7 +56,7 @@
                 <div class="book-title">Đặt lịch khám cùng chuyên gia</div>
                 <div class="book-note">Quý khách hàng vui lòng điền thông tin để đặt lịch thăm khám cùng <span style="color: #1D93E3;">{{ $doctor->name }}</span></div>
                 <div class="bookings">
-                    <form action="/api-save-book" method="post">
+                    <form action="/api-save-book" method="post" id="form-book">
                         @csrf
                         <div class="form">
                             <div class="row">
@@ -153,7 +153,7 @@
                                 <div class="col-sm-12 col-xs-12 form-group">
                                     <label>Chuyên khoa</label>
                                     <div class="control">
-                                        <input type="text" name="special" id="special" class="form-control" value="Chuẩn đoán hình ảnh" readonly>
+                                        <input type="text" name="special" id="special" class="form-control" value="{{ $doctor->specialty?->name }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                             <input type="hidden" name="doctor_id" id="doctor-id" value="{{ $doctor->id }}">
-                            <input type="hidden" name="specialty_id" id="specialty-id" value="{{ $doctor->specialty->id }}">
+                            <input type="hidden" name="specialty_id" id="specialty-id" value="{{ $doctor->specialty?->id }}">
                             <input type="hidden" name="province_id" id="province-id">
                             <input type="hidden" name="district_id" id="district-id">
                             <input type="hidden" name="ward_id" id="ward-id">
@@ -253,7 +253,7 @@
 @endsection
 
 @section('custom-js')
-    @if (!session('success'))
+    @if (session('success'))
         <script>
             toastr.options = {
                 "closeButton": false,

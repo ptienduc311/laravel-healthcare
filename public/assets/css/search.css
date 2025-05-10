@@ -1,0 +1,62 @@
+.search-wrapper-title {
+    color: #132432;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.search-wrapper {
+    margin-bottom: 32px;
+}
+
+.search-wrapper .search-nav-filter {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 36px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    color: #A6A6A6;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.search-wrapper .search-nav-filter li {
+    margin: 0 16px 16px 0;
+    background-color: #F5F5F5;
+    border-radius: 4px;
+    padding: 8px 28px;
+    transition: 0.2s;
+}
+
+.search-wrapper .search-nav-filter a {
+    color: #A6A6A6;
+}
+
+.search-wrapper .search-nav-filter li.active,
+.search-wrapper .search-nav-filter li:hover {
+    background-color: #1D93E3;
+    color: #fff;
+}
+
+.search-wrapper .search-nav-filter li.active a,
+.search-wrapper .search-nav-filter li:hover a {
+    color: #fff;
+}
+
+.team-item {
+    width: 33.33333333%;
+}
+
+@media (max-width: 992px) {
+    .search-wrapper .team-items .team-item {
+        width: 50%;
+    }
+}
+
+@media (max-width: 639px) {
+    .search-wrapper .team-items .team-item {
+        width: 100%;
+    }
+}

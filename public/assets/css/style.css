@@ -1018,6 +1018,44 @@ ul.list-cates li:hover a{
     opacity: 0.5;
 }
 
+/* Introduce */
+.introduce{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.introduce .title{
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.introduce h2 {
+    color: #d9534f;
+    margin-top: 40px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.introduce h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+.introduce p {
+    line-height: 1.6;
+}
+.introduce .info-box {
+    background-color: #e9f5ff;
+    padding: 20px;
+    margin-top: 20px;
+    border-left: 5px solid #007bff;
+    border-radius: 5px;
+}
+
 @media(max-width: 1195px){
     .header-hotline, .header-contact {
         display: none;

@@ -128,4 +128,20 @@ class FrontedController extends Controller
     public function book(){
         return view('themes.book');
     }
+
+    public function lookAppointment(){
+        return view('themes.look-appointment');
+    }
+
+    public function introduce(){
+        return view('themes.introduce');
+    }
+
+    public function searchDoctor(Request $request){
+        return view('themes.search-doctor');
+    }
+    
+    public function searchPost(Request $request){
+        return view('themes.search-post');
+    }
 }

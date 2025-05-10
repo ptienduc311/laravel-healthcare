@@ -14,21 +14,22 @@
           <p>Chúng tôi xin thông báo rằng lịch hẹn khám bệnh của bạn đã được <strong>hủy</strong> với các thông tin như sau:</p>
 
           <ul>
-              <li><strong>Thời gian khám:</strong> {{ $hour_examination }} ngày {{ $day_examination }}</li>
+              <li><strong>Mã lịch hẹn:</strong> {{ $book_code }}</li>
+              <li><strong>Thời gian khám:</strong> {{ $time_examination }}</li>
               <li><strong>Bác sĩ:</strong> {{ $doctor_name }}</li>
               <li><strong>Chuyên khoa:</strong> {{ $specialty }}</li>
           </ul>
 
-          <p><strong>Lý do hủy:</strong> {{ $reason ?? 'Không có lý do cụ thể.' }}</p>
+          <p><strong>Lý do hủy:</strong> {{ $reason }}</p>
 
           <p>Nếu bạn có bất kỳ thắc mắc nào hoặc muốn đặt lại lịch hẹn, vui lòng liên hệ với chúng tôi qua số điện thoại hoặc email hỗ trợ:</p>
 
           <ul>
-              <li><strong>Email:</strong> {{ config('mail.from.address') }}</li>
-              <li><strong>Điện thoại:</strong> {{ config('app.support_phone', '1900 123 456') }}</li>
+              <li><strong>Email:</strong> {{ $email_web }}</li>
+              <li><strong>Điện thoại:</strong> {{ $phone }}</li>
           </ul>
 
-          <p>Trân trọng,<br><strong>{{ config('app.name') }}</strong></p>
+          <p>Trân trọng,<br><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">HealthCare</strong></p>
         </div>
 
     </div>

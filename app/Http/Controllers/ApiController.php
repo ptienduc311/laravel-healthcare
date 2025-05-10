@@ -82,7 +82,7 @@ class ApiController extends Controller
     
             return response()->json([
                 'status' => 'success',
-                'data' => $appointments
+                'data' => $appointments,
             ], 200);
     
         } catch (\Exception $e) {
@@ -102,6 +102,7 @@ class ApiController extends Controller
         $gender = $request->gender;
         $address = $request->address;
         $appointmentDate = $request->appointmentDate;
+        $date_examination = Carbon::parse($appointmentDate)->format('d/m/Y');
         $appointment_id = $request->appointment_id;
         $reason = $request->reason;
         $doctor_id = $request->doctor_id;
@@ -110,6 +111,9 @@ class ApiController extends Controller
         $district_id = $request->district_id;
         $ward_id = $request->ward_id;
         $today = Carbon::today();
+        // dd($name, $phone, $birth, $email, $gender, $address, $appointmentDate,
+        // $date_examination, $appointment_id, $reason, $doctor_id, $specialty_id,
+        // $province_id, $district_id, $ward_id, $today);
 
         //Kiểm tra ngày và lịch hẹn
         if(Carbon::parse($appointmentDate)->lt($today)){
@@ -136,15 +140,16 @@ class ApiController extends Controller
             'birth' => $birth,
             'email' => $email,
             'gender' => $gender,
+            'date_examination' => $date_examination,
             'address' => $address,
             'reason' => $reason,
             'created_date_int' => time(),
-            'province_id ' => $province_id ,
-            'district_id ' => $district_id ,
-            'ward_id ' => $ward_id ,
-            'appointment_id ' => $appointment_id ,
-            'specialty_id ' => $specialty_id ,
-            'doctor_id ' => $doctor_id ,
+            'province_id' => $province_id ,
+            'district_id' => $district_id ,
+            'ward_id' => $ward_id ,
+            'appointment_id' => $appointment_id ,
+            'specialty_id' => $specialty_id ,
+            'doctor_id' => $doctor_id ,
         ]);
 
         //Gửi email
@@ -170,7 +175,7 @@ class ApiController extends Controller
             'appointment_date' => $appointment_date,
             'appointment_time' => $appointment->hour_examination,
             'doctor_name' => $doctor->name,
-            'specialty_name' => $specialty->name,
+            'specialty_name' => $specialty_id ? $specialty->name : '',
             'link_confirm_book' => $link_confirm_book,
         ];
         Mail::to($email)->send(new SendMailBook($data));
@@ -184,12 +189,45 @@ class ApiController extends Controller
             if ($book->status == 1) {
                 $book->status = 2;
                 $book->save();
-                return redirect('doi-ngu-chuyen-gia/pgsts-trinh-thi-ngoc')->with('success', 'Đã xác nhận lịch hẹn thành công.');
+                return redirect('tra-cuu-lich-hen')->with('success', 'Đã xác nhận lịch hẹn thành công.');
             } else {
-                return redirect('doi-ngu-chuyen-gia/pgsts-trinh-thi-ngoc')->with('error', 'Lịch hẹn đã được xác nhận từ trước.');
+                return redirect('tra-cuu-lich-hen')->with('error', 'Lịch hẹn đã được xác nhận từ trước.');
             }
         } else {
-            return redirect('doi-ngu-chuyen-gia/pgsts-trinh-thi-ngoc')->with('error', 'Không tồn tại lịch hẹn này.');
+            return redirect('tra-cuu-lich-hen')->with('error', 'Không tồn tại lịch hẹn này.');
         }
+    }
+
+    public function getBookAppointment(Request $request){
+        $booking_token = $request->query('booking_token');
+        $email = $request->query('email');
+        $appointment_date = $request->query('appointment_date');
+
+        $query = Book::with(['doctor', 'specialty', 'appointment']);
+
+        if ($booking_token) {
+            $query->where('book_code', $booking_token);
+        } elseif ($email && $appointment_date) {
+            $query->where('email', $email)
+                ->where('date_examination', Carbon::parse($appointment_date)->format('d/m/Y'));
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Thông tin không hợp lệ.'
+            ]);
+        }
+
+        $bookings = $query->get();
+        if ($bookings->count() > 0) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $bookings
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Không tìm thấy lịch hẹn.'
+        ]);
     }
 }

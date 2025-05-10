@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\View\Composers\PostCategoryComposer;
 use App\Models\Permission;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -27,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         View::composer(['inc_themes.header'], PostCategoryComposer::class);
+
+        $site = Site::first();
+        View::share('site', $site);
         
         $permissions = Permission::all();
         foreach($permissions as $permission){

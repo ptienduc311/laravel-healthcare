@@ -31,7 +31,7 @@
                             <div class="col-sm-2 m-b-xs">
                                 <select name="specialty_id" class="input-sm form-control input-s-sm inline">
                                     <option value="">Chọn chuyên khoa</option>
-                                    @foreach ($mdical_specialties as $item)
+                                    @foreach ($medical_specialties as $item)
                                         <option value="{{ $item->id }}" {{ request('specialty_id') == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
