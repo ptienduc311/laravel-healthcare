@@ -22,7 +22,7 @@
                 </a>
             </div>
             <div class="header-contact">
-                <a href="https://www.facebook.com/BenhVienDaKhoaMedlatec/" target="_blank">
+                <a href="{{ $site->link_facebook ? $site->link_facebook : '/' }}" target="_blank">
                     <span>Liên hệ</span>
                     <strong>Hỗ trợ khách hàng</strong>
                 </a>
@@ -59,15 +59,33 @@
                     <a href="/gioi-thieu">Giới thiệu</a>
                 </li>
                 <li>
-                    <a href="/doi-ngu-chuyen-gia">Đội ngũ chuyên gia</a>
+                    <a href="/chuyen-khoa">Chuyên khoa</a>
                 </li>
                 <li>
-                    <a href="/chuyen-khoa">Chuyên khoa</a>
+                    <a href="/doi-ngu-chuyen-gia">Đội ngũ chuyên gia</a>
+                </li>
+                <li class="has-submenu">
+                    <a href="#">Tin tức</a>
+                    <i class="fa-solid fa-angle-down submenu-toggle"></i>
+                    <ul class="sub-menu">
+                        <strong class="menu-title">Tin tức</strong>
+                        <li>
+                            <a href="/tin-tuc-tong-hop">Tin tức tổng hợp</a>
+                        </li>
+                        @foreach ($menu_post_categories as $item)
+                            <li>
+                                <a href="/{{ $item->slug }}">{{ $item->name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+                <li>
+                    <a href="/dat-lich-kham">Đặt lịch khám</a>
                 </li>
                 <li>
                     <a href="/tra-cuu-lich-hen">Tra cứu lịch hẹn</a>
                 </li>
-                <li class="has-submenu">
+                {{-- <li class="has-submenu">
                     <a href="/">Chuyên gia</a>
                     <i class="fa-solid fa-angle-down submenu-toggle"></i>
                     <ul class="sub-menu">
@@ -88,22 +106,7 @@
                             <a href="" target="_blank">Dịch vụ bảo hiểm</a>
                         </li>
                     </ul>
-                </li>
-                <li class="has-submenu">
-                    <a href="#">Tin tức</a>
-                    <i class="fa-solid fa-angle-down submenu-toggle"></i>
-                    <ul class="sub-menu">
-                        <strong class="menu-title">Tin tức</strong>
-                        <li>
-                            <a href="/tin-tuc-tong-hop">Tin tức tổng hợp</a>
-                        </li>
-                        @foreach ($menu_post_categories as $item)
-                            <li>
-                                <a href="/{{ $item->slug }}">{{ $item->name }}</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </li>
+                </li> --}}
             </ul>
             <div class="header-nav-bottom">
                 <div class="header-hotline">

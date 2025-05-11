@@ -50,7 +50,6 @@ class AdminPostController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
         $image_id = null;
         $request->validate(
             [
@@ -97,6 +96,7 @@ class AdminPostController extends Controller
         $description = $request->input('description');
         $content = $request->input('content');
         $status = $request->has('status') ? 1 : 2;
+        $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
         $category_id = $request->input('category_id');
         $created_by = Auth::id();
         Post::create([
@@ -105,6 +105,7 @@ class AdminPostController extends Controller
             'description' => $description,
             'content' => $content,
             'status' => $status,
+            'is_outstanding' => $is_outstanding,
             'category_id' => $category_id,
             'image_id' => $image_id,
             'created_by' => $created_by,
@@ -189,6 +190,7 @@ class AdminPostController extends Controller
         $description = $request->input('description');
         $content = $request->input('content');
         $status = $request->has('status') ? 1 : 2;
+        $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
         $category_id = $request->input('category_id');
         $post->update([
             'title' => $title,
@@ -196,6 +198,7 @@ class AdminPostController extends Controller
             'description' => $description,
             'content' => $content,
             'status' => $status,
+            'is_outstanding' => $is_outstanding,
             'category_id' => $category_id,
             'image_id' => $image_id
         ]);

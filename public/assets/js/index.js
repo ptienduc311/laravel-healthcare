@@ -399,10 +399,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const dateInput = document.getElementById("appointmentDate");
     const doctorInput = document.getElementById("doctor-id");
-    let doctorId = null;
-    if (doctorInput) {
-        doctorId = doctorInput.value;
-    }
     const timeSlotList = document.getElementById("time-slot-list");
 
     if(dateInput){
@@ -410,16 +406,18 @@ document.addEventListener("DOMContentLoaded", function () {
             const date = dateInput.value;
             if (!date) return;
 
+            const doctorId = doctorInput.value;
+
             timeSlotList.innerHTML = `<div class="loading">Đang tải giờ khám...</div>`;
 
             fetch(`/api-get-available-times?doctor_id=${doctorId}&date=${date}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 const listTimes = document.querySelector(".list-times");
                 listTimes.innerHTML = "";
 
-                if (data.status === 'error') {
+                if (data.status == 'error') {
                     listTimes.innerHTML = `<div class="error-message">${data.message}</div>`;
                     return;
                 }
@@ -449,13 +447,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Validate đặt lịch hẹn
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('#form-book');
+    const formBook = document.querySelector('#form-book');
 
     function showError(id, message) {
         const errorDiv = document.getElementById(id + '-error');
         if (errorDiv) {
             errorDiv.textContent = message;
-            errorDiv.style.color = 'red';
         }
     }
 
@@ -487,8 +484,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    if(form) {
-        form.addEventListener('submit', function (e) {
+    if(formBook) {
+        formBook.addEventListener('submit', function (e) {
             let isValid = true;
 
             const name = getInputValue('patientName');
@@ -561,6 +558,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 clearError('ward');
             }
 
+            const specialty = getInputValue('specialty-id');
+            if (!specialty) {
+                showError('specialty-id', 'Vui lòng chọn chuyên khoa');
+                isValid = false;
+            } else {
+                clearError('specialty-id');
+            }
+
+            const doctor = getInputValue('doctor-id');
+            if (!doctor) {
+                showError('doctor-id', 'Vui lòng chọn bác sĩ');
+                isValid = false;
+            } else {
+                clearError('doctor-id');
+            }
+
             const address = getInputValue('address');
             if (!address) {
                 showError('address', 'Vui lòng nhập địa chỉ');
@@ -608,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const fieldsToWatch = [
         'patientName', 'phone', 'patientBirthDate', 'email', 'patientSex',
-        'address', 'appointmentDate', 'reasonNote'
+        'address', 'specialty-id', 'doctor-id', 'appointmentDate', 'reasonNote'
     ];
 
     fieldsToWatch.forEach(id => {
@@ -623,14 +636,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-
-    
-    const patientSex = document.getElementById('patientSex');
-    if (patientSex) {
-        patientSex.addEventListener('change', () => {
-            clearError('patientSex');
-        });
-    }
 });
 
 //Tìm kiếm

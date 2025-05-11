@@ -244,6 +244,60 @@
     font-size: 16px;
 }
 
+/* Hiển thị thông tin danh sách bác sĩ */
+.group-doctor{
+    position: relative;
+}
+
+.show-name-doctor{
+    min-height: 36px;
+}
+
+.show-name-doctor.disabled{
+    cursor: not-allowed;
+    background-color: #cecdcd !important;
+}
+
+.show-list-doctor{
+    width: 100%;
+    padding: 10px;
+    max-height: 400px;
+    border-radius: 8px;
+    position: absolute;
+    top: 42px;
+    background-color: #dee2e6;
+    display: none;
+}
+
+.show-list-doctor .item-doctor{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.show-list-doctor .item-doctor.selected{
+    background: #ffeb23;
+}
+
+.show-list-doctor .item-doctor:hover{
+    background: #d0cfca;
+}
+
+.show-list-doctor .item-doctor .avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.show-list-doctor .item-doctor .name{
+    font-weight: 600;
+    padding-left: 15px;
+}
+
 @media(max-width: 1024px){
     .make-appointment{
         padding: 30px 50px;

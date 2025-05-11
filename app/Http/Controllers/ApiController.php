@@ -230,4 +230,28 @@ class ApiController extends Controller
             'message' => 'Không tìm thấy lịch hẹn.'
         ]);
     }
+
+    public function getDoctors(Request $request){
+        $specialty_id = $request->query('specialty_id');
+        $doctors = Doctor::where('specialty_id', $specialty_id)->where('status', 1)->get();
+        if ($doctors->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Vui lòng chọn chuyên khoa khác.'
+            ]);
+        }
+
+        $data = $doctors->map(function ($doctor) {
+            return [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'avatar_url' => $doctor->avatar_url,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'doctors' => $data
+        ]);
+    }
 }

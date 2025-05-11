@@ -86,6 +86,8 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
         Route::get('/edit/{id}', [AdminDoctorController::class, 'edit'])->name('edit')->middleware('can:doctor.edit');
         Route::post('/update/{id}', [AdminDoctorController::class, 'update'])->name('update')->middleware('can:doctor.edit');
         Route::get('/destroy/{id}', [AdminDoctorController::class, 'destroy'])->name('destroy')->middleware('can:doctor.destroy');
+
+        Route::get('/info-doctor/{id?}', [AdminDoctorController::class, 'show'])->name('info');
     });
    
     //Appointment
@@ -152,6 +154,7 @@ Route::get('api-get-available-times', [ApiController::class, 'getAvailabelTimes'
 Route::post('api-save-book', [ApiController::class, 'saveBook']);
 Route::get('confirm-book/{code}', [ApiController::class, 'confirmBook'])->name('book.confirm');
 Route::get('api-get-book-appointment', [ApiController::class, 'getBookAppointment']);
+Route::get('api-get-doctors', [ApiController::class, 'getDoctors']);
 
 Route::get('tim-kiem-bac-si', [FrontedController::class, 'searchDoctor']);
 Route::get('tim-kiem-bai-viet', [FrontedController::class, 'searchPost']);

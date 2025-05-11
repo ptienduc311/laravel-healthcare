@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <ul class="list-cates">
+        {{-- <ul class="list-cates">
             <li>
                 <a class="cate-item" href="#">
                     <div class="cate-item-img">
@@ -95,7 +95,7 @@
                     <div class="cate-item-text">Tắm bé, massage bà bầu</div>
                 </a>
             </li>
-        </ul>
+        </ul> --}}
 
         <div class="media-news">
             <div class="media-title">
@@ -176,7 +176,7 @@
             </div>
         </div>
 
-        <div class="services">
+        {{-- <div class="services">
             <div class="media-title">
                 <h2>Các dịch vụ y tế HealthCare cung cấp</h2>
             </div>
@@ -263,7 +263,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="specialty">
             <div class="media-title">

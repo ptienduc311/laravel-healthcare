@@ -128,7 +128,8 @@ class FrontedController extends Controller
     }
 
     public function book(){
-        return view('themes.book');
+        $specialties = MedicalSpecialty::where('status', 1)->get();
+        return view('themes.book', compact('specialties'));
     }
 
     public function lookAppointment(){
@@ -167,7 +168,9 @@ class FrontedController extends Controller
         $total = $total_post + $total_doctor;
 
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
-        return view('themes.search-doctor', compact('doctors', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news'));
+        $list_featured_news = Post::where('status', 1)->where('is_outstanding', 1)->latest()->limit(5)->get();
+
+        return view('themes.search-doctor', compact('doctors', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news', 'list_featured_news'));
     }
     
     public function searchPost(Request $request){
@@ -179,7 +182,8 @@ class FrontedController extends Controller
         $total = $total_post + $total_doctor;
 
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
+        $list_featured_news = Post::where('status', 1)->where('is_outstanding', 1)->latest()->limit(5)->get();
 
-        return view('themes.search-post', compact('posts', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news'));
+        return view('themes.search-post', compact('posts', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news', 'list_featured_news'));
     }
 }

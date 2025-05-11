@@ -63,6 +63,11 @@ class AdminDoctorController extends Controller
         return view('admin.doctor.list', compact('medical_specialties', 'academicTitles', 'degrees', 'doctors'));
     }
 
+    public function show($id = null){
+        $doctor = Doctor::where('id', $id)->first();
+        dd($doctor->toArray());
+    }
+
     public function create()
     {
         $specialties = MedicalSpecialty::where('status', 1)->get();

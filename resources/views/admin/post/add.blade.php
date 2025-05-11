@@ -96,6 +96,18 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Bài viết nổi bật</label>
+                            <div class="col-sm-10 mt-2">
+                                <div class="checkbox checkbox-danger">
+                                    <input id="is_outstanding" type="checkbox" name="is_outstanding">
+                                    <label for="is_outstanding">
+                                        Đánh dấu nổi bật
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">Trạng thái</label>
                             <div class="col-sm-10 mt-2">
                                 <div class="switch">
