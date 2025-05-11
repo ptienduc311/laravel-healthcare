@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use App\Models\MedicalSpecialty;
+use App\Models\PageSpecialty;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\ServiceSpecialty;
 use Illuminate\Http\Request;
 
 class FrontedController extends Controller
@@ -59,7 +61,7 @@ class FrontedController extends Controller
             $query->where('degree', $request->degree_id);
         }
     
-        $doctors = $query->orderbyDesc('created_date_int')->paginate(12);
+        $doctors = $query->orderbyDesc('created_date_int')->paginate(12)->withQueryString();
 
         return view('themes.list-doctor', compact('doctors', 'specialties', 'academicTitles', 'degrees'));
     }
@@ -99,8 +101,8 @@ class FrontedController extends Controller
         $posts = $post_category->posts()
         ->where('status', 1)
         ->orderByDesc('created_date_int')
-        ->paginate(10);
-
+        ->paginate(10)->withQueryString();
+        
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
         
         return view('themes.news-list', compact('post_category', 'posts', 'list_lastest_news'));
@@ -137,11 +139,47 @@ class FrontedController extends Controller
         return view('themes.introduce');
     }
 
+    public function specialty(){
+        $specialties = MedicalSpecialty::where('status', 1)->orderByDesc('created_date_int')->get();
+        return view('themes.specialty', compact('specialties'));
+    }
+
+    public function specialtyPage(string $slug){
+        $specialty = MedicalSpecialty::where('slug', $slug)
+            ->where('status', 1)
+            ->with(['pageSpecialty', 'serviceSpecialties'])
+            ->firstOrFail();
+
+        $page_specialty = $specialty->pageSpecialty;
+        $services = $specialty->serviceSpecialties;
+
+        $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
+        $doctors = Doctor::where('specialty_id', $specialty->id)->orderByDesc('created_date_int')->limit(10)->get();
+        return view('themes.specialty-page', compact('specialty', 'page_specialty', 'services', 'list_lastest_news', 'doctors'));
+    }
+
     public function searchDoctor(Request $request){
-        return view('themes.search-doctor');
+        $keyword = $request->query('keyword');
+        $doctors = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+
+        $total_post = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->count();
+        $total_doctor = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->count();
+        $total = $total_post + $total_doctor;
+
+        $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
+        return view('themes.search-doctor', compact('doctors', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news'));
     }
     
     public function searchPost(Request $request){
-        return view('themes.search-post');
+        $keyword = $request->query('keyword');
+        $posts = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+
+        $total_post = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->count();
+        $total_doctor = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->count();
+        $total = $total_post + $total_doctor;
+
+        $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
+
+        return view('themes.search-post', compact('posts', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news'));
     }
 }

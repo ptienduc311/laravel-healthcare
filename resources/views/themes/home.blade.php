@@ -272,15 +272,14 @@
             <div class="specialty-items">
                 @foreach ($specialties as $item)
                     <div class="specialty-item">
-                        <a href="">
+                        <a href="/chuyen-khoa/{{ $item->slug }}">
                             <div class="specialty-item-photo">
-                                <img src="https://cdn.bookingcare.vn/fo/w640/2023/12/26/101627-co-xuong-khop.png"
-                                    alt="">
+                                <img src="{{ $item->icon }}" alt="Ảnh {{ $item->name }}">
                             </div>
                         </a>
                         <div class="specialty-item-name">
-                            <a href="">
-                                <span>Cơ xương khớp</span>
+                            <a href="/chuyen-khoa/{{ $item->slug }}">
+                                <span>{{ $item->name }}</span>
                             </a>
                         </div>
                     </div>

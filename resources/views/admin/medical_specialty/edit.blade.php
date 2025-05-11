@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="{{ !empty($medical_specialty->image_icon_id) ? 'display: block;' : ''}}width: 200px; height: 200px; border:none; line-height: 200px;">
                                         @if($medical_specialty->image_icon_id)
-                                            <img src="{{ Storage::url($medical_specialty->image_icon->src) }}" alt="Ảnh bìa" style="max-width: 100%; max-height: 100%;">
+                                            <img src="{{ Storage::url($medical_specialty->image_icon->src) }}" alt="Ảnh icon chuyên khoa" style="max-width: 100%; max-height: 100%;">
                                         @endif
                                     </div>
                                     @error('image_icon')
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="{{ !empty($medical_specialty->image_id) ? 'display: block;' : ''}}width: 200px; height: 200px; border:none; line-height: 200px;">
                                         @if($medical_specialty->image_id)
-                                            <img src="{{ Storage::url($medical_specialty->image->src) }}" alt="Ảnh bìa" style="max-width: 100%; max-height: 100%;">
+                                            <img src="{{ Storage::url($medical_specialty->image->src) }}" alt="Ảnh chuyên khoa" style="max-width: 100%; max-height: 100%;">
                                         @endif
                                     </div>
                                     @error('image')

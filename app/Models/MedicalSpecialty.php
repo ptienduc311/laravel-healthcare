@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 
 class MedicalSpecialty extends Model
 {
@@ -21,5 +24,33 @@ class MedicalSpecialty extends Model
 
     public function user(): BelongsTo{
         return $this->BelongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function serviceSpecialties() :HasMany
+    {
+        return $this->hasMany(ServiceSpecialty::class);
+    }
+
+    public function pageSpecialty() :HasOne
+    {
+        return $this->hasOne(PageSpecialty::class);
+    }
+
+    public function getThumbAttribute()
+    {
+        if ($this->image?->src) {
+            return Storage::url($this->image->src);
+        }
+
+        return asset('assets/images/thumb-symbol.png');
+    }
+
+    public function getIconAttribute()
+    {
+        if ($this->image_icon?->src) {
+            return Storage::url($this->image_icon->src);
+        }
+
+        return asset('assets/images/medical-symbol.png');
     }
 }

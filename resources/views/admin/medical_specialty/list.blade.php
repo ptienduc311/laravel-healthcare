@@ -53,6 +53,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Tên chuyên khoa</th>
+                                <th>Ảnh icon chuyên khoa</th>
                                 <th>Ảnh chuyên khoa</th>
                                 <th>Trạng thái</th>
                                 <th>Người tạo</th>
@@ -63,6 +64,9 @@
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td>{{$item->name}}</td>
+                                <td>
+                                    <img src="{{ Storage::url($item->image_icon?->src) }}" alt="Ảnh icon {{$item->title}}" class="thumb">
+                                </td>
                                 <td>
                                     <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}" class="thumb">
                                 </td>

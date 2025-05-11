@@ -165,6 +165,8 @@ class AdminMedicalSpecialtyController extends Controller
                 'created_by'=> $created_by
             ]);
             $image_icon_id = $key->id;
+            $medical_specialty->image_icon_id = $image_icon_id;
+            $medical_specialty->save();
 
             if ($oldImageIcon && Storage::disk('public')->exists($oldImageIcon->src)) {
                 Storage::disk('public')->delete($oldImageIcon->src);
@@ -196,6 +198,8 @@ class AdminMedicalSpecialtyController extends Controller
                 'created_by'=> $created_by
             ]);
             $image_id = $key->id;
+            $medical_specialty->image_id = $image_id;
+            $medical_specialty->save();
 
             if ($oldImage && Storage::disk('public')->exists($oldImage->src)) {
                 Storage::disk('public')->delete($oldImage->src);

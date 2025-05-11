@@ -130,7 +130,7 @@ var swiper3 = new Swiper(".slideDoctor", {
     },
 });
 
-var swiper4 = new Swiper(".specialty-items", {
+var swiper4 = new Swiper(".slideDoctorSpecial", {
     watchSlidesProgress: true,
     slidesPerView: 1,
     spaceBetween: 10,
@@ -141,7 +141,7 @@ var swiper4 = new Swiper(".specialty-items", {
             spaceBetween: 20
         },
         1024: {
-          slidesPerView: 4,
+          slidesPerView: 3,
           spaceBetween: 30
         }
     },
@@ -395,6 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+//Tải giờ khám khi đặt lịch hẹn
 document.addEventListener("DOMContentLoaded", function () {
     const dateInput = document.getElementById("appointmentDate");
     const doctorInput = document.getElementById("doctor-id");
@@ -446,6 +447,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+//Validate đặt lịch hẹn
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('#form-book');
 
@@ -631,10 +633,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-$('#btn_search').on('click', function (e) {
-    var keyword = $("#keyword").val();
+//Tìm kiếm
+document.getElementById('btn_search').addEventListener('click', function (e) {
+    var keyword = document.getElementById('keyword').value;
     if (keyword !== "") {
         var url = "/tim-kiem-bai-viet?keyword=" + encodeURIComponent(keyword);
         window.location.href = url;
     }
-})
+});
+
+//Back to Top
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+        backToTop.classList.add('show');
+    } else {
+        backToTop.classList.remove('show');
+    }
+});
+
+backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});

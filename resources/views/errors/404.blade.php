@@ -10,7 +10,7 @@
 <body>
     <div class="page-404">
         <div class="page-404-content">
-            <img class="img-fluid" src="{{ asset('404.png') }}">
+            <img class="img-fluid" src="{{ asset('assets/images/404.png') }}">
             <h3>Thật tiếc trang của bạn yêu cầu không tồn tại.</h3>
             <p>Vui lòng thử trang khác hoặc liên hệ trực tiếp với HealthCare nhé!</p>
             <a href="/">Trang chủ</a>

@@ -153,14 +153,21 @@ Route::post('api-save-book', [ApiController::class, 'saveBook']);
 Route::get('confirm-book/{code}', [ApiController::class, 'confirmBook'])->name('book.confirm');
 Route::get('api-get-book-appointment', [ApiController::class, 'getBookAppointment']);
 
-Route::get('/', [FrontedController::class, 'index']);
 Route::get('tim-kiem-bac-si', [FrontedController::class, 'searchDoctor']);
 Route::get('tim-kiem-bai-viet', [FrontedController::class, 'searchPost']);
+
+Route::get('/', [FrontedController::class, 'index']);
 Route::get('gioi-thieu', [FrontedController::class, 'introduce']);
+
 Route::get('doi-ngu-chuyen-gia', [FrontedController::class, 'listDoctor']);
 Route::get('doi-ngu-chuyen-gia/{slug}', [FrontedController::class, 'doctor']);
-Route::get('tra-cuu-lich-hen', [FrontedController::class, 'lookAppointment']);
+
 Route::get('dat-lich-kham', [FrontedController::class, 'book']);
+Route::get('tra-cuu-lich-hen', [FrontedController::class, 'lookAppointment']);
+
+Route::get('chuyen-khoa', [FrontedController::class, 'specialty']);
+Route::get('chuyen-khoa/{slug}', [FrontedController::class, 'specialtyPage']);
+
 Route::get('tin-tuc-tong-hop', [FrontedController::class, 'newsSummary']);
 Route::get('tin-tuc/{slug_id}', [FrontedController::class, 'newsDetail']);
 Route::get('{slug}', [FrontedController::class, 'newsList']);

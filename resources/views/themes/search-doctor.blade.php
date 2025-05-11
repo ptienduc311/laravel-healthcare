@@ -16,260 +16,66 @@
                 <li>
                     <a href="/">Trang chủ</a>
                 </li>
-                <li class="active">Kết quả tìm kiếm: 1990</li>
+                <li class="active">Kết quả tìm kiếm: {{ $keyword }}</li>
             </ol>
         </div>
     </div>
     <div class="container">
-        <h2 class="search-wrapper-title">Hiển thị 1 kết quả theo từ khóa <span style="display: inline-block;">“ThS.BSCKII Trịnh Thị Nga”</span></h2>
+        @if ($total != 0)
+            <h2 class="search-wrapper-title">Hiển thị {{ $total }} kết quả theo từ khóa <span style="display: inline-block;">“{{ $keyword }}”</span></h2>
+        @else
+            <h2 class="search-wrapper-title">Không có kết quả theo từ khóa “ {{ $keyword }}”</h2>
+        @endif
         <div class="row">
             <div class="col-xs-12 col-lg-8">
                 <div class="search-wrapper">
-                    <ul class="search-nav-filter">
-                        <li class="active"><a href="https://medlatec.vn/tim-kiem-thong-tin?keyword=a&amp;type=bai-viet">Bài viết (25645)</a></li>
-                        <li><a href="https://medlatec.vn/tim-kiem-bac-si?keyword=a&amp;type=bac-si">Bác sĩ (45)</a></li>
-                    </ul>
-                    <div class="team-items">
-                        <div class="team-item">
-                            <div class="team-item-info">
-                                <div class="team-item-photo">
-                                    <a href="" class="avatar-doctor">
-                                        <img src="https://medlatec.vn/media/1555/catalog/thaytri-removebg-preview.png?size=256" alt="">
-                                    </a>
-                                    <span class="circle"></span>
+                    @if ($total != 0)
+                        <ul class="search-nav-filter">
+                            <li><a href="/tim-kiem-bai-viet?keyword={{ $keyword }}">Bài viết ({{ $total_post }})</a></li>
+                            <li class="active"><a href="/tim-kiem-bac-si?keyword={{ $keyword }}">Bác sĩ ({{ $total_doctor }})</a></li>
+                        </ul>
+                        <div class="team-items">
+                            @foreach ($doctors as $item)
+                                <div class="team-item">
+                                    <div class="team-item-info">
+                                        <div class="team-item-photo">
+                                            <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}" class="avatar-doctor">
+                                                <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}">
+                                            </a>
+                                            <span class="circle"></span>
+                                        </div>
+                                        <div class="team-item-details">
+                                            <h3 class="team-item-name">
+                                                <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}">{{$item->name}}</a>
+                                            </h3>
+                                            <div class="team-item-special">
+                                                <a href="">Chuyên khoa - {{ $item->specialty?->name }}</a>
+                                            </div>
+                                            <div class="team-item-review">
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                            </div>
+                                            <div class="team-item-book">
+                                                <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}#book-doctor">Đặt lịch khám</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="team-item-details">
-                                    <h3 class="team-item-name">
-                                        <a href="">TTND.GS.AHLĐ.BSCC Nguyễn Anh Trí</a>
-                                    </h3>
-                                    <div class="team-item-special">
-                                        <a href="">Chuyên khoa - Xét nghiệm</a>
-                                    </div>
-                                    <div class="team-item-review">
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                    </div>
-                                    <div class="team-item-book">
-                                        <a href="">Đặt lịch khám</a>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
-                        <div class="team-item">
-                            <div class="team-item-info">
-                                <div class="team-item-photo">
-                                    <a href="" class="avatar-doctor">
-                                        <img src="https://medlatec.vn/media/1555/catalog/thaytri-removebg-preview.png?size=256" alt="">
-                                    </a>
-                                    <span class="circle"></span>
-                                </div>
-                                <div class="team-item-details">
-                                    <h3 class="team-item-name">
-                                        <a href="">TTND.GS.AHLĐ.BSCC Nguyễn Anh Trí</a>
-                                    </h3>
-                                    <div class="team-item-special">
-                                        <a href="">Chuyên khoa - Xét nghiệm</a>
-                                    </div>
-                                    <div class="team-item-review">
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                    </div>
-                                    <div class="team-item-book">
-                                        <a href="">Đặt lịch khám</a>
-                                    </div>
-                                </div>
-                            </div>
+                        {{ $doctors->links('vendor.pagination.custom-pagination') }}
+                    @else
+                        <div class="search-empty">
+                            <img loading="lazy" src="{{ asset('assets/images/search-empty.png') }}" alt="Not found">
+                            <p>Không có kết quả theo từ khóa “{{ $keyword }}”</p>
                         </div>
-                        <div class="team-item">
-                            <div class="team-item-info">
-                                <div class="team-item-photo">
-                                    <a href="" class="avatar-doctor">
-                                        <img src="https://medlatec.vn/media/1555/catalog/thaytri-removebg-preview.png?size=256" alt="">
-                                    </a>
-                                    <span class="circle"></span>
-                                </div>
-                                <div class="team-item-details">
-                                    <h3 class="team-item-name">
-                                        <a href="">TTND.GS.AHLĐ.BSCC Nguyễn Anh Trí</a>
-                                    </h3>
-                                    <div class="team-item-special">
-                                        <a href="">Chuyên khoa - Xét nghiệm</a>
-                                    </div>
-                                    <div class="team-item-review">
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                    </div>
-                                    <div class="team-item-book">
-                                        <a href="">Đặt lịch khám</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-item">
-                            <div class="team-item-info">
-                                <div class="team-item-photo">
-                                    <a href="" class="avatar-doctor">
-                                        <img src="https://medlatec.vn/media/1555/catalog/thaytri-removebg-preview.png?size=256" alt="">
-                                    </a>
-                                    <span class="circle"></span>
-                                </div>
-                                <div class="team-item-details">
-                                    <h3 class="team-item-name">
-                                        <a href="">TTND.GS.AHLĐ.BSCC Nguyễn Anh Trí</a>
-                                    </h3>
-                                    <div class="team-item-special">
-                                        <a href="">Chuyên khoa - Xét nghiệm</a>
-                                    </div>
-                                    <div class="team-item-review">
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                    </div>
-                                    <div class="team-item-book">
-                                        <a href="">Đặt lịch khám</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
-            <div class="col-xs-12 col-lg-4">
-                <div class="sidebar-hotline" style="background-image: url(https://medlatec.vn/med/images/contactsidebar.png);">
-                    <div class="hotline">
-                        <div class="icon">
-                            <i class="fa-solid fa-phone-volume"></i>
-                        </div>
-                        <div class="text">
-                            <span>Hotline</span>
-                            <strong>1900565656</strong>
-                        </div>
-                    </div>
-                    <p>Liên hệ ngay với số hotline của MEDLATEC để được phục vụ và sử dụng các dịch vụ khám, chữa bệnh hiện đại & cao cấp nhất.</p>
-                    <a href="tel:1900565656" class="btn btn-primary">Liên hệ với chúng tôi</a>
-                </div>
-                <div class="sidebar-banner">
-                    <a href="" target="_blank">
-                        <img src="https://medlatec.vn/media/41099/catalog/B%e1%bb%99+banner+2025_C%e1%bb%99t+ph%e1%ba%a3i.jpg?size=2048" alt="">
-                    </a>
-                </div>
-                <div class="sidebar-banner">
-                    <a href="" target="_blank">
-                        <img src="https://medlatec.vn/media/41099/catalog/B%e1%bb%99+banner+2025_C%e1%bb%99t+ph%e1%ba%a3i.jpg?size=2048" alt="">
-                    </a>
-                </div>
-                <div class="latest-news">
-                    <div class="block-title">
-                        <h2>Tin tức nổi bật</h2>
-                        <a href="" class="action">Xem thêm</a>
-                    </div>
-                    <div class="block-content">
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-item post-item-list">
-                            <div class="post-item-info">
-                                <div class="post-item-photo">
-                                    <a href="" class="post-image-container">
-                                        <img src="https://medlatec.vn/media/47676/content/nhiem-khuan-huyet-medlatec.jpg?size=1024" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-item-details">
-                                    <div class="post-item-date">
-                                        <i class="fa-regular fa-clock"></i>
-                                        Thứ Bảy, 29 tháng 3, 2025
-                                    </div>
-                                    <h3 class="post-item-title">
-                                        <a href="">
-                                            Sốt cao, tiểu rắt… người phụ nữ đến MEDLATEC khám phát hi...
-                                        </a>
-                                    </h3>
-                                    <div class="post-item-excerpt">
-                                        Người phụ nữ có biểu hiện sốt cao, rét run, kèm theo đó là tiểu buốt, tiểu rắt… nên đến viện khám. Bác sĩ tại Bệnh viện Đa khoa MEDLATEC phát hiện người này...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @include('inc_themes.sidebar')
         </div>
     </div>
 </div>

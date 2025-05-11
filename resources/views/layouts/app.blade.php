@@ -36,6 +36,9 @@
         @yield('content')
 
         <div id="overlay"></div>
+        <button id="backToTop" class="back-to-top">
+            <i class="fa-solid fa-angle-up"></i>
+        </button>
         <!-- end content -->
         <!-- footer -->
         @include('inc_themes.footer')

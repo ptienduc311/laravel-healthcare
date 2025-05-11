@@ -45,6 +45,21 @@
     color: #fff;
 }
 
+.search-wrapper .search-empty {
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 160px; 
+    color: #A6A6A6;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.search-wrapper .search-empty img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 60px;
+}
+
 .team-item {
     width: 33.33333333%;
 }

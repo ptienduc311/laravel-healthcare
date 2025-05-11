@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-        View::composer(['inc_themes.header'], PostCategoryComposer::class);
+        View::composer(['inc_themes.header', 'inc_themes.footer'], PostCategoryComposer::class);
 
         $site = Site::first();
         View::share('site', $site);

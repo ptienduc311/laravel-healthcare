@@ -30,7 +30,7 @@
                                 <div class="card-body md:p-10">
                                     <div class="text-center logo">
                                         <div class="logo-img">
-                                            <img class="mx-auto avatar-img" src="{{ asset('logo-big.png') }}" alt="HealthCare logo">
+                                            <img class="mx-auto avatar-img" src="{{ asset('assets/images/logo-big.png') }}" alt="HealthCare logo">
                                         </div>
                                     </div>
                                     @yield('content')
