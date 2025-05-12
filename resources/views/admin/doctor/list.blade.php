@@ -100,7 +100,9 @@
                                     <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}" class="thumb">
                                 </td>
                                 <td>
-                                    <span>{{ $item->name }}</span>
+                                    <a href="{{ route('doctor.info', $item->id) }}">
+                                        <span class="text-muted fw-semibold" data-toggle="tooltip" data-placement="top" title="Thông tin bác sĩ">{{ $item->name }}</span>
+                                    </a>
                                     <a href="{{ route('appointment.add', $item->id) }}" class="link-appointment">Thêm lịch khám</a>
                                 </td>
                                 <td>

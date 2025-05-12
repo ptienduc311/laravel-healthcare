@@ -53,6 +53,104 @@ $(document).ready(function () {
             $(this).closest(itemSelector).remove();
         }
     });
+
+    //Tìm kiếm bác sĩ
+    $('.btn-search-doctor').on('click', function () {
+        $('#ibox1').children('.ibox-content').addClass('sk-loading');
+        let specialtyId = $('#specialty-id').val().trim();
+        let doctorName = $('#doctor-name').val().trim();
+
+        if (!specialtyId && !doctorName) {
+            $('#ibox1').find('.ibox-content').removeClass('sk-loading');
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "1500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr.warning("Vui lòng chọn chuyên khoa hoặc nhập tên bác sĩ.");
+            return;
+        }
+
+        $.ajax({
+            url: '/admin/api-get-doctors',
+            type: 'GET',
+            data: {
+                specialty_id: specialtyId,
+                name: doctorName
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    let html = '';
+                    response.doctors.forEach(function (doctor) {
+                        html += `
+                            <div class="item-doctor" data-doctor-id="${doctor.id}">
+                                <img src="${doctor.avatar_url}" alt="Ảnh bác sĩ" class="avatar">
+                                <div class="name">${doctor.name}</div>
+                            </div>
+                        `;
+                    });
+                    $('.list-doctor').html(html);
+                } else {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "progressBar": true,
+                        "preventDuplicates": false,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "10000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.warning(response.message);
+                    $('.list-doctor').html('');
+                }
+            },
+            error: function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "progressBar": true,
+                    "preventDuplicates": false,
+                    "positionClass": "toast-top-right",
+                    "onclick": null,
+                    "showDuration": "400",
+                    "hideDuration": "10000",
+                    "timeOut": "3000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.error("Đã xảy ra lỗi khi tải bác sĩ.");
+            },
+            complete: function () {
+                $('#ibox1').find('.ibox-content').removeClass('sk-loading');
+            }
+        });
+    });
+
+    $(document).on('click', '.item-doctor', function () {
+        $('.item-doctor').removeClass('selected');
+        $(this).addClass('selected');
+    });
 });
 
 //CheckAll

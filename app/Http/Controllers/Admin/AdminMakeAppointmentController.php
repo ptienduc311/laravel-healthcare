@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\MedicalSpecialty;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,10 +58,12 @@ class AdminMakeAppointmentController extends Controller
         return view('admin.appointment.list', compact('groupedAppointments', 'paginator'));
     }
 
-    public function create(string $doctorId)
+    public function create($doctorId = null)
     {
+        $type = null;
+        $specialties = MedicalSpecialty::where('status', 1)->get();
         $doctor = Doctor::findOrFail($doctorId);
-        return view('admin.appointment.add', compact('doctor'));
+        return view('admin.appointment.add', compact('doctor', 'specialties', 'type'));
     }
 
     public function store(Request $request, string $doctorId)

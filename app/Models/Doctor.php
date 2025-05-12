@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class Doctor extends Model
 {
     protected $fillable = [
-        'name', 'slug_name', 'image_id', 'gender', 'specialty_id', 'experience', 'academic_title', 'degree', 'regency', 'introduce', 'status', 'is_outstanding', 'created_by', 'created_date_int'
+        'name', 'slug_name', 'image_id', 'gender', 'address', 'email', 'phone', 'current_workplace', 'specialty_id', 'experience', 'academic_title', 'degree', 'regency', 'introduce', 'status', 'is_outstanding', 'created_by', 'created_date_int'
     ];
 
     public function image(): BelongsTo{

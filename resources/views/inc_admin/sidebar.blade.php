@@ -81,11 +81,17 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/doctor/info-doctor*') ? 'active' : '' }}">
+                        <a href="{{ url('admin/doctor/info-doctor') }}">Thông tin bác sĩ</a>
+                    </li>
                     <li class="{{ request()->is('admin/doctor') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor') }}">Danh sách bác sĩ</a>
                     </li>
                     <li class="{{ request()->is('admin/doctor/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor/add') }}">Thêm bác sĩ</a>
+                    </li>
+                    <li class="{{ request()->is('admin/appointment/add*') ? 'active' : '' }}">
+                        <a href="{{ url('admin/appointment/add') }}">Thêm lịch khám</a>
                     </li>
                     <li class="{{ request()->is('admin/appointment') ? 'active' : '' }}">
                         <a href="{{ url('admin/appointment') }}">Lịch khám</a>

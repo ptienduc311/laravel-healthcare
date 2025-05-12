@@ -24,10 +24,18 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('doctor.update', $doctor->id) }}" autocomplete="off">
-                        @csrf
+            <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('doctor.update', $doctor->id) }}" autocomplete="off">
+                @csrf
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Thông tin chuyên khoa</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Tên bác sĩ<span class="claim">*</span></label>
                             <div class="col-sm-10">
@@ -372,9 +380,48 @@
                                 <button class="btn btn-primary" type="submit">Cập nhật</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Thông tin cá nhân <small>(không bắt buộc)</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Địa chỉ</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="address" value="{{ $doctor->address }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="email" value="{{ old('email', $doctor->email) }}">
+                                @error('email')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Số điện thoại</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="phone" value="{{ $doctor->phone }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Nơi công tác</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="current_workplace" value="{{ $doctor->current_workplace }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

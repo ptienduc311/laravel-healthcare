@@ -34,13 +34,15 @@ Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name(
 Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
 
 Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], function(){
-    #ADMIN
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile/update', [AdminController::class, 'profile_update'])->name('admin.profile_update');
     Route::get('/site', [AdminController::class, 'site'])->name('admin.site')->middleware('can:site.edit');
     Route::post('/site/update', [AdminController::class, 'site_update'])->name('admin.site_update')->middleware('can:site.edit');
     
+    //API
+    Route::get('/api-get-doctors', [AdminDoctorController::class, 'getDoctors']);
+
     //PostCategory
     Route::group(['prefix' => 'post/cat', 'as' => 'post_category.'], function() {
         Route::get('/', [AdminPostCategoryController::class, 'index'])->name('index')->middleware('can:post_category.index');
@@ -93,7 +95,7 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
     //Appointment
     Route::group(['prefix' => 'appointment', 'as' => 'appointment.'], function() {
         Route::get('/', [AdminMakeAppointmentController::class, 'index'])->name('index')->middleware('can:appointment.index');
-        Route::get('/add/{doctorId}', [AdminMakeAppointmentController::class, 'create'])->name('add')->middleware('can:appointment.add');
+        Route::get('/add/{doctorId?}', [AdminMakeAppointmentController::class, 'create'])->name('add')->middleware('can:appointment.add');
         Route::post('/store/{doctorId}', [AdminMakeAppointmentController::class, 'store'])->name('store')->middleware('can:appointment.add');
         Route::get('/edit/{doctorId}/{date}', [AdminMakeAppointmentController::class, 'edit'])->name('edit')->middleware('can:appointment.edit');
         Route::post('/update/{doctorId}/{date}', [AdminMakeAppointmentController::class, 'update'])->name('update')->middleware('can:appointment.edit');

@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             $table->dropColumn('is_outstanding');
-                        $table->string('description', 255)->nullable(false)->change();
+            $table->string('description', 255)->nullable(false)->change();
         });
     }
 };

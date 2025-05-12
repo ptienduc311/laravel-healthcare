@@ -279,12 +279,12 @@
     transition: 0.3s;
 }
 
-.show-list-doctor .item-doctor.selected{
-    background: #ffeb23;
-}
-
 .show-list-doctor .item-doctor:hover{
     background: #d0cfca;
+}
+
+.show-list-doctor .item-doctor.selected{
+    background: #ffeb23;
 }
 
 .show-list-doctor .item-doctor .avatar{

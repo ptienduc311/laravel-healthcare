@@ -64,8 +64,24 @@ class AdminDoctorController extends Controller
     }
 
     public function show($id = null){
+        dd('123');
+        //Học hàm, học vị
+        $academicTitles = [
+            1 => 'Giáo sư',
+            2 => 'Phó giáo sư',
+        ];
+        
+        $degrees = [
+            1 => 'Bác sĩ nội trú',
+            2 => 'Bác sĩ',
+            3 => 'Tiến sĩ',
+            4 => 'Thạc sĩ',
+            5 => 'Bác sĩ chuyên khoa II',
+            6 => 'Bác sĩ chuyên khoa I',
+            7 => 'Bác sĩ cao cấp',
+        ];
         $doctor = Doctor::where('id', $id)->first();
-        dd($doctor->toArray());
+        return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees'));
     }
 
     public function create()
@@ -82,20 +98,24 @@ class AdminDoctorController extends Controller
                 'name' => 'required|string|max:255',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'experience' => 'nullable|string|max:255',
-                'gender' => 'required'
+                'gender' => 'required', 
+                'email' => 'nullable|string|email|max:255',
             ],
             [
                 'required' => ':attribute không được để trống',
                 'string' => ':attribute phải là chuỗi',
                 'max' => ':attribute có độ dài tối đa :max ký tự',
                 'image' => 'File được chọn không phải dạng ảnh',
-                'mimes' => ':attribute phải thuộc các loại sau jpg,png,jpeg,gif,svg'
+                'mimes' => ':attribute phải thuộc các loại sau jpg,png,jpeg,gif,svg',
+                'string' => ':attribute phải là chuỗi',
+                'email' => ':attribute không đúng định dạng',
             ],
             [
                 'name' => "Tên bác sĩ",
                 'experience' => "Số năm kinh nghiệm",
                 'avatar' => "Ảnh đại diện",
-                'gender' => "Giới tính"
+                'gender' => "Giới tính",
+                'email' => "Email"
             ]
         );
 
@@ -146,6 +166,10 @@ class AdminDoctorController extends Controller
         $name = $request->input('name');
         $slug_name = Str::slug($request->input('name'));
         $gender = $request->input('gender');
+        $address = $request->input('address');
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+        $current_workplace = $request->input('current_workplace');
         $specialty_id = $request->input('specialty_id');
         $experience = $request->input('experience');
         $academic_title = $request->input('academic_title');
@@ -160,6 +184,10 @@ class AdminDoctorController extends Controller
             'slug_name' => $slug_name,
             'image_id' => $image_id,
             'gender' => $gender,
+            'address' => $address,
+            'email' => $email,
+            'phone' => $phone,
+            'current_workplace' => $current_workplace,
             'specialty_id' => $specialty_id ?? null,
             'experience' => $experience,
             'academic_title' => $academic_title,
@@ -238,20 +266,24 @@ class AdminDoctorController extends Controller
                 'name' => 'required|string|max:255',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'experience' => 'nullable|string|max:255',
-                'gender' => 'required'
+                'gender' => 'required',
+                'email' => 'nullable|string|email|max:255',
             ],
             [
                 'required' => ':attribute không được để trống',
                 'string' => ':attribute phải là chuỗi',
                 'max' => ':attribute có độ dài tối đa :max ký tự',
                 'image' => 'File được chọn không phải dạng ảnh',
-                'mimes' => ':attribute phải thuộc các loại sau jpg,png,jpeg,gif,svg'
+                'mimes' => ':attribute phải thuộc các loại sau jpg,png,jpeg,gif,svg',
+                'string' => ':attribute phải là chuỗi',
+                'email' => ':attribute không đúng định dạng',
             ],
             [
                 'name' => "Tên bác sĩ",
                 'experience' => "Số năm kinh nghiệm",
                 'avatar' => 'Ảnh đại diện',
-                'gender' => "Giới tính"
+                'gender' => "Giới tính",
+                'email' => "Email"
             ]
         );
 
@@ -313,6 +345,10 @@ class AdminDoctorController extends Controller
         $name = $request->input('name');
         $slug_name = Str::slug($request->input('name'));
         $gender = $request->input('gender');
+        $address = $request->input('address');
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+        $current_workplace = $request->input('current_workplace');
         $specialty_id = $request->input('specialty_id');
         $experience = $request->input('experience');
         $academic_title = $request->input('academic_title');
@@ -327,6 +363,10 @@ class AdminDoctorController extends Controller
             'slug_name' => $slug_name,
             'image_id' => $image_id,
             'gender' => $gender,
+            'address' => $address,
+            'email' => $email,
+            'phone' => $phone,
+            'current_workplace' => $current_workplace,
             'specialty_id' => $specialty_id ?? null,
             'experience' => $experience,
             'academic_title' => $academic_title,
@@ -403,5 +443,50 @@ class AdminDoctorController extends Controller
             $oldImage->delete();
         }
         return redirect('admin/doctor')->with('success', 'Đã xóa thành công');
+    }
+
+    public function getDoctors(Request $request)
+    {
+        $specialty_id = $request->query('specialty_id');
+        $name = $request->query('name');
+
+        if(!$specialty_id && !$name){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Vui lòng chọn chuyên khoa hoặc nhập tên bác sĩ.'
+            ]);
+        }
+
+        $query = Doctor::where('status', 1);
+
+        if ($specialty_id) {
+            $query->where('specialty_id', $specialty_id);
+        }
+
+        if ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        $doctors = $query->where('status', 1)->get();
+
+        if ($doctors->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không tìm thấy bác sĩ phù hợp.'
+            ]);
+        }
+
+        $data = $doctors->map(function ($doctor) {
+            return [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'avatar_url' => $doctor->avatar_url,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'doctors' => $data
+        ]);
     }
 }
