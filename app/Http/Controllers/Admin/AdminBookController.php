@@ -172,7 +172,7 @@ class AdminBookController extends Controller
             'time_examination' => $time_examination,
             'doctor_name' => $doctor_name,
             'specialty' => $specialty,
-            'reason' => $reason ? $reason : "Bác sĩ có lịch bận đột xuất.",
+            'reason' => $reason ? $reason : "Bác sĩ thay đổi lịch làm việc.",
             'email_web' => $email_web,
             'phone' => $phone
         ];

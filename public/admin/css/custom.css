@@ -172,6 +172,12 @@ label.timeline-item:has(input:checked) {
     color: #fff;
 }
 
+label.timeline-item.have-appointment:not(:has(input:checked)){
+    background: none !important;
+    border: 1px solid #9f9a9a !important;
+    color: inherit;
+}
+
 .card{
     border: 1px solid #bdbdbd;
     border-radius: 5px;

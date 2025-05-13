@@ -110,7 +110,7 @@ class ApiController extends Controller
         $province_id = $request->province_id;
         $district_id = $request->district_id;
         $ward_id = $request->ward_id;
-        $today = Carbon::today();
+        $today = Carbon::today()->startOfDay();;
         // dd($name, $phone, $birth, $email, $gender, $address, $appointmentDate,
         // $date_examination, $appointment_id, $reason, $doctor_id, $specialty_id,
         // $province_id, $district_id, $ward_id, $today);

@@ -18,6 +18,7 @@
     <link href="{{ asset('admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/jasny/jasny-bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/css/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('ckeditor5/ckeditor5.css')}}" rel="stylesheet">
     <link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
@@ -84,6 +85,11 @@
     
     <!-- Sweet alert -->
     <script src="{{ asset('admin/js/plugins/sweetalert/sweetalert.min.js') }}"></script>
+    
+    <!-- Ladda -->
+    <script src="{{ asset('admin/js/plugins/ladda/spin.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/ladda/ladda.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/ladda/ladda.jquery.min.js') }}"></script>
 
     <script type="importmap">
         {

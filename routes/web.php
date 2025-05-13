@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
     
     //API
     Route::get('/api-get-doctors', [AdminDoctorController::class, 'getDoctors']);
+    Route::post('/api/check-doctor-appointments', [AdminMakeAppointmentController::class, 'checkAppointment']);
+    Route::post('/appointment/confirm-remove', [AdminMakeAppointmentController::class, 'confirmRemove'])->name('appointment.confirm-remove');
 
     //PostCategory
     Route::group(['prefix' => 'post/cat', 'as' => 'post_category.'], function() {

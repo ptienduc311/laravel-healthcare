@@ -83,11 +83,12 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Bác sĩ {{ $doctor->name }}</h5>
+                        <h5>Bác sĩ <span id="selected-doctor-name">{{ $doctor->name ?? '[Chưa chọn]' }}</span></h5>
                     </div>
                     <div class="ibox-content">
-                        <form method="POST" class="form-horizontal" enctype="multipart/form-data"
-                            action="{{ route('appointment.store', $doctor->id) }}" autocomplete="off">
+                        <form method="POST" id="appointment-form"
+                            action="{{ isset($doctor) ? route('appointment.store', $doctor->id) : '#' }}"
+                            class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Ngày khám <span class="claim">*</span></label>
@@ -110,12 +111,15 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Khoảng thời gian khám</label>
                                 <div class="col-sm-2 px-0">
-                                    <select class="form-control m-b" id="time-interval">
-                                        <option value="15" {{ $type == 1 ? 'selected' : '' }}>15 phút</option>
-                                        <option value="30" {{ $type == 2 ? 'selected' : '' }}>30 phút</option>
-                                        <option value="60" {{ $type == 3 ? 'selected' : '' }}>1 giờ</option>
-                                        <option value="120" {{ $type == 4 ? 'selected' : '' }}>2 giờ</option>
+                                    <select class="form-control m-b" name="type" id="time-interval">
+                                        <option value="15">15 phút</option>
+                                        <option value="30">30 phút</option>
+                                        <option value="60">1 giờ</option>
+                                        <option value="120">2 giờ</option>
                                     </select>
+                                    @error('type')
+                                        <p class="error">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -155,9 +159,10 @@
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-primary" type="submit">Thêm lịch khám</button>
+                                    <button class="btn btn-primary" type="submit" id="submit-button" {{ isset($doctor) ? '' : 'disabled' }}>Thêm lịch khám</button>
                                 </div>
                             </div>
+                            <input type="hidden" name="doctor_id" value="{{ isset($doctor) ? $doctor->id : '' }}" id="doctor-id">
                         </form>
                     </div>
                 </div>
@@ -167,6 +172,73 @@
 @endsection
 
 @section('custom-js')
+    @if ($errors->has('doctor_id'))
+        <script>
+            toastr.options = {
+                closeButton: false,
+                debug: false,
+                progressBar: true,
+                preventDuplicates: false,
+                positionClass: "toast-top-right",
+                onclick: null,
+                showDuration: "400",
+                hideDuration: "10000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+
+            toastr.error("{{ $errors->first('doctor_id') }}");
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": true,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.success("{{session('success')}}")
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": true,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
+        </script>
+    @endif
     <script>
         //Xử lý input date 
         const today = new Date();
@@ -175,7 +247,7 @@
 
         $('#day-examination').datepicker({
             format: 'dd-mm-yyyy',
-            startDate: today,
+            startDate: today,       
             endDate: oneMonthLater,
             autoclose: true,
             todayHighlight: true
@@ -188,104 +260,6 @@
         const formattedToday = `${day}-${month}-${year}`;
         $('#day-examination').val(formattedToday);
 
-        //Xử lý lịch hẹn
-        function generateTimeSlots(interval) {
-            const start = 7 * 60;
-            const end = 23 * 60;
-            const slots = [];
-
-            for (let time = start; time <= end; time += interval) {
-                const hours = Math.floor(time / 60);
-                const minutes = time % 60;
-                const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-                slots.push({
-                    timeStr,
-                    minutes: time
-                });
-            }
-
-            return slots;
-        }
-
-        function renderTimeSlots() {
-            const interval = parseInt($('#time-interval').val());
-            const slots = generateTimeSlots(interval);
-            const container = $('#time-slots');
-            container.empty();
-
-            slots.forEach(slot => {
-                const checkbox = `
-                <label class="timeline-item me-2 mb-2 d-inline-block">
-                    <input type="checkbox" name="hour_examination[]" value="${slot.timeStr}" data-minutes="${slot.minutes}"> ${slot.timeStr}
-                </label>
-            `;
-                container.append(checkbox);
-            });
-        }
-
-        function handleTimeTypeSelection(radio) {
-            const selected = radio.val();
-            const alreadyChecked = radio.data('checked') || false;
-            const interval = parseInt($('#time-interval').val());
-
-            if (alreadyChecked) {
-                // Nếu đã chọn trước → bỏ chọn
-                $('input[name="type_time"]').prop('checked', false).data('checked', false);
-                $('input[name="hour_examination[]"]').prop('checked', false);
-                return;
-            }
-
-            // Đánh dấu radio được chọn
-            $('input[name="type_time"]').data('checked', false);
-            radio.data('checked', true);
-
-            let start = 0,
-                end = 0;
-            switch (selected) {
-                case 'all_day':
-                    start = 7 * 60;
-                    end = 23 * 60;
-                    break;
-                case 'morning':
-                    start = 7 * 60;
-                    end = 12 * 60 + 59;
-                    break;
-                case 'afternoon':
-                    start = 13 * 60;
-                    end = 17 * 60 + 59;
-                    break;
-                case 'night':
-                    start = 18 * 60;
-                    end = 23 * 60;
-                    break;
-                default:
-                    return;
-            }
-
-            $('input[name="hour_examination[]"]').each(function() {
-                const time = parseInt($(this).data('minutes'));
-                if (time >= start && time <= end) {
-                    $(this).prop('checked', true);
-                } else {
-                    $(this).prop('checked', false);
-                }
-            });
-        }
-        $(document).ready(function() {
-            renderTimeSlots();
-
-            $('#time-interval').on('change', function() {
-                renderTimeSlots();
-                const checkedRadio = $('input[name="type_time"]:checked');
-                if (checkedRadio.length) {
-                    handleTimeTypeSelection(checkedRadio);
-                }
-            });
-
-            $('input[name="type_time"]').on('click', function() {
-                handleTimeTypeSelection($(this));
-            });
-        });
     </script>
 
 @endsection

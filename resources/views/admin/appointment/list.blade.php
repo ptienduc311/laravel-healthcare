@@ -28,15 +28,24 @@
                 <div class="ibox-content">
                     <div class="row mb-3">
                         <form action="{{ route('appointment.index') }}" method="get" class="row mb-4 ms-0" autocomplete="off">
-                            <div class="col-sm-3 m-b-xs">
-                                <div class="input-group date">
+                            <div class="col-sm-4 m-b-xs d-flex align-items-center">
+                                <p class="mb-0" style="flex-basis: 25%;">Ngày bắt đầu</p>
+                                <div class="input-group date" style="flex-basis: 75%">
                                     <span class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </span>
-                                    <input type="text" class="form-control" value="{{ request('date') }}" id="day-filter" name="date">
+                                    <input type="text" class="form-control" value="{{ request('start_date') }}" id="day-start" name="start_date">
                                 </div>
                             </div>
-                            <div class="col-sm-5"></div>
+                            <div class="col-sm-4 m-b-xs d-flex align-items-center">
+                                <p class="mb-0" style="flex-basis: 25%;">Ngày kết thúc</p>
+                                <div class="input-group date" style="flex-basis: 75%">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input type="text" class="form-control" value="{{ request('end_date') }}" id="day-end" name="end_date">
+                                </div>
+                            </div>
                             <div class="col-sm-1 m-b-xs"></div>
                             <div class="col-sm-3">
                                 <div class="input-group">
@@ -57,71 +66,48 @@
                                 <th>Ảnh đại diện</th>
                                 <th colspan="2">Tên bác sĩ</th>
                                 <th colspan="2">Ngày khám</th>
-                                <th>Người tạo</th>
                                 <th>Hoạt động</th>
                             </tr>
                         </thead>
                         <tbody>
-                        @php $index = 1; @endphp
-                        @foreach($groupedAppointments as $doctorId => $dates)
-                            @php
-                                $doctor = $dates->first()->first()->doctor;
-                            @endphp
+                        @foreach($appointments as $key => $item)
                             <tr>
-                                <td rowspan="{{ count($dates) }}">{{ $index++ }}</td>
-                                <td rowspan="{{ count($dates) }}">
-                                    <img src="{{ $doctor->avatar_url }}" alt="Ảnh {{ $doctor->name }}" class="thumb">
+                                <td>{{ $key++ }}</td>
+                                <td>
+                                    <img src="{{ $item->doctor?->avatar_url }}" alt="Ảnh bác sĩ" class="thumb">
                                 </td>
-                                <td rowspan="{{ count($dates) }}">
-                                    <span>{{ $doctor->name }}</span>
-                                    <a href="{{ route('appointment.add', $doctor->id) }}" class="link-appointment">Thêm lịch khám</a>
+                                <td>
+                                    <span>{{ $item->doctor?->name }}</span>
+                                    <a href="{{ route('appointment.add', $item->doctor?->id) }}" class="link-appointment">Thêm lịch khám</a>
                                 </td>
-                                <td rowspan="{{ count($dates) }}">
-                                    @if ($doctor->specialty_id)
-                                        <span class="{{ $doctor->specialty?->status == 1 ? 'active-cat' : 'inactive-cat' }}">
-                                            {{ $doctor->specialty?->name }}
+                                <td>
+                                    @if ($item->doctor?->specialty_id)
+                                        <span class="{{ $item->doctor?->specialty?->status == 1 ? 'active-cat' : 'inactive-cat' }}">
+                                            {{ $item->doctor?->specialty?->name }}
                                         </span>
                                     @else
                                         <span class="no-cat">Chưa chọn chuyên khoa</span>
                                     @endif
                                 </td>
-                                @foreach($dates as $dateInt => $appointments)
-                                    @php
-                                        $formattedDate = date('d/m/Y', $dateInt);
-                                        $hours = $appointments->pluck('hour_examination')->sort()->join(', ');
-                                        $user = $appointments->first()->user;
-                                    @endphp
-                    
-                                    @if (!$loop->first)
-                                        <tr>
-                                    @endif
-                                        <td>{{ $formattedDate }}</td>
-                                        <td>
-                                            <span class="created_by" data-toggle="tooltip" title="{{ $hours }}">
-                                                {{ $appointments->count() }} cuộc hẹn
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="created_by" data-toggle="tooltip"
-                                                  title="{{ $user?->roles?->pluck('name')->join(', ') }}">
-                                                  {{ $user?->name }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('appointment.edit', ['doctorId' => $doctor->id, 'date' => $dateInt]) }}" title="Sửa" class="edit">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a href="{{ route('appointment.destroy', ['doctorId' => $doctor->id, 'date' => $dateInt]) }}" title="Xóa" class="delete"
-                                               onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                <td>{{ date('d/m/Y', $item->day_examination) }}</td>
+                                <td>
+                                    <span class="created_by" data-toggle="tooltip" title="{{ $item->hours }}">
+                                        {{ $item->total_appointments }} lịch khám
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('appointment.edit', ['doctorId' => $item->doctor_id, 'date' => $item->day_examination]) }}" title="Sửa" class="edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="{{ route('appointment.destroy', ['doctorId' => $item->doctor_id, 'date' => $item->day_examination]) }}" title="Xóa" class="delete"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
                         @endforeach
                         </tbody>
                     </table>
-                    {{$paginator->links()}}
+                    {{$appointments->links()}}
                 </div>
             </div>
         </div>
@@ -154,7 +140,12 @@
     @endif
 
     <script>
-        $('#day-filter').datepicker({
+        $('#day-start').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
+        $('#day-end').datepicker({
             format: 'dd-mm-yyyy',
             autoclose: true,
             todayHighlight: true

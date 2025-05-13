@@ -11,18 +11,18 @@
         </h2>
         <div style="padding: 30px;">
           <p>Xin chào <strong>{{ $name }}</strong>,</p>
-          <p>Chúng tôi xin thông báo rằng lịch hẹn khám bệnh của bạn đã được <strong>hủy</strong> với các thông tin như sau:</p>
+          <p>Chúng tôi xin thông báo rằng lịch hẹn khám bệnh của bạn đã bị <strong style="font-size: 16px; font-weight: 600; color:#d9534f;">hủy</strong> với các thông tin như sau:</p>
 
-          <ul>
-              <li><strong>Mã lịch hẹn:</strong> {{ $book_code }}</li>
-              <li><strong>Thời gian khám:</strong> {{ $time_examination }}</li>
-              <li><strong>Bác sĩ:</strong> {{ $doctor_name }}</li>
-              <li><strong>Chuyên khoa:</strong> {{ $specialty }}</li>
+          <ul class="detail" style="list-style:none;margin: 20px 0;background-color: #f2f2f2;padding: 15px;border-left: 5px solid #d9534f;">
+              <li style="margin-bottom: 10px;"><strong>Mã lịch hẹn:</strong> {{ $book_code }}</li>
+              <li style="margin-bottom: 10px;"><strong>Thời gian khám:</strong> {{ $time_examination }}</li>
+              <li style="margin-bottom: 10px;"><strong>Bác sĩ:</strong> {{ $doctor_name }}</li>
+              <li style="margin-bottom: 10px;"><strong>Chuyên khoa:</strong> {{ $specialty }}</li>
           </ul>
 
           <p><strong>Lý do hủy:</strong> {{ $reason }}</p>
 
-          <p>Nếu bạn có bất kỳ thắc mắc nào hoặc muốn đặt lại lịch hẹn, vui lòng liên hệ với chúng tôi qua số điện thoại hoặc email hỗ trợ:</p>
+          <p>Chúng tôi rất xin lỗi vì sự bất tiện này. Nếu bạn có bất kỳ thắc mắc nào hoặc muốn đặt lại lịch hẹn, vui lòng liên hệ với chúng tôi qua số điện thoại hoặc email hỗ trợ:</p>
 
           <ul>
               <li><strong>Email:</strong> {{ $email_web }}</li>

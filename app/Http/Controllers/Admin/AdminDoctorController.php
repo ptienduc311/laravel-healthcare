@@ -64,7 +64,6 @@ class AdminDoctorController extends Controller
     }
 
     public function show($id = null){
-        dd('123');
         //Học hàm, học vị
         $academicTitles = [
             1 => 'Giáo sư',

@@ -2,6 +2,15 @@
 
 @section('title', 'Sửa lịch khám bệnh')
 @section('content')
+<style>
+    button.confirm.ladda-button[disabled]{
+        cursor: not-allowed;
+        filter: alpha(opacity=65);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        opacity: .65;
+    }
+</style>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>Bác sĩ</h2>
@@ -52,11 +61,11 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Khoảng thời gian khám</label>
                             <div class="col-sm-2 px-0">
-                                <select class="form-control m-b" id="time-interval">
-                                    <option value="15">15 phút</option>
-                                    <option value="30" selected>30 phút</option>
-                                    <option value="60">1 giờ</option>
-                                    <option value="120">2 giờ</option>
+                                <select class="form-control m-b" name="type" id="time-interval">
+                                    <option value="15" {{ $type == 15 ? 'selected' : '' }}>15 phút</option>
+                                    <option value="30"  {{ $type == 30 ? 'selected' : '' }}>30 phút</option>
+                                    <option value="60"  {{ $type == 60 ? 'selected' : '' }}>1 giờ</option>
+                                    <option value="120"  {{ $type == 120 ? 'selected' : '' }}>2 giờ</option>
                                 </select>
                             </div>
                         </div>
@@ -84,14 +93,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Chọn giờ khám <span class="claim">*</span></label>
-                            <div class="col-sm-10 px-0" id="time-slots">
-                                @foreach ($appointments as $item)
-                                    <label class="timeline-item me-2 mb-2 d-inline-block{{ $item->is_appointment == 1 ? " have-appointment" : "" }}">
-                                        <input type="checkbox" name="hour_examination[]" value="{{ $item->hour_examination }}" checked>
-                                        {{ $item->hour_examination }}
-                                    </label>
-                                @endforeach
-                            </div>
+                            <div class="col-sm-10 px-0" id="time-slots"></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2"></div>
@@ -108,6 +110,7 @@
                                 <a href="/admin/appointment" class="btn btn-info ms-2">Quay lại</a>
                             </div>
                         </div>
+                        <input type="hidden" name="doctor_id" value="{{ $doctor->id }}" id="doctor-id">
                     </form>
                 </div>
             </div>
@@ -117,110 +120,143 @@
 @endsection
 
 @section('custom-js')
-<script>
-    const dateVal = $('#day-examination').val();
-    $('#day-examination').datepicker({
-        format: 'dd-mm-yyyy',
-        startDate: dateVal,
-        endDate: dateVal,
-        autoclose: true
-    });
-
-    function generateTimeSlots(interval) {
-        const start = 7 * 60;
-        const end = 23 * 60;
-        const slots = [];
-
-        for (let time = start; time <= end; time += interval) {
-            const hours = Math.floor(time / 60);
-            const minutes = time % 60;
-            const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-            slots.push({ timeStr, minutes: time });
-        }
-
-        return slots;
-    }
-
-    function renderTimeSlots() {
-        const interval = parseInt($('#time-interval').val());
-        const slots = generateTimeSlots(interval);
-        const container = $('#time-slots');
-        container.empty();
-
-        slots.forEach(slot => {
-            const checkbox = `
-                <label class="timeline-item me-2 mb-2 d-inline-block">
-                    <input type="checkbox" name="hour_examination[]" value="${slot.timeStr}" data-minutes="${slot.minutes}"> ${slot.timeStr}
-                </label>
-            `;
-            container.append(checkbox);
-        });
-    }
-
-    function handleTimeTypeSelection(radio) {
-        const selected = radio.val();
-        const alreadyChecked = radio.data('checked') || false;
-        const interval = parseInt($('#time-interval').val());
-
-        if (alreadyChecked) {
-            // Nếu đã chọn trước → bỏ chọn
-            $('input[name="type_time"]').prop('checked', false).data('checked', false);
-            $('input[name="hour_examination[]"]').prop('checked', false);
-            return;
-        }
-
-        // Đánh dấu radio được chọn
-        $('input[name="type_time"]').data('checked', false);
-        radio.data('checked', true);
-
-        let start = 0, end = 0;
-        switch (selected) {
-            case 'all_day':
-                start = 7 * 60;
-                end = 23 * 60;
-                break;
-            case 'morning':
-                start = 7 * 60;
-                end = 12 * 60 + 59;
-                break;
-            case 'afternoon':
-                start = 13 * 60;
-                end = 17 * 60 + 59;
-                break;
-            case 'night':
-                start = 18 * 60;
-                end = 23 * 60;
-                break;
-            default:
-                return;
-        }
-
-        $('input[name="hour_examination[]"]').each(function () {
-            const time = parseInt($(this).data('minutes'));
-            console.log(time)
-            if (time >= start && time <= end) {
-                $(this).prop('checked', true);
-            } else {
-                $(this).prop('checked', false);
+    @if (session('error'))
+        <script>
+            toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "progressBar": false,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "2400",
+            "extendedTimeOut": "1000",
+            "showEasing": "linear",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
             }
-        });
-    }
 
-    $(document).ready(function () {
-        // renderTimeSlots();
+            toastr.error("{{session('error')}}")
+        </script>
+    @endif
 
-        $('#time-interval').on('change', function () {
-            renderTimeSlots();
-            const checkedRadio = $('input[name="type_time"]:checked');
-            if (checkedRadio.length) {
-                handleTimeTypeSelection(checkedRadio);
-            }
+    @if ($errors->has('doctor_id'))
+        <script>
+            toastr.options = {
+                closeButton: false,
+                debug: false,
+                progressBar: true,
+                preventDuplicates: false,
+                positionClass: "toast-top-right",
+                onclick: null,
+                showDuration: "400",
+                hideDuration: "10000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+
+            toastr.error("{{ $errors->first('doctor_id') }}");
+        </script>
+    @endif
+    @if (session('confirm_remove'))
+        <script>
+            const type = "{{ session('type') }}";
+            const newHours = {!! json_encode(session('newHours')) !!};
+            const hoursAdd = {!! json_encode(session('hoursAdd')) !!};
+            const hoursAppointment = {!! json_encode(session('hoursAppointment')) !!};
+            const appointmentIds = {!! json_encode(session('appointmentIds')) !!};
+            const date = "{{ session('date') }}";
+            const doctorId = "{{ session('doctorId') }}";
+
+            const arrHoursAppointment = Object.values(hoursAppointment)
+            const strHoursAppointment = arrHoursAppointment.join(', ');
+            const swalText = `Bạn đã xóa ${arrHoursAppointment.length} giờ có lịch hẹn: ${strHoursAppointment}.
+                Bạn có chắc muốn xóa?`;
+
+            swal({
+                title: "Xác nhận thay đổi lịch khám?",
+                text: swalText,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Chắc chắn",
+                cancelButtonText: "Không",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    console.log(type, newHours, hoursAdd, hoursAppointment, appointmentIds, date, doctorId)
+                    const $btn = $('.sweet-alert .confirm');
+                    $btn.addClass('ladda-button')
+                    const ladda = Ladda.create($btn[0]);
+                    ladda.start();
+                    $btn.find('.ladda-label').text('Đang gửi email...');
+
+                    $.ajax({
+                        url: "{{ route('appointment.confirm-remove') }}", // bạn tạo route này
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            doctor_id: doctorId,
+                            date: date,
+                            type: type,
+                            newHours: newHours,
+                            hoursAdd: hoursAdd,
+                            hoursAppointment: hoursAppointment,
+                            appointmentIds: appointmentIds,
+                        },
+                        success: function (res) {
+                            ladda.stop();
+                            if (res.success) {
+                                swal("Thành công!", res.message, "success");
+                                setTimeout(() => {
+                                    location.href = `/admin/appointment/edit/${doctorId}/${date}`;
+                                }, 1500);
+                            } else {
+                                swal("Lỗi!", res.message, "error");
+                            }
+                        },
+                        error: function () {
+                            ladda.stop();
+                            swal("Lỗi!", "Không thể xử lý yêu cầu.", "error");
+                        }
+                    });
+                }
+            });
+        </script>
+    @endif
+
+    <script>
+        const dateVal = $('#day-examination').val();
+        $('#day-examination').datepicker({
+            format: 'dd-mm-yyyy',
+            startDate: dateVal,
+            endDate: dateVal,
+            autoclose: true
         });
 
-        $('input[name="type_time"]').on('click', function () {
-            handleTimeTypeSelection($(this));
-        });
-    });
-</script>
+        // $(document).ready(function (){
+
+        //     var l = $( '.ladda-button-demo' ).ladda();
+
+        //     l.click(function(){
+        //         // Start loading
+        //         l.ladda( 'start' );
+
+        //         // Timeout example
+        //         // Do something in backend and then stop ladda
+        //         setTimeout(function(){
+        //             l.ladda('stop');
+        //         },12000)
+        //     });
+        // });
+    </script>
 
 @endsection

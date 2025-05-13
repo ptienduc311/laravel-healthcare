@@ -23,7 +23,7 @@
         <div class="doctor-single">
             <div class="make-appointment">
                 <div class="book-title">Đặt lịch khám cùng chuyên gia</div>
-                <div class="book-note">Quý khách hàng vui lòng điền thông tin để đặt lịch thăm khám cùng <span style="color: #1D93E3;">PGS.TS.BSCC Nguyễn Quốc Dũng</span></div>
+                <div class="book-note">Quý khách hàng vui lòng điền thông tin để đặt lịch thăm khám cùng bác sĩ</div>
                 <div class="bookings">
                     <form action="/api-save-book" method="post" id="form-book">
                         @csrf

@@ -74,8 +74,8 @@
             </li>
             @endcanany
 
-            @canany(['doctor.index', 'doctor.add', 'doctor.edit', 'doctor.destroy', 'appointment.index', 'appointment.add', 'appointment.edit', 'appointment.destroy'])
-            <li class="{{ (request()->is('admin/doctor*') || request()->is('admin/appointment*')) ? 'active' : '' }}">
+            @canany(['doctor.index', 'doctor.add', 'doctor.edit', 'doctor.destroy'])
+            <li class="{{ request()->is('admin/doctor*') ? 'active' : '' }}">
                 <a href="{{ url('admin/doctor') }}">
                     <i class="fa fa-user-md"></i> <span class="nav-label">Bác sĩ</span>
                     <span class="fa arrow"></span>
@@ -90,11 +90,22 @@
                     <li class="{{ request()->is('admin/doctor/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor/add') }}">Thêm bác sĩ</a>
                     </li>
+                </ul>
+            </li>
+            @endcanany
+
+            @canany(['appointment.index', 'appointment.add', 'appointment.edit', 'appointment.destroy'])
+            <li class="{{ request()->is('admin/appointment*') ? 'active' : '' }}">
+                <a href="{{ url('admin/appointment') }}">
+                    <i class="fa fa-user-md"></i> <span class="nav-label">Lịch khám</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/appointment') ? 'active' : '' }}">
+                        <a href="{{ url('admin/appointment') }}">Danh sách lịch khám</a>
+                    </li>
                     <li class="{{ request()->is('admin/appointment/add*') ? 'active' : '' }}">
                         <a href="{{ url('admin/appointment/add') }}">Thêm lịch khám</a>
-                    </li>
-                    <li class="{{ request()->is('admin/appointment') ? 'active' : '' }}">
-                        <a href="{{ url('admin/appointment') }}">Lịch khám</a>
                     </li>
                 </ul>
             </li>
