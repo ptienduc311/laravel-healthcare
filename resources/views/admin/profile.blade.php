@@ -48,7 +48,10 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Mật khẩu</label>
                             <div class="col-sm-4">
-                                <input type="password" class="form-control" value="" name="password">
+                                <input type="password" class="form-control pe-5" value="" name="password">
+                                <div class="toggle-password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </div>
                                 @error('password')
                                     <p class="error">{{ $message }}</p>
                                 @enderror    
@@ -57,7 +60,10 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Xác nhận mật khẩu</label>
                             <div class="col-sm-4">
-                                <input type="password" class="form-control" value="" name="password_confirmation">
+                                <input type="password" class="form-control pe-5" value="" name="password_confirmation">
+                                <div class="toggle-password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>

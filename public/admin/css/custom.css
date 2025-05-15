@@ -195,7 +195,6 @@ label.timeline-item.have-appointment:not(:has(input:checked)){
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
 }
 
 .card-body label.checkbox-inline{
@@ -351,4 +350,31 @@ label.timeline-item.have-appointment:not(:has(input:checked)){
 .list-doctor .item-doctor .name {
     font-weight: 600;
     padding-left: 15px;
+}
+
+.gif-search{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gif-search h3{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.gif-search .img{
+    max-width: 250px;
+}
+
+.gif-search img{
+    width: 100%;
+    height: auto;
+}
+
+.toggle-password{
+    position: absolute;
+    top: 8px;
+    right: 25px;
+    cursor: pointer;
 }

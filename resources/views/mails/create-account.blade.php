@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <title>Xác nhận tài khoản</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            padding: 20px;
-        }
-
         .container {
             max-width: 600px;
             margin: auto;
@@ -56,12 +50,12 @@
 
         .btn-confirm {
             background-color: #28a745;
-            color: #fff;
+            color: #fff !important;
         }
 
         .btn-cancel {
             background-color: #dc3545;
-            color: #fff;
+            color: #fff !important;
             margin-left: 10px;
         }
 
@@ -73,30 +67,30 @@
 <body>
 <div class="container">
     <h2>Xin chào,</h2>
-
     <p>
         Bạn nhận được email này vì quản trị viên của <strong>HealthCare</strong>
         (Dịch vụ đặt lịch khám chữa bệnh) đã tạo một tài khoản sử dụng email của bạn.
     </p>
-
     <p>Nếu bạn đồng ý tạo tài khoản, dưới đây là thông tin đăng nhập ban đầu:</p>
 
     <div class="info">
         <p><strong>Tên tài khoản:</strong> {{ $username }}</p>
         <p><strong>Email:</strong> {{ $email }}</p>
         <p><strong>Mật khẩu:</strong> {{ $password }}</p>
-        <p><strong>Vai trò:</strong> {{ implode(', ', $roles) }}</p>
+        <p><strong>Vai trò:</strong> {{ $roles }}</p>
         <p class="note">(Đăng nhập bằng email và mật khẩu)</p>
     </div>
 
     <div class="actions">
-        <p>Vui lòng nhấn vào nút bên dưới để kích hoạt tài khoản:</p>
-        <a href="{{ $confirmationUrl }}" class="btn btn-confirm">Xác nhận tài khoản</a>
+        @if (!$is_active)
+            <p>Vui lòng nhấn vào nút bên dưới để kích hoạt tài khoản:</p>
+            <a href="{{ $urlActive }}" class="btn btn-confirm">Xác nhận tài khoản</a>
+        @endif
 
-         <p>Nếu bạn không yêu cầu tạo tài khoản này, vui lòng nhấn "Hủy tài khoản" tại đây:</p>
-        <a href="{{ $cancelUrl }}" class="btn btn-cancel">Hủy tài khoản</a>
+        <p>Nếu bạn không yêu cầu tạo tài khoản này, vui lòng nhấn "Hủy tài khoản" tại đây:</p>
+        <a href="{{ $urlCancel }}" class="btn btn-cancel">Hủy tài khoản</a>
     </div>
-              <p>Xin cảm ơn,<br><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">Hệ thống quản trị HealthCare</strong></p>
+    <p>Xin cảm ơn,<br><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">Hệ thống quản trị HealthCare</strong></p>
 </div>
 </body>
 </html>

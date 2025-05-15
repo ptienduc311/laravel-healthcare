@@ -41,7 +41,6 @@ class AdminBookController extends Controller
             });
         });
 
-
         $selectedDoctor = null;
         if ($request->filled('doctor_id')) {
             $selectedDoctor = Doctor::find($request->doctor_id);
@@ -115,6 +114,7 @@ class AdminBookController extends Controller
         if($book->status == 3){
             return redirect()->back()->with('error', 'Lịch hẹn này đã bị hủy.');
         }
+        //Chưa xử lý
     }
 
     public function searchDoctor(Request $request){

@@ -111,6 +111,7 @@
                             </div>
                         </div>
                         <input type="hidden" name="doctor_id" value="{{ $doctor->id }}" id="doctor-id">
+                        <input type="hidden" value="true" id="is-appointment">
                     </form>
                 </div>
             </div>

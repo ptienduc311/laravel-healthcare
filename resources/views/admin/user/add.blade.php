@@ -1,60 +1,123 @@
 @extends('layouts.admin')
 
-@section('title', 'Thêm người dùng')
-@section('custom-css')
-    <link href="{{ asset('admin_style/css/user/add_user.css') }}" rel="stylesheet" type="text/css" />
-@endsection
-
+@section('title', 'Tạo tài khoản')
 @section('content')
-    <div id="content" class="fl-right">
-        <div id="card">
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {!! session('status') !!}
-                </div>
-            @endif
-            <h2>THÊM NGƯỜI DÙNG</h2>
-            <form action="{{ route('user.store') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Tên tài khoản</label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}" required>
-                </div>
-                @error('name')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required>
-                </div>
-                @error('email')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" id="password" name="password" value="{{ old('password') }}" required>
-                </div>
-                @error('password')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-                <div class="form-group">
-                    <label for="password_confirmation">Xác nhận mật khẩu</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" required>
-                </div>
-                <div class="form-group">
-                    <label for="role">Nhóm quyền</label>
-                    <select id="role" name="role" required>
-                        <option value="">Chọn quyền</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->name }}">{{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button type="submit">Thêm mới</button>
-                </div>
-            </form>
-        </div>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Người dùng</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Trang chủ</a>
+            </li>
+            <li>
+                <a>Người dùng</a>
+            </li>
+            <li class="active">
+                <strong>Tạo tài khoản</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
 
     </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form method="POST" class="form-horizontal" action="{{ route('user.store') }}" autocomplete="off">
+                        @csrf
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tên tài khoản<span class="claim">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+                                @error('name')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Email<span class="claim">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" value="{{ old('email') }}" name="email">
+                                @error('email')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Mật khẩu<span class="claim">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password">
+                                <div class="toggle-password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </div>
+                                @error('password')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Xác nhận mật khẩu</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password_confirmation">
+                                <div class="toggle-password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Vai trò</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" multiple name="roles[]">
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('roles')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Kich hoạt tài khoản</label>
+                            <div class="col-sm-10">
+                                <div class="checkbox checkbox-danger">
+                                    <input id="activate" type="checkbox" name="is_activate">
+                                    <label for="activate">
+                                        Kích hoạt
+                                    </label>
+                                </div>
+                                <small class="d-block pt-3 fst-italic">Tài khoản <b>Admin</b> sẽ tự động kích hoạt tài khoản.</small>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit" name="action" value="create">Tạo tài khoản</button>
+                                <button class="btn btn-primary ladda-button ladda-button-send-mail" type="submit" name="action" value="create_and_send"  data-style="zoom-in">Gửi email xác nhận</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('custom-js')
+    <script>
+        var l = Ladda.bind('.ladda-button-send-mail');
+        l.click(function(){
+            l.ladda( 'start' );
+        });
+    </script>
 @endsection

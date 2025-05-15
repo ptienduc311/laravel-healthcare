@@ -31,8 +31,17 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Tên vai trò<span class="claim">*</span></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="name" value="{{old('name')}}">
+                                <input type="text" class="form-control name-role" name="name" value="{{old('name')}}">
                                 @error('name')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Mã vai trò <span class="claim">*</span><small class="d-block fw-normal text-muted">(viết thường, không dấu)</small></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control slug-role" name="slug_role" value="{{ old('slug_role') }}">
+                                @error('slug_role')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -62,8 +71,8 @@
                                 </div>
                                 <div class="card-body">
                                     @foreach ($modulePermissions as $permission)
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" name="permission_id[]" class="permission-checkbox" value="{{ $permission->id }}" {{ in_array($permission->id, old('permission_id', [])) ? 'checked' : '' }}>{{ $permission->name }}
+                                        <label class="checkbox-inline col-md-3">
+                                            <input type="checkbox" name="permission_id[]" class="permission-checkbox" value="{{ $permission->id }}" {{ in_array($permission->id, old('permission_id', [])) ? 'checked' : '' }} style="top:20%;">{{ $permission->name }}
                                         </label>
                                     @endforeach
                                 </div>
@@ -84,4 +93,27 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-js')
+    <script>
+        //Sinh slug role
+        function toSlug(str) {
+            return str
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-+|-+$/g, '');   
+        }
+
+        $('.name-role').on('input', function () {
+            const nameValue = $(this).val();
+            const slug = toSlug(nameValue);
+            $('.slug-role').val(slug);
+        });
+    </script>
 @endsection

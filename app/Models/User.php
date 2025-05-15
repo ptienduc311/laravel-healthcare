@@ -21,7 +21,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'name', 'email', 'password', 'remember_token', 'email_verified_at', 'reset_token', 'confirm_token',
+        'name', 'email', 'password', 'status', 'remember_token', 'email_verified_at', 'reset_token', 'confirm_token', 'cancel_token'
     ];
 
     /**
@@ -57,11 +57,11 @@ class User extends Authenticatable
     public function roles(): BelongsToMany{
         return $this->belongsToMany(Role::class, 'user_roles');
     }
-
-    public function hasRole($role)
-    {
-        return $this->roles->contains('name', $role);
-    }
+ 
+    // public function hasRole($role)
+    // {
+    //     return $this->roles->contains('name', $role);
+    // }
 
     public function hasPermission($permission)
     {

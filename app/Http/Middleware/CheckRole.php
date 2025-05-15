@@ -14,7 +14,7 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
         $user = Auth::user();
 
@@ -22,8 +22,12 @@ class CheckRole
             return redirect('/login');
         }
 
-        if ($user->roles->contains('name', 'Admin') || $user->roles->contains('name', 'doctor')) {
-            return $next($request);
+        $userRoles = $user->roles->pluck('slug_role')->toArray();
+
+        foreach ($roles as $role) {
+            if (in_array($role, $userRoles)) {
+                return $next($request);
+            }
         }
 
         Auth::logout();

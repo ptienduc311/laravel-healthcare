@@ -81,11 +81,22 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins show-loading-bottom">
                     <div class="ibox-title">
                         <h5>Bác sĩ <span id="selected-doctor-name">{{ $doctor->name ?? '[Chưa chọn]' }}</span></h5>
                     </div>
                     <div class="ibox-content">
+                        <div class="sk-spinner sk-spinner-cube-grid">
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                        </div>
                         <form method="POST" id="appointment-form"
                             action="{{ isset($doctor) ? route('appointment.store', $doctor->id) : '#' }}"
                             class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
@@ -113,7 +124,7 @@
                                 <div class="col-sm-2 px-0">
                                     <select class="form-control m-b" name="type" id="time-interval">
                                         <option value="15">15 phút</option>
-                                        <option value="30">30 phút</option>
+                                        <option value="30" selected>30 phút</option>
                                         <option value="60">1 giờ</option>
                                         <option value="120">2 giờ</option>
                                     </select>
@@ -163,6 +174,7 @@
                                 </div>
                             </div>
                             <input type="hidden" name="doctor_id" value="{{ isset($doctor) ? $doctor->id : '' }}" id="doctor-id">
+                            <input type="hidden" value="true" id="is-appointment">
                         </form>
                     </div>
                 </div>

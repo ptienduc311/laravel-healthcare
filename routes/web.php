@@ -26,6 +26,7 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'register'])->name('register');
 Route::post('register/handle', [RegisterController::class, 'handle'])->name('register.handle');
 Route::get('register/active/{confirm_token}', [RegisterController::class, 'active'])->name('register.active');
+Route::get('cancel-account/{cancel_token}', [RegisterController::class, 'cancelAccount'])->name('register.cancel');
 
 //Reset Password
 Route::get('reset', [LoginController::class, 'reset'])->name('reset.pass');
@@ -33,7 +34,7 @@ Route::post('send-link-reset', [LoginController::class, 'sendLinkResetEmail'])->
 Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name('new.pass');
 Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
 
-Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], function(){
+Route::group(['middleware' => ['auth', 'checkActive', 'checkRole: admin,doctor'], 'prefix' => 'admin'], function(){
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile/update', [AdminController::class, 'profile_update'])->name('admin.profile_update');
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
     
     //API
     Route::get('/api-get-doctors', [AdminDoctorController::class, 'getDoctors']);
+    Route::get('/show-profile-doctor', [AdminDoctorController::class, 'showProfile'])->name('doctor.show-profile');
     Route::post('/api/check-doctor-appointments', [AdminMakeAppointmentController::class, 'checkAppointment']);
     Route::post('/appointment/confirm-remove', [AdminMakeAppointmentController::class, 'confirmRemove'])->name('appointment.confirm-remove');
 
@@ -91,7 +93,7 @@ Route::group(['middleware' => ['auth', 'checkRole'], 'prefix' => 'admin'], funct
         Route::post('/update/{id}', [AdminDoctorController::class, 'update'])->name('update')->middleware('can:doctor.edit');
         Route::get('/destroy/{id}', [AdminDoctorController::class, 'destroy'])->name('destroy')->middleware('can:doctor.destroy');
 
-        Route::get('/info-doctor/{id?}', [AdminDoctorController::class, 'show'])->name('info');
+        Route::get('/profile-doctor/{doctorId?}', [AdminDoctorController::class, 'show'])->name('profile-doctor')->middleware('can:doctor.profile');
     });
    
     //Appointment
@@ -163,7 +165,7 @@ Route::get('api-get-doctors', [ApiController::class, 'getDoctors']);
 Route::get('tim-kiem-bac-si', [FrontedController::class, 'searchDoctor']);
 Route::get('tim-kiem-bai-viet', [FrontedController::class, 'searchPost']);
 
-Route::get('/', [FrontedController::class, 'index']);
+Route::get('/', [FrontedController::class, 'index'])->name('home');
 Route::get('gioi-thieu', [FrontedController::class, 'introduce']);
 
 Route::get('doi-ngu-chuyen-gia', [FrontedController::class, 'listDoctor']);

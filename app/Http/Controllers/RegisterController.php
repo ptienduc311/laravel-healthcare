@@ -89,14 +89,33 @@ class RegisterController extends Controller
                 return redirect()->route('login')->with('success', 'Xác nhận tài khoản thành công!!!');
             } else {
                 echo "<script>
-                    alert('Tài khoản đã được kích hoạt trước đó');
+                    alert('Tài khoản đã được kích hoạt trước đó.');
                     window.location.href = '$urlLogin';
                     </script>";
             }
         } else {
             echo "<script>
-                alert('Yêu cầu kích hoạt không hợp lệ. Sai mã xác nhận hoặc tài khoản đã quá thời gian xác nhận');
+                alert('Yêu cầu kích hoạt không hợp lệ. Sai mã xác nhận hoặc tài khoản đã quá thời gian xác nhận.');
                 window.location.href = '$urlLogin';
+                </script>";
+        }
+    }
+
+    public function cancelAccount($cancel_token){
+        $exists = User::where('cancel_token', $cancel_token)->exists();
+        $urlHome = route('home');
+        if ($exists) {
+            $user = User::where('cancel_token', $cancel_token)->first();
+            $user->roles()->detach();
+            $user->delete();
+            echo "<script>
+                alert('Đã xóa tài khoản thành công.');
+                window.location.href = '$urlHome';
+                </script>";
+        } else {
+            echo "<script>
+                alert('Tài khoản đã được xóa hoặc không tồn tại.');
+                window.location.href = '$urlHome';
                 </script>";
         }
     }

@@ -81,6 +81,7 @@
 .toast-bottom-full-width {
     margin-bottom: 20px;
 }
+/* End Toast */
 .logo{
     display: flex;
     justify-content: center;
@@ -89,4 +90,20 @@
 .logo-img{
     max-width: 140px;
     height: auto;
+}
+
+.pos-relative{
+    position: relative;
+}
+
+.back-home{
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.back-home:hover{
+    color: #6ba7fd;
 }

@@ -238,7 +238,7 @@
                                     </tr>
                                     <tr>
                                         <td class="content-block">
-                                            Cảm ơn bạn đã đăng ký tài khoản tại Shoes Store. Để hoàn tất quá trình đăng ký, hãy nhấn vào nút bên dưới:
+                                            Cảm ơn bạn đã đăng ký tài khoản tại HealthCare. Để hoàn tất quá trình đăng ký, hãy nhấn vào nút bên dưới:
                                         </td>
                                     </tr>
                                     <tr>

@@ -27,16 +27,9 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="row mb-3">
-                        <form action="{{ route('role.index') }}" method="get" class="row mb-4 ms-0">
-                            <div class="col-sm-2 m-b-xs">
+                        <form action="{{ route('role.index') }}" method="GET" class="row mb-4 ms-0">
+                            <div class="col-sm-9 m-b-xs">
                             </div>
-                            <div class="col-sm-2 m-b-xs">
-                            </div>
-                            <div class="col-sm-2 m-b-xs">
-                            </div>
-                            <div class="col-sm-2 m-b-xs">
-                            </div>
-                            <div class="col-sm-1 m-b-xs"></div>
                             <div class="col-sm-3">
                                 <div class="input-group">
                                     <input type="text" name="keyword" placeholder="Nhập tên vai trò"
@@ -54,6 +47,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Vai trò</th>
+                                <th>Mã vai trò</th>
                                 <th>Mô tả</th>
                                 <th>Ngày tạo</th>
                                 <th>Tác vụ</th>
@@ -67,6 +61,9 @@
                                         {{ $item->name }}
                                     </td>
                                     <td>
+                                        {{ $item->slug_role }}
+                                    </td>
+                                    <td>
                                         {{ $item->description }}
                                     </td>
                                     <td>
@@ -76,9 +73,11 @@
                                         <a href="{{ route('role.edit', $item->id) }}" title="Sửa" class="edit">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="{{ route('role.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                        @if (!in_array($item->slug_role, ['admin', 'doctor']))
+                                            <a href="{{ route('role.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -113,6 +112,28 @@
             }
 
             toastr.success("{{session('success')}}")
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "31231314000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
         </script>
     @endif
 @endsection

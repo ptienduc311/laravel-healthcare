@@ -60,6 +60,11 @@ $(document).ready(function () {
         let specialtyId = $('#specialty-id').val().trim();
         let doctorName = $('#doctor-name').val().trim();
 
+        //Profile doctor
+        $('#doctor-profile').html('');
+        $('#no-found-doctor').show();
+        //End
+
         if($('#doctor-id')){
             $('#doctor-id').val('');
         }
@@ -183,22 +188,6 @@ $(document).ready(function () {
         return slots;
     }
 
-    // function renderTimeSlots(interval = 30, checkedTimes = []) {
-    //     const slots = generateTimeSlots(interval);
-    //     const container = $('#time-slots');
-    //     container.empty();
-
-    //     slots.forEach(slot => {
-    //         const isChecked = checkedTimes.includes(slot.timeStr) ? 'checked' : '';
-    //         const checkbox = `
-    //             <label class="timeline-item me-2 mb-2 d-inline-block">
-    //                 <input type="checkbox" name="hour_examination[]" value="${slot.timeStr}" data-minutes="${slot.minutes}" ${isChecked}> ${slot.timeStr}
-    //             </label>
-    //         `;
-    //         container.append(checkbox);
-    //     });
-    // }
-
     function renderTimeSlots(interval = 30, checkedData = []) {
         const slots = generateTimeSlots(interval);
         const container = $('#time-slots');
@@ -249,7 +238,12 @@ $(document).ready(function () {
     function loadAppointmentByDoctorAndDate() {
         const doctorId = $('#doctor-id').val();
         const dayExamination = $('#day-examination').val();
-        const fallbackInterval = parseInt($('#time-interval').val()); // <-- fallback nếu không có API data
+        const fallbackInterval = parseInt($('#time-interval').val());
+        const is_appointment = $('#is-appointment').val();
+
+        if(!is_appointment){
+            return;
+        }
 
         if (!doctorId) {
             renderTimeSlots(fallbackInterval);
@@ -290,7 +284,6 @@ $(document).ready(function () {
         });
     }
 
-
     $(document).ready(function () {
         loadAppointmentByDoctorAndDate();
         
@@ -315,23 +308,58 @@ $(document).ready(function () {
         const doctorId = $(this).data('doctor-id');
         const doctorName = $(this).data('doctor-name');
 
-        // Cập nhật tiêu đề
+        //Xr lý lấy lịch hẹn
         $('#selected-doctor-name').text(doctorName);
-
-        // Cập nhật action form
         $('#appointment-form').attr('action', `/admin/appointment/store/${doctorId}`);
-
-        // Nếu có input hidden doctor_id, cập nhật luôn
         if ($('#doctor-id').length) {
             $('#doctor-id').val(doctorId);
         } else {
             $('#appointment-form').append(`<input type="hidden" name="doctor_id" id="doctor-id" value="${doctorId}">`);
         }
-
         $('#submit-button').prop('disabled', false);
-
-        // Gọi lại lịch hẹn theo bác sĩ đã chọn (nếu cần)
         loadAppointmentByDoctorAndDate();
+
+        //Profile Doctor
+        $('.show-loading-bottom').find('.ibox-content').addClass('sk-loading');
+        $.ajax({
+            url: '/admin/show-profile-doctor',
+            type: 'GET',
+            data: {
+                doctorId: doctorId
+            },
+            success: function (response) {
+                if (response.status == 'error') {
+                    $('#no-found-doctor').show();
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "progressBar": true,
+                        "preventDuplicates": false,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "10000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.warning(response.message);
+                    return;
+                }
+                $('#no-found-doctor').hide();
+                $('#doctor-profile').html(response.html);
+            },
+            error: function () {
+                $('#no-found-doctor').show();
+                toastr.warning('Đã xảy ra lỗi khi tải thông tin bác sĩ.');
+            },
+            complete: function () {
+                $('.show-loading-bottom .ibox-content').removeClass('sk-loading');
+            }
+        });
     });
 
     $('#appointment-form').on('submit', function (e) {
@@ -357,9 +385,20 @@ $(document).ready(function () {
             toastr.error('Vui lòng chọn bác sĩ trước khi thêm lịch khám.');
         }
     });
+
+    //Ẩn/Hiển mật khẩu
+    $(document).on('click', '.toggle-password', function () {
+        const icon = $(this).find('i');
+        const input = $(this).siblings('input');
+
+        const isPassword = input.attr('type') === 'password';
+        input.attr('type', isPassword ? 'text' : 'password');
+
+        icon.toggleClass('fa-eye fa-eye-slash');
+    });
 });
 
-//CheckAll
+//CheckAll quyền
 document.addEventListener("DOMContentLoaded", function () {
     const checkAll = document.getElementById("check-all");
     const groupChecks = document.querySelectorAll(".group-check");

@@ -63,7 +63,7 @@ class AdminDoctorController extends Controller
         return view('admin.doctor.list', compact('medical_specialties', 'academicTitles', 'degrees', 'doctors'));
     }
 
-    public function show($id = null){
+    public function show($doctorId = null){
         //Học hàm, học vị
         $academicTitles = [
             1 => 'Giáo sư',
@@ -79,8 +79,14 @@ class AdminDoctorController extends Controller
             6 => 'Bác sĩ chuyên khoa I',
             7 => 'Bác sĩ cao cấp',
         ];
-        $doctor = Doctor::where('id', $id)->first();
-        return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees'));
+        $specialties = MedicalSpecialty::where('status', 1)->get();
+
+        if (!$doctorId) {
+            return view('admin.doctor.info', compact('academicTitles', 'degrees', 'specialties'));
+        }
+
+        $doctor = Doctor::where('id', $doctorId)->first();
+        return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees', 'specialties'));
     }
 
     public function create()
@@ -488,4 +494,35 @@ class AdminDoctorController extends Controller
             'doctors' => $data
         ]);
     }
+
+    public function showProfile(Request $request)
+    {
+        $doctorId = $request->query('doctorId');
+        $doctor = Doctor::with(['specialty', 'doctor_training', 'doctor_works', 'doctor_prizes'])->find($doctorId);
+
+        if (!$doctor) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không tìm thấy bác sĩ phù hợp.'
+            ]);
+        }
+
+        $academicTitles = [
+            'PGS' => 'Phó Giáo Sư',
+            'GS'  => 'Giáo Sư',
+            'TS'  => 'Tiến Sĩ',
+            'ThS' => 'Thạc Sĩ',
+        ];
+
+        $degrees = [
+            'BS'   => 'Bác Sĩ',
+            'BSCKI' => 'Bác Sĩ Chuyên Khoa I',
+            'BSCKII' => 'Bác Sĩ Chuyên Khoa II',
+        ];
+
+        $html = view('admin.doctor.doctor_profile', compact('doctor', 'academicTitles', 'degrees'))->render();
+
+        return response()->json(['html' => $html]);
+    }
+
 }

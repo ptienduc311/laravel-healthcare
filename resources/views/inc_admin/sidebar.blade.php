@@ -81,8 +81,8 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
-                    <li class="{{ request()->is('admin/doctor/info-doctor*') ? 'active' : '' }}">
-                        <a href="{{ url('admin/doctor/info-doctor') }}">Thông tin bác sĩ</a>
+                    <li class="{{ request()->is('admin/doctor/profile-doctor*') ? 'active' : '' }}">
+                        <a href="{{ url('admin/doctor/profile-doctor') }}">Thông tin bác sĩ</a>
                     </li>
                     <li class="{{ request()->is('admin/doctor') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor') }}">Danh sách bác sĩ</a>
@@ -146,7 +146,7 @@
             @endcanany
 
             @canany(['role.index', 'role.add', 'role.edit', 'role.destroy'])
-            <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
+            <li class="{{ request()->is('admin/role*') ? 'active' : '' }}">
                 <a href="{{ url('admin/role') }}">
                     <i class="fa fa-sitemap"></i> <span class="nav-label">Vai trò</span>
                     <span class="fa arrow"></span>
@@ -163,7 +163,7 @@
             @endcanany
 
             @canany(['user.index', 'user.add', 'user.edit', 'user.destroy'])
-            <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+            <li class="{{ request()->is('admin/user*') ? 'active' : '' }}">
                 <a href="{{ url('admin/user') }}">
                     <i class="fa fa-users"></i> <span class="nav-label">Người dùng</span>
                     <span class="fa arrow"></span>
@@ -172,9 +172,9 @@
                     <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
                         <a href="{{ url('admin/user') }}">Danh sách người dùng</a>
                     </li>
-                    {{-- <li class="{{ request()->is('admin/user/add') ? 'active' : '' }}">
+                    <li class="{{ request()->is('admin/user/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/user/add') }}">Thêm người dùng</a>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
             @endcanany

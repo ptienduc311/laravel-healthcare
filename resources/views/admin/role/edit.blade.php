@@ -31,8 +31,17 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Tên vai trò<span class="claim">*</span></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="name" value="{{ $role->name }}">
+                                <input type="text" class="form-control name-role" name="name" value="{{ $role->name }}">
                                 @error('name')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Mã vai trò <span class="claim">*</span><small class="d-block fw-normal text-muted">(viết thường, không dấu)</small></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control slug-role" name="slug_role" value="{{ $role->slug_role }}" {{ $isHaveRole ? 'readonly' : '' }}>
+                                @error('slug_role')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -62,8 +71,8 @@
                                 </div>
                                 <div class="card-body">
                                     @foreach ($modulePermissions as $permission)
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" name="permission_id[]" class="permission-checkbox" value="{{ $permission->id }}" {{ in_array($permission->id, $permissionIds) ? 'checked' : '' }}>{{ $permission->name }}
+                                        <label class="checkbox-inline col-md-3">
+                                            <input type="checkbox" name="permission_id[]" class="permission-checkbox" value="{{ $permission->id }}" {{ in_array($permission->id, $permissionIds) ? 'checked' : '' }} style="top:20%;">{{ $permission->name }}
                                         </label>
                                     @endforeach
                                 </div>
@@ -84,4 +93,52 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-js')
+    @if (!$isHaveRole)
+        <script>
+            //Sinh slug role
+            function toSlug(str) {
+                return str
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/đ/g, 'd')
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-+|-+$/g, '');   
+            }
+
+            $('.name-role').on('input', function () {
+                const nameValue = $(this).val();
+                const slug = toSlug(nameValue);
+                $('.slug-role').val(slug);
+            });
+        </script>
+    @endif
+
+    @if (session('warning'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.warning("{{session('warning')}}")
+        </script>
+    @endif
 @endsection

@@ -232,51 +232,71 @@
         </script>
     @endif
     <script>
-    $(document).ready(function () {
-        const specialtySelect = $('#specialty-id');
-        const doctorList = $('.show-list-doctor');
-        const showNameDoctor = $('.show-name-doctor');
-        const doctorIdInput = $('#doctor-id');
-        const groupDoctor = $('.group-doctor');
+        $(document).ready(function () {
+            const specialtySelect = $('#specialty-id');
+            const doctorList = $('.show-list-doctor');
+            const showNameDoctor = $('.show-name-doctor');
+            const doctorIdInput = $('#doctor-id');
+            const groupDoctor = $('.group-doctor');
 
-        let doctorsData = [];
+            let doctorsData = [];
 
-        showNameDoctor.on('click', function () {
-            if (!$(this).hasClass('disabled') && doctorsData.length > 0) {
-                doctorList.toggle();
-            }
-        });
+            showNameDoctor.on('click', function () {
+                if (!$(this).hasClass('disabled') && doctorsData.length > 0) {
+                    doctorList.toggle();
+                }
+            });
 
-        // Chọn một chuyên khoa
-        specialtySelect.on('change', function () {
-            const specialtyId = $(this).val();
+            // Chọn một chuyên khoa
+            specialtySelect.on('change', function () {
+                const specialtyId = $(this).val();
 
-            doctorsData = [];
-            doctorIdInput.val('');
-            doctorList.empty().hide();
-            showNameDoctor.addClass('disabled').text('Chọn bác sĩ');
+                doctorsData = [];
+                doctorIdInput.val('');
+                doctorList.empty().hide();
+                showNameDoctor.addClass('disabled').text('Chọn bác sĩ');
 
-            if (!specialtyId) return;
+                if (!specialtyId) return;
 
-            $.ajax({
-                url: '/api-get-doctors',
-                type: 'GET',
-                data: { specialty_id: specialtyId },
-                success: function (response) {
-                    if (response.status == 'success' && response.doctors.length > 0) {
-                        doctorsData = response.doctors;
+                $.ajax({
+                    url: '/api-get-doctors',
+                    type: 'GET',
+                    data: { specialty_id: specialtyId },
+                    success: function (response) {
+                        if (response.status == 'success' && response.doctors.length > 0) {
+                            doctorsData = response.doctors;
 
-                        response.doctors.forEach(function (doctor) {
-                            const doctorItem = `
-                                <div class="item-doctor" data-doctor-id="${doctor.id}" data-doctor-name="${doctor.name}">
-                                    <img src="${doctor.avatar_url}" title="Ảnh bác sĩ" class="avatar">
-                                    <div class="name">${doctor.name}</div>
-                                </div>`;
-                            doctorList.append(doctorItem);
-                        });
-                        showNameDoctor.removeClass('disabled').text('Chọn bác sĩ');
-                    } else {
-                        showNameDoctor.addClass('disabled').html(`<p class="error">Không có bác sĩ</p>`);
+                            response.doctors.forEach(function (doctor) {
+                                const doctorItem = `
+                                    <div class="item-doctor" data-doctor-id="${doctor.id}" data-doctor-name="${doctor.name}">
+                                        <img src="${doctor.avatar_url}" title="Ảnh bác sĩ" class="avatar">
+                                        <div class="name">${doctor.name}</div>
+                                    </div>`;
+                                doctorList.append(doctorItem);
+                            });
+                            showNameDoctor.removeClass('disabled').text('Chọn bác sĩ');
+                        } else {
+                            showNameDoctor.addClass('disabled').html(`<p class="error">Không có bác sĩ</p>`);
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "progressBar": true,
+                                "preventDuplicates": false,
+                                "positionClass": "toast-top-right",
+                                "onclick": null,
+                                "showDuration": "400",
+                                "hideDuration": "10000",
+                                "timeOut": "3000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            toastr.warning(response.message, "Không có bác sĩ");
+                        }
+                    },
+                    error: function () {
                         toastr.options = {
                             "closeButton": false,
                             "debug": false,
@@ -293,49 +313,39 @@
                             "showMethod": "fadeIn",
                             "hideMethod": "fadeOut"
                         };
-                        toastr.warning(response.message, "Không có bác sĩ");
+                        toastr.warning("Đã xảy ra lỗi khi tải bác sĩ.");
                     }
-                },
-                error: function () {
-                    toastr.options = {
-                        "closeButton": false,
-                        "debug": false,
-                        "progressBar": true,
-                        "preventDuplicates": false,
-                        "positionClass": "toast-top-right",
-                        "onclick": null,
-                        "showDuration": "400",
-                        "hideDuration": "10000",
-                        "timeOut": "3000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                    };
-                    toastr.warning("Đã xảy ra lỗi khi tải bác sĩ.");
+                });
+            });
+
+            // Khi click chọn một bác sĩ
+            groupDoctor.on('click', '.item-doctor', function () {
+                doctorList.find('.item-doctor').removeClass('selected');
+                $(this).addClass("selected");
+                
+                const doctorId = $(this).data('doctor-id');
+                const doctorName = $(this).data('doctor-name');
+                doctorIdInput.val(doctorId);
+                showNameDoctor.text(doctorName);
+                doctorList.hide();
+            });
+
+            // Nhấn lại chuyên khoa khác → reset toàn bộ
+            specialtySelect.on('change', function () {
+                doctorIdInput.val('');
+                doctorList.empty().hide();
+                showNameDoctor.addClass('disabled').text('Chọn bác sĩ');
+            });
+
+            $(document).on('click', function (e) {
+                const target = $(e.target);
+                const isInsideDoctorGroup = target.closest('.group-doctor').length > 0;
+
+                if (!isInsideDoctorGroup) {
+                    doctorList.hide();
                 }
             });
-        });
 
-        // Khi click chọn một bác sĩ
-        groupDoctor.on('click', '.item-doctor', function () {
-            doctorList.find('.item-doctor').removeClass('selected');
-            $(this).addClass("selected");
-            
-            const doctorId = $(this).data('doctor-id');
-            const doctorName = $(this).data('doctor-name');
-            doctorIdInput.val(doctorId);
-            showNameDoctor.text(doctorName);
-            doctorList.hide();
         });
-
-        // Nhấn lại chuyên khoa khác → reset toàn bộ
-        specialtySelect.on('change', function () {
-            doctorIdInput.val('');
-            doctorList.empty().hide();
-            showNameDoctor.addClass('disabled').text('Chọn bác sĩ');
-        });
-    });
     </script>
 @endsection
