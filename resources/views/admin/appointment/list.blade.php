@@ -48,17 +48,22 @@
                             </div>
                             <div class="col-sm-1 m-b-xs"></div>
                             <div class="col-sm-3">
-                                <div class="input-group">
-                                    <input type="text" name="keyword" placeholder="Nhập tên bác sĩ"
-                                           value="{{ request('keyword') }}"
-                                           class="input-sm form-control">
-                                    <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-sm btn-primary">Tìm kiếm</button>
-                                    </span>
-                                </div>
+                                @if ($isAdmin)
+                                    <div class="input-group">
+                                        <input type="text" name="keyword" placeholder="Nhập tên bác sĩ" value="{{ request('keyword') }}" class="input-sm form-control">
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-sm btn-primary">Tìm kiếm</button>
+                                        </span>
+                                    </div>
+                                @else
+                                    <div class="input-group float-end me-4">
+                                        <button type="submit" class="btn btn-sm btn-primary">Lọc</button>
+                                    </div>
+                                @endif
                             </div>
                         </form>
                     </div>
+                    <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -107,6 +112,7 @@
                         @endforeach
                         </tbody>
                     </table>
+                    </div>
                     {{$appointments->links()}}
                 </div>
             </div>
@@ -136,6 +142,91 @@
             }
 
             toastr.success("{{session('success')}}")
+        </script>
+    @endif
+
+    @if ($errors->has('doctor_id'))
+        <script>
+            toastr.options = {
+                closeButton: false,
+                debug: false,
+                progressBar: true,
+                preventDuplicates: false,
+                positionClass: "toast-top-right",
+                onclick: null,
+                showDuration: "400",
+                hideDuration: "10000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+
+            toastr.error("{{ $errors->first('doctor_id') }}");
+        </script>
+    @endif
+    @if (session('confirm_remove'))
+        <script>
+            const hoursAppointment = {!! json_encode(session('hoursAppointment')) !!};
+            const appointmentIds = {!! json_encode(session('appointmentIds')) !!};
+            const date = "{{ session('date') }}";
+            const doctorId = "{{ session('doctorId') }}";
+
+            const arrHoursAppointment = Object.values(hoursAppointment)
+            const strHoursAppointment = arrHoursAppointment.join(', ');
+            const swalText = `Bạn đã xóa ${arrHoursAppointment.length} giờ khám có lịch hẹn: ${strHoursAppointment}.
+                Bạn có chắc chắn muốn xóa?`;
+
+            swal({
+                title: "Xác nhận thay đổi lịch khám?",
+                text: swalText,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Chắc chắn",
+                cancelButtonText: "Không",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    console.log(hoursAppointment, appointmentIds, date, doctorId)
+                    const $btn = $('.sweet-alert .confirm');
+                    $btn.addClass('ladda-button')
+                    const ladda = Ladda.create($btn[0]);
+                    ladda.start();
+                    $btn.find('.ladda-label').text('Đang gửi email...');
+
+                    $.ajax({
+                        url: "{{ route('appointment.confirm-delete') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            doctor_id: doctorId,
+                            date: date,
+                            hoursAppointment: hoursAppointment,
+                            appointmentIds: appointmentIds,
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                swal("Thành công!", res.message, "success");
+                                setTimeout(() => {
+                                    location.href = '/admin/appointment';
+                                }, 1500);
+                            } else {
+                                swal("Lỗi!", res.message, "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Lỗi!", "Không thể xử lý yêu cầu.", "error");
+                        },
+                        complete: function () {
+                            ladda.stop();
+                        }
+                    });
+                }
+            });
         </script>
     @endif
 

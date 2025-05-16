@@ -242,8 +242,19 @@
         });
 
         $('#btn-show-reason').on('click', function () {
-            $(this).closest('.form-group').next('.form-group').removeClass('d-none');
-            $('#reason-cancel').focus();
+            const $btn = $(this);
+            const $cancelGroup = $btn.closest('.form-group').next('.form-group');
+            const $reasonTextarea = $('#reason-cancel');
+
+            if ($cancelGroup.hasClass('d-none')) {
+                $cancelGroup.removeClass('d-none');
+                $btn.text('Bỏ hủy');
+                $reasonTextarea.focus();
+            } else {
+                $cancelGroup.addClass('d-none');
+                $btn.html('<i class="fa fa-close"></i> Hủy hẹn');
+                $reasonTextarea.val('');
+            }
         });
 
         $(document).on('click', '#btn-cancel-appointment', function () {
@@ -262,6 +273,12 @@
                 closeOnConfirm: false
             }, function (isConfirm) {
                 if (isConfirm) {
+                    const $btn = $('.sweet-alert .confirm');
+                    $btn.addClass('ladda-button')
+                    const ladda = Ladda.create($btn[0]);
+                    ladda.start();
+                    $btn.find('.ladda-label').text('Đang gửi email...');
+
                     $.ajax({
                         url: "{{ route('book.cancel') }}",
                         method: "POST",
@@ -274,12 +291,18 @@
                         success: function (response) {
                             if (response.status == 'success') {
                                 swal("Đã hủy!", response.message, "success");
+                                setTimeout(() => {
+                                    location.href = '/admin/book';
+                                }, 1500);
                             } else {
                                 swal("Lỗi", response.message, "error");
                             }
                         },
                         error: function () {
                             swal("Lỗi", "Không thể hủy lịch hẹn. Vui lòng thử lại.", "error");
+                        },
+                        complete: function () {
+                            ladda.stop();
                         }
                     });
                 }

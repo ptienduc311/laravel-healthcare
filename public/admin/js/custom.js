@@ -161,11 +161,6 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.item-doctor', function () {
-        $('.item-doctor').removeClass('selected');
-        $(this).addClass('selected');
-    });
-
 
     //Xử lý lịch hẹn
     let isManualIntervalChange = false;
@@ -239,9 +234,9 @@ $(document).ready(function () {
         const doctorId = $('#doctor-id').val();
         const dayExamination = $('#day-examination').val();
         const fallbackInterval = parseInt($('#time-interval').val());
-        const is_appointment = $('#is-appointment').val();
+        const is_appointment = $('#is-appointment');
 
-        if(!is_appointment){
+        if(is_appointment.length === 0 || !is_appointment.val()){
             return;
         }
 
@@ -302,34 +297,54 @@ $(document).ready(function () {
         });
     });
 
+    //Kiểm tra role doctor, tìm kiếm và lựa chọn bác sĩ kết nối
+    $('select[name="roles[]"]').on('change', function () {
+        let showConnect = false;
 
-    //Chọn bác sĩ tìm kiếm
-    $(document).on('click', '.item-doctor', function () {
-        const doctorId = $(this).data('doctor-id');
-        const doctorName = $(this).data('doctor-name');
+        $(this).find('option:selected').each(function () {
+            const slug = $(this).data('slug-role');
+            if (slug === 'doctor') {
+                showConnect = true;
+            }
+        });
 
-        //Xr lý lấy lịch hẹn
-        $('#selected-doctor-name').text(doctorName);
-        $('#appointment-form').attr('action', `/admin/appointment/store/${doctorId}`);
-        if ($('#doctor-id').length) {
-            $('#doctor-id').val(doctorId);
+        if (showConnect) {
+            $('.connect-doctor').show();
         } else {
-            $('#appointment-form').append(`<input type="hidden" name="doctor_id" id="doctor-id" value="${doctorId}">`);
+            $('.connect-doctor').hide();
+            $('#doctor-id').val('');
+            $('.show-doctor-connect').hide();
         }
-        $('#submit-button').prop('disabled', false);
-        loadAppointmentByDoctorAndDate();
+    });
 
-        //Profile Doctor
-        $('.show-loading-bottom').find('.ibox-content').addClass('sk-loading');
+    $('.btn-search-connect-doctor').on('click', function() {
+        let specialtyId = $('#specialty-id').val().trim();
+        let doctorName = $('#doctor-name').val().trim();
+
+        var l = Ladda.create(this);
+        l.start();
+
         $.ajax({
-            url: '/admin/show-profile-doctor',
+            url: '/admin/api-get-doctors-connect',
             type: 'GET',
             data: {
-                doctorId: doctorId
+                specialty_id: specialtyId,
+                name: doctorName
             },
             success: function (response) {
-                if (response.status == 'error') {
-                    $('#no-found-doctor').show();
+                if (response.status === 'success') {
+                    let html = '';
+                    response.doctors.forEach(function (doctor) {
+                        let is_active = doctor.status == 1 ? '' : ` <small class="ps-2 fst-italic text-danger">(Không hoạt động)</small>`
+                        html += `
+                            <div class="item-doctor" data-doctor-id="${doctor.id}" data-doctor-name="${doctor.name}">
+                                <img src="${doctor.avatar_url}" alt="Ảnh bác sĩ" class="avatar">
+                                <div class="name">${doctor.name}${is_active}</div>
+                            </div>
+                        `;
+                    });
+                    $('.list-doctor').html(html);
+                } else {
                     toastr.options = {
                         "closeButton": false,
                         "debug": false,
@@ -347,19 +362,123 @@ $(document).ready(function () {
                         "hideMethod": "fadeOut"
                     };
                     toastr.warning(response.message);
-                    return;
+                    $('.list-doctor').html(`<p class="error normal fw-semibold">Không có dữ liệu.</p>`);
                 }
-                $('#no-found-doctor').hide();
-                $('#doctor-profile').html(response.html);
             },
             error: function () {
-                $('#no-found-doctor').show();
-                toastr.warning('Đã xảy ra lỗi khi tải thông tin bác sĩ.');
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "progressBar": true,
+                    "preventDuplicates": false,
+                    "positionClass": "toast-top-right",
+                    "onclick": null,
+                    "showDuration": "400",
+                    "hideDuration": "10000",
+                    "timeOut": "3000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.error("Đã xảy ra lỗi khi tải bác sĩ.");
             },
             complete: function () {
-                $('.show-loading-bottom .ibox-content').removeClass('sk-loading');
+                l.stop();
             }
         });
+    })
+
+    $(document).on('click', '.disconnect-doctor', function () {
+        $('#doctor-id').val('');
+        $('.show-doctor-connect').empty().hide();
+    });
+    //End
+
+    //Chọn bác sĩ tìm kiếm
+    $(document).on('click', '.item-doctor', function () {
+        $('.item-doctor').removeClass('selected');
+        $(this).addClass('selected');
+
+        const doctorId = $(this).data('doctor-id');
+        const doctorName = $(this).data('doctor-name');
+
+        //Xử lý lấy lịch hẹn
+        $('#selected-doctor-name').text(doctorName);
+        $('#appointment-form').attr('action', `/admin/appointment/store/${doctorId}`);
+        if ($('#doctor-id').length) {
+            $('#doctor-id').val(doctorId);
+        } else {
+            $('#appointment-form').append(`<input type="hidden" name="doctor_id" id="doctor-id" value="${doctorId}">`);
+        }
+        $('#submit-button').prop('disabled', false);
+        loadAppointmentByDoctorAndDate();
+
+        //Profile Doctor
+        const is_profile = $('#is-profile');
+        if(is_profile.length && is_profile.val() === "true"){
+            $('.show-loading-bottom').find('.ibox-content').addClass('sk-loading');
+            $.ajax({
+                url: '/admin/show-profile-doctor',
+                type: 'GET',
+                data: {
+                    doctorId: doctorId
+                },
+                success: function (response) {
+                    if (response.status == 'error') {
+                        $('#no-found-doctor').show();
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "progressBar": true,
+                            "preventDuplicates": false,
+                            "positionClass": "toast-top-right",
+                            "onclick": null,
+                            "showDuration": "400",
+                            "hideDuration": "10000",
+                            "timeOut": "3000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        };
+                        toastr.warning(response.message);
+                        return;
+                    }
+                    $('#no-found-doctor').hide();
+                    $('#doctor-profile').html(response.html);
+                },
+                error: function () {
+                    $('#no-found-doctor').show();
+                    toastr.warning('Đã xảy ra lỗi khi tải thông tin bác sĩ.');
+                },
+                complete: function () {
+                    $('.show-loading-bottom .ibox-content').removeClass('sk-loading');
+                }
+            });
+        }
+
+        //Connect doctor
+        const is_create_user = $('#is-create-user');
+        if(is_create_user.length && is_create_user.val() === "true"){
+            const doctorAvatar = $(this).find('img').attr('src');
+
+            $('.show-doctor-connect').html(`
+                <div class="d-flex align-items-center gap-3">
+                    <div class="doctor-selected">
+                        <img src="${doctorAvatar}" alt="Ảnh bác sĩ" class="avatar">
+                        <div class="name">${doctorName}</div>
+                    </div>
+                    <div class="disconnect-doctor btn-danger">
+                        <i class="fa fa-unlink"></i> <span class="bold">Hủy liên kết</span>
+                    </div>
+                </div>
+            `).show();
+
+            $('#myModal').modal('hide');
+        }
     });
 
     $('#appointment-form').on('submit', function (e) {

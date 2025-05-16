@@ -81,12 +81,41 @@ class AdminDoctorController extends Controller
         ];
         $specialties = MedicalSpecialty::where('status', 1)->get();
 
-        if (!$doctorId) {
-            return view('admin.doctor.info', compact('academicTitles', 'degrees', 'specialties'));
+        // if (!$doctorId) {
+        //     return view('admin.doctor.info', compact('academicTitles', 'degrees', 'specialties'));
+        // }
+
+        // $doctor = Doctor::where('id', $doctorId)->first();
+        // return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees', 'specialties'));
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        $isAdmin = $user->hasRole('admin');
+
+        //Doctor
+        if ($isDoctor && !$isAdmin) {
+            $doctor = Doctor::where('user_id', Auth::id())->first();
+
+            if (!$doctor) {
+                abort(404);
+            }
+
+            return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees', 'specialties', 'isAdmin'));
         }
 
-        $doctor = Doctor::where('id', $doctorId)->first();
-        return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees', 'specialties'));
+        //Admin
+        if ($doctorId) {
+            $doctor = Doctor::find($doctorId);
+
+            if (!$doctor) {
+                abort(404);
+            }
+
+            return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees', 'specialties', 'isAdmin'));
+        }
+
+        return view('admin.doctor.info', compact('academicTitles', 'degrees', 'specialties', 'isAdmin'));
     }
 
     public function create()
@@ -255,13 +284,22 @@ class AdminDoctorController extends Controller
 
     public function edit(string $id)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isAdmin = $user->hasRole('admin');
+        
         $doctor = Doctor::find($id);
         $specialties = MedicalSpecialty::where('status', 1)->get();
-        return view('admin.doctor.edit', compact('doctor', 'specialties'));
+        return view('admin.doctor.edit', compact('doctor', 'specialties', 'isAdmin'));
     }
 
     public function update(Request $request, string $id)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        $isAdmin = $user->hasRole('admin');
+
         $doctor = Doctor::with('doctor_prizes', 'doctor_training', 'doctor_works')->find($id);
         $oldImage = $doctor->image;
         $image_id = $oldImage->id ?? null;
@@ -360,8 +398,13 @@ class AdminDoctorController extends Controller
         $degree = $request->input('degree');
         $regency = $request->input('regency');
         $introduce = $request->input('introduce');
-        $status = $request->has('status') ? 1 : 2;
-        $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
+        $status = $doctor->status;
+        $is_outstanding = $doctor->is_outstanding;
+        if($isAdmin){
+            $status = $request->has('status') ? 1 : 2;
+            $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
+        }
+
         $created_by = Auth::id();
         $doctor->update([
             'name' => $name,
@@ -432,7 +475,10 @@ class AdminDoctorController extends Controller
             }
         }
 
-        return redirect('admin/doctor')->with('success', 'Cập nhật thành công');
+        if($isDoctor){
+            return redirect('admin/doctor')->with('success', 'Cập nhật thành công');
+        }
+        return redirect('admin/doctor/profile-doctor')->with('success', 'Cập nhật thành công');
     }
 
     public function destroy(string $id)
@@ -495,6 +541,51 @@ class AdminDoctorController extends Controller
         ]);
     }
 
+    public function getDoctorsConnect(Request $request){
+        $specialty_id = $request->query('specialty_id');
+        $name = $request->query('name');
+
+        if(!$specialty_id && !$name){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Vui lòng chọn chuyên khoa hoặc nhập tên bác sĩ.'
+            ]);
+        }
+
+        $query = Doctor::whereNull('user_id');
+
+        if ($specialty_id) {
+            $query->where('specialty_id', $specialty_id);
+        }
+
+        if ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        $doctors = $query->get();
+
+        if ($doctors->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không tìm thấy bác sĩ phù hợp.'
+            ]);
+        }
+
+        $data = $doctors->map(function ($doctor) {
+            return [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'avatar_url' => $doctor->avatar_url,
+                'status' => $doctor->status
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'doctors' => $data
+        ]);
+    }
+
     public function showProfile(Request $request)
     {
         $doctorId = $request->query('doctorId');
@@ -522,7 +613,10 @@ class AdminDoctorController extends Controller
 
         $html = view('admin.doctor.doctor_profile', compact('doctor', 'academicTitles', 'degrees'))->render();
 
-        return response()->json(['html' => $html]);
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
     }
 
 }

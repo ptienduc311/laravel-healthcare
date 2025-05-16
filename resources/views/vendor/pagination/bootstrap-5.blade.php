@@ -2,7 +2,7 @@
     <nav class="d-flex justify-items-center justify-content-between">
         <div class="flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
             <div>
-                <p class="small text-muted">
+                <p class="small text-muted d-md-none">
                     {!! __('Hiển thị') !!}
                     <span class="fw-semibold">{{ $paginator->firstItem() }}</span>
                     {!! __('đến') !!}

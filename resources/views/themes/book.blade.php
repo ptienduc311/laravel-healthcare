@@ -25,7 +25,7 @@
                 <div class="book-title">Đặt lịch khám cùng chuyên gia</div>
                 <div class="book-note">Quý khách hàng vui lòng điền thông tin để đặt lịch thăm khám cùng bác sĩ</div>
                 <div class="bookings">
-                    <form action="/api-save-book" method="post" id="form-book">
+                    <form action="/api-save-book" method="post" id="form-book" data-require-specialty="1">
                         @csrf
                         <div class="form">
                             <div class="row">
@@ -330,7 +330,6 @@
                 doctorList.hide();
             });
 
-            // Nhấn lại chuyên khoa khác → reset toàn bộ
             specialtySelect.on('change', function () {
                 doctorIdInput.val('');
                 doctorList.empty().hide();

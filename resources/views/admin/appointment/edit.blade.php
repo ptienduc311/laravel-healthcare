@@ -201,7 +201,7 @@
                     $btn.find('.ladda-label').text('Đang gửi email...');
 
                     $.ajax({
-                        url: "{{ route('appointment.confirm-remove') }}", // bạn tạo route này
+                        url: "{{ route('appointment.confirm-remove') }}",
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
@@ -214,7 +214,6 @@
                             appointmentIds: appointmentIds,
                         },
                         success: function (res) {
-                            ladda.stop();
                             if (res.success) {
                                 swal("Thành công!", res.message, "success");
                                 setTimeout(() => {
@@ -225,8 +224,10 @@
                             }
                         },
                         error: function () {
-                            ladda.stop();
                             swal("Lỗi!", "Không thể xử lý yêu cầu.", "error");
+                        },
+                        complete: function () {
+                            ladda.stop();
                         }
                     });
                 }
@@ -242,22 +243,6 @@
             endDate: dateVal,
             autoclose: true
         });
-
-        // $(document).ready(function (){
-
-        //     var l = $( '.ladda-button-demo' ).ladda();
-
-        //     l.click(function(){
-        //         // Start loading
-        //         l.ladda( 'start' );
-
-        //         // Timeout example
-        //         // Do something in backend and then stop ladda
-        //         setTimeout(function(){
-        //             l.ladda('stop');
-        //         },12000)
-        //     });
-        // });
     </script>
 
 @endsection

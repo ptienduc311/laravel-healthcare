@@ -349,31 +349,33 @@
                             </div>
                         </div>
 
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="is_outstanding">Bác sĩ nổi bật</label>
-                            <div class="col-sm-10 mt-2">
-                                <div class="checkbox checkbox-danger pt-0">
-                                    <input id="is_outstanding" type="checkbox" name="is_outstanding" {{ $doctor->is_outstanding == 1 ? 'checked' : '' }}>
-                                    <label></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Trạng thái</label>
-                            <div class="col-sm-10 mt-2">
-                                <div class="switch">
-                                    <div class="onoffswitch">
-                                        <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" {{ $doctor->status == 1 ? 'checked' : '' }}>
-                                        <label class="onoffswitch-label" for="status">
-                                            <span class="onoffswitch-inner"></span>
-                                            <span class="onoffswitch-switch"></span>
-                                        </label>
+                        @if ($isAdmin)
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="is_outstanding">Bác sĩ nổi bật</label>
+                                <div class="col-sm-10 mt-2">
+                                    <div class="checkbox checkbox-danger pt-0">
+                                        <input id="is_outstanding" type="checkbox" name="is_outstanding" {{ $doctor->is_outstanding == 1 ? 'checked' : '' }}>
+                                        <label></label>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Trạng thái</label>
+                                <div class="col-sm-10 mt-2">
+                                    <div class="switch">
+                                        <div class="onoffswitch">
+                                            <input type="checkbox" class="onoffswitch-checkbox" id="status" name="status" {{ $doctor->status == 1 ? 'checked' : '' }}>
+                                            <label class="onoffswitch-label" for="status">
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">

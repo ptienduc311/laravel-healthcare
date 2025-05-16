@@ -43,9 +43,11 @@ Route::group(['middleware' => ['auth', 'checkActive', 'checkRole: admin,doctor']
     
     //API
     Route::get('/api-get-doctors', [AdminDoctorController::class, 'getDoctors']);
+    Route::get('/api-get-doctors-connect', [AdminDoctorController::class, 'getDoctorsConnect']);
     Route::get('/show-profile-doctor', [AdminDoctorController::class, 'showProfile'])->name('doctor.show-profile');
     Route::post('/api/check-doctor-appointments', [AdminMakeAppointmentController::class, 'checkAppointment']);
     Route::post('/appointment/confirm-remove', [AdminMakeAppointmentController::class, 'confirmRemove'])->name('appointment.confirm-remove');
+    Route::post('/appointment/confirm-delete', [AdminMakeAppointmentController::class, 'confirmDelete'])->name('appointment.confirm-delete');
 
     //PostCategory
     Route::group(['prefix' => 'post/cat', 'as' => 'post_category.'], function() {

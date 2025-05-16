@@ -20,6 +20,18 @@
                 </div>
             </li>
 
+            <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                <a href="{{ url('admin/dashboard') }}">
+                    <i class="fa fa-th-large"></i> <span class="nav-label">Trang chủ</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                        <a href="{{ url('admin/dashboard') }}">Dashboard</a>
+                    </li>
+                </ul>
+            </li>
+
             @canany(['post_category.index', 'post_category.add', 'post_category.edit', 'post_category.destroy'])
             <li class="{{ request()->is('admin/post/cat*') ? 'active' : '' }}">
                 <a href="{{ url('admin/post/cat') }}">
@@ -84,12 +96,16 @@
                     <li class="{{ request()->is('admin/doctor/profile-doctor*') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor/profile-doctor') }}">Thông tin bác sĩ</a>
                     </li>
+                    @can('doctor.index')
                     <li class="{{ request()->is('admin/doctor') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor') }}">Danh sách bác sĩ</a>
                     </li>
+                    @endcan
+                    @can('doctor.add')
                     <li class="{{ request()->is('admin/doctor/add') ? 'active' : '' }}">
                         <a href="{{ url('admin/doctor/add') }}">Thêm bác sĩ</a>
                     </li>
+                    @endcan
                 </ul>
             </li>
             @endcanany

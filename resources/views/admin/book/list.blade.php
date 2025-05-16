@@ -28,12 +28,10 @@
                 <div class="ibox-content">
                     <div class="row mb-3">
                         <form action="{{ route('book.index') }}" method="get" class="row mb-4 ms-0" autocomplete="OFF">
+                            @if ($isAdmin)
                             <div class="col-sm-2 m-b-xs">
                                 <div class="input-group group-input-doctor">
-                                    <input type="text" 
-                                        name="doctor_name" 
-                                        id="doctor-name-search" 
-                                        class="form-control input-sm" 
+                                    <input type="text" name="doctor_name" id="doctor-name-search" class="form-control input-sm" 
                                         placeholder="Nhập tên bác sĩ" 
                                         value="{{ old('doctor_name', $selectedDoctor?->name) }}"
                                         {{ $selectedDoctor ? 'readonly' : '' }}>
@@ -52,14 +50,6 @@
                                 </div>
                             </div>
                             <div class="col-sm-2 m-b-xs">
-                                <div class="input-group date">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                    <input type="text" class="form-control" id="date-examination" name="date_examination" value="{{ request('date_examination') }}" placeholder="Ngày khám">
-                                </div>
-                            </div>
-                            <div class="col-sm-2 m-b-xs">
                                 <select name="specialty_id" class="input-sm form-control input-s-sm inline">
                                     <option value="">Chọn chuyên khoa</option>
                                     @foreach ($medical_specialties as $item)
@@ -68,6 +58,15 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                            @endif
+                            <div class="col-sm-2 m-b-xs">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="date-examination" name="date_examination" value="{{ request('date_examination') }}" placeholder="Ngày khám">
+                                </div>
                             </div>
                             <div class="col-sm-2 m-b-xs">
                                 <select name="status" class="input-sm form-control input-s-sm inline">
@@ -80,6 +79,9 @@
                                     <option value="6" {{ request('status') == '6' ? 'selected' : '' }}>Đã có kết quả</option>
                                 </select>
                             </div>
+                            @if (!$isAdmin)
+                                <div class="col-sm-4 m-b-xs"></div>
+                            @endif
                             <div class="col-sm-1 m-b-xs"></div>
                             <div class="col-sm-3">
                                 <div class="input-group">
@@ -126,9 +128,9 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="" class="text-primary">{{ $item->doctor?->name }}</a>
+                                    <span class="text-muted font-bold">{{ $item->doctor?->name }}</span>
                                     {{ $item->doctor_id && $item->specialty_id ? " - " : "" }}
-                                    <a href="" class="text-primary">{{ $item->specialty?->name }}</a>
+                                    <span class="text-muted font-bold">{{ $item->specialty?->name }}</span>
                                 </td>
                                 <td>
                                     @php
@@ -326,6 +328,12 @@
                 closeOnConfirm: false
             }, function (isConfirm) {
                 if (isConfirm) {
+                    const $btn = $('.sweet-alert .confirm');
+                    $btn.addClass('ladda-button')
+                    const ladda = Ladda.create($btn[0]);
+                    ladda.start();
+                    $btn.find('.ladda-label').text('Đang gửi email...');
+
                     $.ajax({
                         url: "{{ route('book.cancel') }}",
                         method: "POST",
@@ -337,12 +345,18 @@
                         success: function (response) {
                             if (response.status == 'success') {
                                 swal("Đã hủy!", response.message, "success");
+                                setTimeout(() => {
+                                    location.href = '/admin/book';
+                                }, 1500);
                             } else {
                                 swal("Lỗi", response.message, "error");
                             }
                         },
                         error: function () {
                             swal("Lỗi", "Không thể hủy lịch hẹn. Vui lòng thử lại.", "error");
+                        },
+                        complete: function () {
+                            ladda.stop();
                         }
                     });
                 }

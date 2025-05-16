@@ -58,6 +58,7 @@
                             </div>
                         </form>
                     </div>
+                    <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -94,6 +95,7 @@
                             </tr>
                         @endforeach
                     </table>
+                    </div>
                     {{$posts->links()}}
                 </div>
             </div>

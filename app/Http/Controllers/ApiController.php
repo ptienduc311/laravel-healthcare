@@ -103,6 +103,7 @@ class ApiController extends Controller
         $address = $request->address;
         $appointmentDate = $request->appointmentDate;
         $date_examination = Carbon::parse($appointmentDate)->format('d/m/Y');
+        $date_examination_int = Carbon::parse($appointmentDate)->startOfDay()->timestamp;
         $appointment_id = $request->appointment_id;
         $reason = $request->reason;
         $doctor_id = $request->doctor_id;
@@ -141,6 +142,7 @@ class ApiController extends Controller
             'email' => $email,
             'gender' => $gender,
             'date_examination' => $date_examination,
+            'date_examination_int' => $date_examination_int,
             'address' => $address,
             'reason' => $reason,
             'created_date_int' => time(),

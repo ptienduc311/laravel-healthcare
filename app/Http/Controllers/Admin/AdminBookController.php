@@ -7,9 +7,10 @@ use App\Mail\SendMailCancelBook;
 use App\Models\Book;
 use App\Models\Doctor;
 use App\Models\MedicalSpecialty;
+use App\Models\User;
 use App\Models\Site;
-use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class AdminBookController extends Controller
@@ -29,6 +30,17 @@ class AdminBookController extends Controller
             6 => ['name' => 'Đã có kết quả', 'color' => 'success'],
         ];
         $medical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->get();
+        
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        $isAdmin = $user->hasRole('admin');
+        if ($isDoctor && !$isAdmin) {
+            $doctor = Doctor::where('user_id', $user->id)->first();
+            if ($doctor) {
+                $query->where('doctor_id', $doctor->id);
+            }
+        }
 
         $query->when($request->doctor_id, fn($q) => $q->where('doctor_id', $request->doctor_id));
         $query->when($request->date_examination, fn($q) => $q->where('date_examination', $request->date_examination));
@@ -48,7 +60,7 @@ class AdminBookController extends Controller
 
         $books = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
 
-        return view('admin.book.list', compact('statusMap', 'books', 'medical_specialties', 'selectedDoctor'));
+        return view('admin.book.list', compact('statusMap', 'books', 'medical_specialties', 'selectedDoctor', 'isAdmin'));
     }
 
     public function create()
@@ -151,7 +163,7 @@ class AdminBookController extends Controller
         $book->status = 3;
         $book->save();
 
-        //Cập nhật lại is_appointment - appointments
+        //Cập nhật laij trạng thái lịch hẹn
         if ($book->appointment) {
             $book->appointment->is_appointment = 2;
             $book->appointment->save();

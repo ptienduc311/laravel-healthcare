@@ -558,8 +558,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 clearError('ward');
             }
 
+            const requireSpecialty = formBook?.dataset.requireSpecialty === '1';
             const specialty = getInputValue('specialty-id');
-            if (!specialty) {
+            if (requireSpecialty && !specialty) {
                 showError('specialty-id', 'Vui lòng chọn chuyên khoa');
                 isValid = false;
             } else {
@@ -602,7 +603,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const timeSlotList = document.getElementById("time-slot-list");
             const existingTimeError = timeSlotList.querySelector('.time-error');
         
-            if (existingTimeError) existingTimeError.remove(); // Xóa lỗi cũ nếu có
+            if (existingTimeError) existingTimeError.remove();
         
             if (!selectedTime) {
                 showError('time', 'Vui lòng chọn giờ khám');

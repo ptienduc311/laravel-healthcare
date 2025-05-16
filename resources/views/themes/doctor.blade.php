@@ -56,7 +56,7 @@
                 <div class="book-title">Đặt lịch khám cùng chuyên gia</div>
                 <div class="book-note">Quý khách hàng vui lòng điền thông tin để đặt lịch thăm khám cùng <span style="color: #1D93E3;">{{ $doctor->name }}</span></div>
                 <div class="bookings">
-                    <form action="/api-save-book" method="post" id="form-book">
+                    <form action="/api-save-book" method="post" id="form-book" data-require-specialty="0">
                         @csrf
                         <div class="form">
                             <div class="row">

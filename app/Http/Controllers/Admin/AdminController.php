@@ -3,16 +3,98 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
+use App\Models\Doctor;
+use App\Models\DoctorAppointments;
+use App\Models\MedicalSpecialty;
 use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('admin.dashboard');
+        $todayInt = Carbon::today()->startOfDay()->timestamp;
+        $startOfMonthInt = Carbon::now()->startOfMonth()->startOfDay()->timestamp;
+        $endOfMonthInt = Carbon::now()->endOfMonth()->startOfDay()->timestamp;
+        $thisMonth = Carbon::now()->month;
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        $isAdmin = $user->hasRole('admin');
+        if($isDoctor && !$isAdmin){
+            $doctorId = $user->doctor->id;
+        }
+
+        $medicalSpecialtyCount = number_format(MedicalSpecialty::count(), 0, ',', '.');
+        $doctorCount = number_format(Doctor::count(), 0, ',', '.');
+
+        //Lịch khám
+        $appointmentTodayQuery = DoctorAppointments::query();
+        $appointmentMonthQuery = DoctorAppointments::query();
+
+        if ($isDoctor && !$isAdmin && $doctorId) {
+            $appointmentTodayQuery->where('doctor_id', $doctorId);
+            $appointmentMonthQuery->where('doctor_id', $doctorId);
+        }
+
+        $appointmentsToday = $appointmentTodayQuery->where('day_examination', $todayInt)->count();
+        $appointmentsThisMonth = $appointmentMonthQuery->whereBetween('day_examination', [$startOfMonthInt, $endOfMonthInt])->count();
+        
+        $appointmentsTodayFormatted = number_format($appointmentsToday, 0, ',', '.');
+        $appointmentsThisMonthFormatted = number_format($appointmentsThisMonth, 0, ',', '.');
+
+        //Lịch hẹn
+        $booksTodayQuery = Book::query();
+        $booksMonthQuery = Book::query();
+
+        if ($isDoctor && !$isAdmin && $doctorId) {
+            $booksTodayQuery->where('doctor_id', $doctorId);
+            $booksMonthQuery->where('doctor_id', $doctorId);
+        }
+
+        $booksToday = $booksTodayQuery->where('date_examination_int', $todayInt)->count();
+        $booksThisMonth = $booksMonthQuery->whereBetween('date_examination_int', [$startOfMonthInt, $endOfMonthInt])->count();
+
+        $booksTodayFormatted = number_format($booksToday, 0, ',', '.');
+        $booksThisMonthFormatted = number_format($booksThisMonth, 0, ',', '.');
+
+        //Lấy lịch hẹn trong ngày & tháng
+        $type = $request->query('type');
+        $baseBooksQuery = Book::query();
+        $baseStatusQuery = Book::query();
+        if ($isDoctor && !$isAdmin && $doctorId) {
+            $baseBooksQuery->where('doctor_id', $doctorId);
+        }
+
+        if ($type == 'month') {
+            $baseBooksQuery->whereBetween('date_examination_int', [$startOfMonthInt, $endOfMonthInt]);
+            $baseStatusQuery->whereBetween('date_examination_int', [$startOfMonthInt, $endOfMonthInt]);
+        } else {
+            $baseBooksQuery->where('date_examination_int', $todayInt);
+            $baseStatusQuery->where('date_examination_int', $todayInt);
+        }
+
+        $listBooks = $baseBooksQuery->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+
+        $statusCount = $baseStatusQuery->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+        $statusMap = [
+            1 => ['name' => 'Chưa xác nhận', 'color' => 'secondary'],
+            2 => ['name' => 'Đã xác nhận', 'color' => 'primary'],
+            3 => ['name' => 'Đã hủy', 'color' => 'danger'],
+            4 => ['name' => 'Đang khám', 'color' => 'warning'],
+            5 => ['name' => 'Chờ kết quả', 'color' => 'info'],
+            6 => ['name' => 'Đã có kết quả', 'color' => 'success'],
+        ];
+
+        return view('admin.dashboard', compact('thisMonth', 'medicalSpecialtyCount', 'doctorCount', 'appointmentsTodayFormatted', 'appointmentsThisMonthFormatted', 'booksTodayFormatted', 'booksThisMonthFormatted', 'listBooks', 'statusMap', 'statusCount'));
     }
 
     public function profile()

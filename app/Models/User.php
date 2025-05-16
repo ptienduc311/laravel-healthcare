@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -57,11 +58,16 @@ class User extends Authenticatable
     public function roles(): BelongsToMany{
         return $this->belongsToMany(Role::class, 'user_roles');
     }
+
+    public function doctor() :HasOne
+    {
+        return $this->hasOne(Doctor::class, 'user_id', 'id');
+    }
  
-    // public function hasRole($role)
-    // {
-    //     return $this->roles->contains('name', $role);
-    // }
+    public function hasRole($slugRole)
+    {
+        return $this->roles->contains('slug_role', $slugRole);
+    }
 
     public function hasPermission($permission)
     {

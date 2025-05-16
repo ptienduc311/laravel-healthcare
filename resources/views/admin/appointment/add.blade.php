@@ -22,63 +22,65 @@
         </div>
     </div>
     <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox float-e-margins" id="ibox1">
-                    <div class="ibox-title">
-                        <h5>Tìm kiếm bác sĩ</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="sk-spinner sk-spinner-circle">
-                            <div class="sk-circle1 sk-circle"></div>
-                            <div class="sk-circle2 sk-circle"></div>
-                            <div class="sk-circle3 sk-circle"></div>
-                            <div class="sk-circle4 sk-circle"></div>
-                            <div class="sk-circle5 sk-circle"></div>
-                            <div class="sk-circle6 sk-circle"></div>
-                            <div class="sk-circle7 sk-circle"></div>
-                            <div class="sk-circle8 sk-circle"></div>
-                            <div class="sk-circle9 sk-circle"></div>
-                            <div class="sk-circle10 sk-circle"></div>
-                            <div class="sk-circle11 sk-circle"></div>
-                            <div class="sk-circle12 sk-circle"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-7 b-r">
-                                <div class="row">
-                                    <div class="col-sm-3 m-b-xs">
-                                        <select name="specialty_id" class="input-sm form-control" id="specialty-id">
-                                            <option value="">Chọn chuyên khoa</option>
-                                            @foreach ($specialties as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-7 m-b-xs">
-                                        <input type="text" name="name" placeholder="Nhập tên bác sĩ" class="input-sm form-control" id="doctor-name">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <button class="input-sm btn btn-sm btn-primary btn-search-doctor"><strong>Tìm kiếm</strong></button>
-                                    </div>
-                                </div>
-                                <div class="img-search">
-                                    <img src="{{ asset('admin/img/search.png') }}" alt="">
-                                </div>
+        @if ($isAdmin)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins" id="ibox1">
+                        <div class="ibox-title">
+                            <h5>Tìm kiếm bác sĩ</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
                             </div>
-                            <div class="col-sm-5">
-                                <h4>Danh sách bác sĩ</h4>
-                                <div class="list-doctor"></div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="sk-spinner sk-spinner-circle">
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-7 b-r">
+                                    <div class="row">
+                                        <div class="col-sm-3 m-b-xs">
+                                            <select name="specialty_id" class="input-sm form-control" id="specialty-id">
+                                                <option value="">Chọn chuyên khoa</option>
+                                                @foreach ($specialties as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-7 m-b-xs">
+                                            <input type="text" name="name" placeholder="Nhập tên bác sĩ" class="input-sm form-control" id="doctor-name">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="input-sm btn btn-sm btn-primary btn-search-doctor"><strong>Tìm kiếm</strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="img-search">
+                                        <img src="{{ asset('admin/img/search.png') }}" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <h4>Danh sách bác sĩ</h4>
+                                    <div class="list-doctor"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox float-e-margins show-loading-bottom">
@@ -206,7 +208,6 @@
             toastr.error("{{ $errors->first('doctor_id') }}");
         </script>
     @endif
-
     @if (session('success'))
         <script>
             toastr.options = {

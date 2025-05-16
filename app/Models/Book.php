@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Book extends Model
 {
     protected $fillable = [
-        'book_code', 'name', 'phone', 'birth', 'email', 'gender', 'date_examination',
+        'book_code', 'name', 'phone', 'birth', 'email', 'gender', 'date_examination', 'date_examination_int',
         'address', 'reason', 'created_date_int', 'status', 'province_id', 'district_id',
         'ward_id', 'appointment_id', 'specialty_id', 'doctor_id'
     ];

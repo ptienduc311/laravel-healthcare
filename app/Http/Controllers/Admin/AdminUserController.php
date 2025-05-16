@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendMailCreateAccount;
+use App\Models\Doctor;
+use App\Models\MedicalSpecialty;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
@@ -12,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AdminUserController extends Controller
 {
@@ -30,7 +33,9 @@ class AdminUserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('admin.user.add', compact('roles'));
+        $specialties = MedicalSpecialty::where('status', 1)->get();
+        
+        return view('admin.user.add', compact('roles', 'specialties'));
     }
 
     /**
@@ -70,6 +75,7 @@ class AdminUserController extends Controller
         $password = $request->input('password');
         $roles = $request->input('roles');
         $is_activate = $request->has('is_activate');
+        $doctorId = $request->input('doctor_id');
         $is_create = $request->input('action') === 'create';
         $email_verified_at = $is_activate ? now() : null;
 
@@ -83,6 +89,7 @@ class AdminUserController extends Controller
         $selectedRoles = Role::whereIn('id', $roles)->get();
         $strRoles = $selectedRoles->pluck('name')->implode(', ');
         $isAdmin = $selectedRoles->contains('slug_role', 'admin');
+        $isDoctor = $selectedRoles->contains('slug_role', 'doctor');
 
         $userData = [
             'name' => $name,
@@ -103,6 +110,23 @@ class AdminUserController extends Controller
                 'role_id' => $role->id,
                 'user_id' => $user->id
             ]);
+        }
+
+        if ($isDoctor) {
+            if ($doctorId) {
+                Doctor::where('id', $doctorId)
+                    ->whereNull('user_id')
+                    ->update(['user_id' => $user->id]);
+            } else {
+                $slugName = Str::slug($name);
+                Doctor::create([
+                    'name' => $name,
+                    'slug_name' => $slugName,
+                    'status' => 1,
+                    'created_date_int' => time(),
+                    'user_id' => $user->id,
+                ]);
+            }
         }
         
         if (!$is_create || !$isAdmin) {

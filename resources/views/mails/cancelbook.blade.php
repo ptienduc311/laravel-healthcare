@@ -27,6 +27,7 @@
           <ul>
               <li><strong>Email:</strong> {{ $email_web }}</li>
               <li><strong>Điện thoại:</strong> {{ $phone }}</li>
+              <li><strong>Hotline:</strong> {{ $hotline }}</li>
           </ul>
 
           <p>Trân trọng,<br><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">HealthCare</strong></p>

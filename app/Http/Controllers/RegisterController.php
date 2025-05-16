@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendMailRegister;
+use App\Models\Doctor;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -107,6 +108,7 @@ class RegisterController extends Controller
         if ($exists) {
             $user = User::where('cancel_token', $cancel_token)->first();
             $user->roles()->detach();
+            Doctor::where('user_id', $user->id)->delete();
             $user->delete();
             echo "<script>
                 alert('Đã xóa tài khoản thành công.');

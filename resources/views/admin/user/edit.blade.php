@@ -73,7 +73,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Vai trò</label>
                             <div class="col-sm-10">
-                                <select class="form-control" multiple name="roles[]">
+                                <select class="form-control" name="roles[]">
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}" {{ in_array($role->id, $userRoleIds) ? 'selected' : '' }}>
                                             {{ $role->name }}

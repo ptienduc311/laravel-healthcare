@@ -75,11 +75,26 @@
                             <div class="col-sm-10">
                                 <select class="form-control" multiple name="roles[]">
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}">
+                                        <option value="{{ $role->id }}" data-slug-role="{{ $role->slug_role }}">
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
                                 </select>
+                                <div class="connect-doctor" data-toggle="modal" data-target="#myModal">
+                                    <i class="fa fa-link"></i>
+                                    Liên kết bác sĩ
+                                </div>
+                                <div class="show-doctor-connect">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="doctor-selected">
+                                            <img src="http://127.0.0.1:8000/assets/images/male-doctor.jpg" alt="Ảnh bác sĩ" class="avatar">
+                                            <div class="name">Bác sĩ Hạnh</div>
+                                        </div>
+                                        <div class="disconnect-doctor btn-danger">
+                                            <i class="fa fa-unlink"></i> <span class="bold">Hủy liên kết</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 @error('roles')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
@@ -98,6 +113,8 @@
                                 <small class="d-block pt-3 fst-italic">Tài khoản <b>Admin</b> sẽ tự động kích hoạt tài khoản.</small>
                             </div>
                         </div>
+                        <input type="hidden" name="doctor_id" id="doctor-id">
+                        <input type="hidden" value="true" id="is-create-user">
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
@@ -109,15 +126,52 @@
                 </div>
             </div>
         </div>
+        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"p>
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <div class="col-md-4 mb-3 pe-0 ps-2">
+                            <select name="" id="specialty-id" class="form-control">
+                                <option value="">---Chuyên khoa---</option>
+                                @foreach ($specialties as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3 pe-0 ps-2">
+                            <input type="text" id="doctor-name" class="form-control" placeholder="Nhập tên bác sĩ">
+                        </div>
+                        <div class="col-md-2 mb-3 pe-0 ps-2">
+                            <button class="btn btn-success w-100 btn-search-connect-doctor ladda-button" data-style="zoom-in" type="button">
+                                <span class="bold"> Tìm kiếm</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-doctor"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 
 @section('custom-js')
     <script>
-        var l = Ladda.bind('.ladda-button-send-mail');
-        l.click(function(){
-            l.ladda( 'start' );
+        Ladda.bind('.ladda-button-send-mail');
+
+        document.querySelector('.form-horizontal').addEventListener('submit', function(event) {
+            var buttonClicked = event.submitter;
+            
+            if (buttonClicked && buttonClicked.value === "create_and_send") {
+                var laddaButton = Ladda.create(buttonClicked);
+                laddaButton.start();
+            }
         });
+
     </script>
 @endsection
