@@ -352,6 +352,10 @@ label.timeline-item.have-appointment:not(:has(input:checked)){
     padding-left: 15px;
 }
 
+#no-found-doctor{
+    display: none;
+}
+
 .gif-search{
     display: flex;
     flex-direction: column;
@@ -370,6 +374,24 @@ label.timeline-item.have-appointment:not(:has(input:checked)){
 .gif-search img{
     width: 100%;
     height: auto;
+}
+
+.edit-email{
+    position: absolute;
+    top: 0;
+    right: 15px;
+    padding: 7px 10px;
+    background: #EA2027;
+    color: #fff;
+    border: 1px solid #EA2027;
+    border-radius: 3px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    cursor: pointer;
+}
+
+.edit-email:hover i{
+    transform: scale(1.1);
 }
 
 .toggle-password{

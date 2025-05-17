@@ -99,7 +99,7 @@
                             <div class="sk-cube"></div>
                             <div class="sk-cube"></div>
                         </div>
-                        <form method="POST" id="appointment-form"
+                        <form method="POST" id="form-submit"
                             action="{{ isset($doctor) ? route('appointment.store', $doctor->id) : '#' }}"
                             class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
                             @csrf

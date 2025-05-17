@@ -84,7 +84,7 @@ $(document).ready(function () {
                 "onclick": null,
                 "showDuration": "400",
                 "hideDuration": "10000",
-                "timeOut": "1500",
+                "timeOut": "2000",
                 "extendedTimeOut": "1000",
                 "showEasing": "swing",
                 "hideEasing": "linear",
@@ -160,7 +160,6 @@ $(document).ready(function () {
             }
         });
     });
-
 
     //Xử lý lịch hẹn
     let isManualIntervalChange = false;
@@ -298,7 +297,7 @@ $(document).ready(function () {
     });
 
     //Kiểm tra role doctor, tìm kiếm và lựa chọn bác sĩ kết nối
-    $('select[name="roles[]"]').on('change', function () {
+    $('#role-user').on('change', function () {
         let showConnect = false;
 
         $(this).find('option:selected').each(function () {
@@ -410,7 +409,7 @@ $(document).ready(function () {
         if ($('#doctor-id').length) {
             $('#doctor-id').val(doctorId);
         } else {
-            $('#appointment-form').append(`<input type="hidden" name="doctor_id" id="doctor-id" value="${doctorId}">`);
+            $('#form-submit').append(`<input type="hidden" name="doctor_id" id="doctor-id" value="${doctorId}">`);
         }
         $('#submit-button').prop('disabled', false);
         loadAppointmentByDoctorAndDate();
@@ -460,7 +459,7 @@ $(document).ready(function () {
             });
         }
 
-        //Connect doctor
+        //Connect user - doctor
         const is_create_user = $('#is-create-user');
         if(is_create_user.length && is_create_user.val() === "true"){
             const doctorAvatar = $(this).find('img').attr('src');
@@ -505,7 +504,21 @@ $(document).ready(function () {
         }
     });
 
-    //Ẩn/Hiển mật khẩu
+    //Thay đổi email
+    $(document).on('click', '.edit-email', function () {
+        const icon = $(this).find('i');
+        const input = $(this).siblings('input');
+
+        if (input.prop('readonly')) {
+            input.prop('readonly', false);
+            icon.removeClass('fa-edit').addClass('fa-close');
+        } else {
+            input.prop('readonly', true);
+            icon.removeClass('fa-close').addClass('fa-edit');
+        }
+    });
+
+    //Ẩn/Hiện mật khẩu
     $(document).on('click', '.toggle-password', function () {
         const icon = $(this).find('i');
         const input = $(this).siblings('input');

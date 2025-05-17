@@ -17,7 +17,6 @@ class CheckRole
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         $user = Auth::user();
-        // dd($user->roles);
 
         if (!$user) {
             return redirect('/login');
@@ -32,6 +31,6 @@ class CheckRole
         }
 
         Auth::logout();
-        return redirect('/login');
+        return redirect('/login')->with('no-access', 'Không có quyền truy cập vào trang quản trị');;
     }
 }

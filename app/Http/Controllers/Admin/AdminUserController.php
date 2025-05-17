@@ -9,9 +9,8 @@ use App\Models\MedicalSpecialty;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -48,8 +47,7 @@ class AdminUserController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
-                'roles' => 'required|array|min:1',
-                'roles.*' => 'exists:roles,id',
+                'role' => 'required|exists:roles,id',
             ],
             [
                 'required' => ':attribute không được để trống',
@@ -59,21 +57,20 @@ class AdminUserController extends Controller
                 'unique' => ':attribute đã tồn tại',
                 'confirmed' => 'Mật khẩu xác nhận không đúng',
                 'string' => ':attribute phải là chuỗi',
-                'array' => ':attribute phải là mảng',
                 'exists' => ':attribute không hợp lệ',
-                'roles.required' => 'Bạn phải chọn ít nhất vai trò',
+                'role.required' => 'Bạn phải chọn ít nhất một vai trò',
             ],
             [
                 'name' => 'Tên người dùng',
                 'email' => 'Email',
                 'password' => 'Mật khẩu',
-                'roles' => 'Vai trò'
+                'role' => 'Vai trò'
             ]
         );
         $name = $request->input('name');
         $email = $request->input('email');
         $password = $request->input('password');
-        $roles = $request->input('roles');
+        $roleId  = $request->input('role');
         $is_activate = $request->has('is_activate');
         $doctorId = $request->input('doctor_id');
         $is_create = $request->input('action') === 'create';
@@ -86,10 +83,17 @@ class AdminUserController extends Controller
         $cancel_token = md5('cancel:' . $base_token);
         $urlCancel = route('register.cancel', $cancel_token);
 
-        $selectedRoles = Role::whereIn('id', $roles)->get();
-        $strRoles = $selectedRoles->pluck('name')->implode(', ');
-        $isAdmin = $selectedRoles->contains('slug_role', 'admin');
-        $isDoctor = $selectedRoles->contains('slug_role', 'doctor');
+        $role = Role::find($roleId);
+        $isAdmin = $role->slug_role === 'admin';
+        $isDoctor = $role->slug_role === 'doctor';
+        // dd($role, $isAdmin, $isDoctor);
+
+        if ($isDoctor) {
+            $checkDoctor = Doctor::where('id', $doctorId)->whereNull('user_id')->exists();
+            if(!$checkDoctor){
+                return redirect()->back()->with('error', 'Bác sĩ không tồn tại hoặc đã liên kết tài khoản.');
+            }
+        }
 
         $userData = [
             'name' => $name,
@@ -105,12 +109,10 @@ class AdminUserController extends Controller
         }
 
         $user = User::create($userData);
-        foreach ($selectedRoles as $role) {
-            UserRole::create([
-                'role_id' => $role->id,
-                'user_id' => $user->id
-            ]);
-        }
+        UserRole::create([
+            'role_id' => $role->id,
+            'user_id' => $user->id
+        ]);
 
         if ($isDoctor) {
             if ($doctorId) {
@@ -134,7 +136,7 @@ class AdminUserController extends Controller
                 'username' => $name,
                 'email' => $email,
                 'password' => $password,
-                'roles' => $strRoles,
+                'roles' => $role->name,
                 'is_active' => $isAdmin ? true : $is_activate,
                 'urlActive' => $urlActive,
                 'urlCancel' => $urlCancel,
@@ -150,20 +152,21 @@ class AdminUserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
-        $userRoleIds = $user->roles->pluck('id')->toArray();
-        return view("admin.user.edit", compact('user', 'roles', 'userRoleIds'));
+        $userRoleId = $user->roles->pluck('id')->first();;
+        $specialties = MedicalSpecialty::where('status', 1)->get();
+        $isDoctor = $user->hasRole('doctor');
+
+        return view("admin.user.edit", compact('user', 'roles', 'userRoleId', 'specialties', 'isDoctor'));
     }
 
     public function update(Request $request, User $user)
     {
-        // dd($request);
         $request->validate(
             [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $user->id,
                 'password' => 'nullable|string|min:8|confirmed',
-                'roles' => 'required|array|min:1',
-                'roles.*' => 'exists:roles,id',
+                'role' => 'required|exists:roles,id',
             ],
             [
                 'required' => ':attribute không được để trống',
@@ -173,27 +176,78 @@ class AdminUserController extends Controller
                 'unique' => ':attribute đã tồn tại',
                 'confirmed' => 'Mật khẩu xác nhận không đúng',
                 'string' => ':attribute phải là chuỗi',
-                'array' => ':attribute phải là mảng',
-                'exists' => ':attribute không hợp lệ'
+                'exists' => ':attribute không hợp lệ',
+                'role.required' => 'Bạn phải chọn ít nhất một vai trò',
             ],
             [
                 'name' => 'Tên người dùng',
                 'email' => "Email",
                 'password' => 'Mật khẩu',
-                'roles' => 'Vai trò'
+                'role' => 'Vai trò'
             ]
         );
+        $isDoctor = $user->hasRole('doctor');
+        $roleIdNew = $request->input('role');
+        $roleIdOld = optional($user->roles->first())->id;
+        $roleDoctor = Role::where('slug_role', 'doctor')->first()->id;
+        $doctorIdNew = $request->input('doctor_id');
+        $doctorIdOld = $user->doctor?->id;
+        // dd($request, $isDoctor, $roleIdNew, $roleIdOld, $roleDoctor, $doctorIdNew, $doctorIdOld);
 
-        $data = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-        ];
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->input('password'));
+        //Nếu user là doctor
+        if($isDoctor){
+            //Là bác sĩ
+            if($roleIdNew ==  $roleDoctor){
+                //Nếu có doctor_id
+                if($doctorIdNew){
+                    if($doctorIdNew == $doctorIdOld){
+                        dd('Vai trò vẫn là bác sĩ, vẫn là bác sĩ cũ')   ;
+                    }
+                    else{
+                        dd('Vai trò vẫn là bác sĩ, nhưng là bác sĩ mới');
+                    }
+                }
+                else{
+                    dd('Vai trò vẫn là bác sĩ, nhưng chưa chọn bác sĩ');
+                }
+            }
+            else{
+                dd('Đã từng là bác sĩ');
+            }
         }
-        $user->update($data);
-        $user->roles()->sync($request->input('roles'));
-        return redirect('admin/user')->with('success', 'Cập nhật người dùng thành công.');
+        else{
+            //Nếu vẫn là role cũ
+            if($roleIdNew == $roleIdOld){
+                dd('Vẫn là vai trò cũ');
+            }
+            else{
+                //Nếu là doctor
+                if($roleIdNew == $roleDoctor){
+                    //Nếu có doctor_id
+                    if($doctorIdNew){
+                        dd('Chuyển đổi vai trò thành bác sĩ và đã lựa chọn bác sĩ');
+                    }
+                    else{
+                        dd('Chuyển đổi vai trò thành bác sĩ và chưa chọn bác sĩ');
+                    }
+                }
+                else{
+                    dd('Chuyển đổi vai trò');
+                }
+            }
+        }
+        dd('hỏng');
+
+        // $data = [
+        //     'name' => $request->input('name'),
+        //     'email' => $request->input('email'),
+        // ];
+        // if ($request->filled('password')) {
+        //     $data['password'] = Hash::make($request->input('password'));
+        // }
+        // $user->update($data);
+        // $user->roles()->sync($request->input('roles'));
+        // return redirect('admin/user')->with('success', 'Cập nhật người dùng thành công.');
     }
 
     /**

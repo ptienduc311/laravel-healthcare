@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <form method="POST" class="form-horizontal" action="{{ route('user.store') }}" autocomplete="off">
+                    <form method="POST" class="form-horizontal" id="form-submit" action="{{ route('user.store') }}" autocomplete="off">
                         @csrf
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Tên tài khoản<span class="claim">*</span></label>
@@ -51,7 +51,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Mật khẩu<span class="claim">*</span></label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password">
+                                <input type="password" class="form-control pe-5" name="password">
                                 <div class="toggle-password">
                                     <i class="fa fa-eye-slash"></i>
                                 </div>
@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Xác nhận mật khẩu</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password_confirmation">
+                                <input type="password" class="form-control pe-5" name="password_confirmation">
                                 <div class="toggle-password">
                                     <i class="fa fa-eye-slash"></i>
                                 </div>
@@ -73,7 +73,8 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Vai trò</label>
                             <div class="col-sm-10">
-                                <select class="form-control" multiple name="roles[]">
+                                <select class="form-control" name="role" id="role-user">
+                                    <option value="">---Chọn vai trò---</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}" data-slug-role="{{ $role->slug_role }}">
                                             {{ $role->name }}
@@ -84,18 +85,8 @@
                                     <i class="fa fa-link"></i>
                                     Liên kết bác sĩ
                                 </div>
-                                <div class="show-doctor-connect">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="doctor-selected">
-                                            <img src="http://127.0.0.1:8000/assets/images/male-doctor.jpg" alt="Ảnh bác sĩ" class="avatar">
-                                            <div class="name">Bác sĩ Hạnh</div>
-                                        </div>
-                                        <div class="disconnect-doctor btn-danger">
-                                            <i class="fa fa-unlink"></i> <span class="bold">Hủy liên kết</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                @error('roles')
+                                <div class="show-doctor-connect"></div>
+                                @error('role')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -113,7 +104,7 @@
                                 <small class="d-block pt-3 fst-italic">Tài khoản <b>Admin</b> sẽ tự động kích hoạt tài khoản.</small>
                             </div>
                         </div>
-                        <input type="hidden" name="doctor_id" id="doctor-id">
+                        {{-- <input type="hidden" name="doctor_id" id="doctor-id"> --}}
                         <input type="hidden" value="true" id="is-create-user">
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -172,6 +163,28 @@
                 laddaButton.start();
             }
         });
-
     </script>
+
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
+        </script>
+    @endif
 @endsection

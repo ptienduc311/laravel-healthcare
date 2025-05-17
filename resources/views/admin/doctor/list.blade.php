@@ -62,7 +62,7 @@
                                 <select name="status" class="input-sm form-control input-s-sm inline">
                                     <option value="">Trạng thái</option>
                                     <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Hoạt động</option>
-                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Không hoạt động</option>
+                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Tạm dừng</option>
                                 </select>
                             </div>
                             <div class="col-sm-1 m-b-xs"></div>
@@ -117,7 +117,7 @@
                                 </td>
                                 <td>{{ $academicTitles[$item->academic_title] ?? '' }}</td>
                                 <td>{{ $degrees[$item->degree] ?? '' }}</td>
-                                <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
+                                <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Tạm dừng"}}</td>
                                 <td>
                                     <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
                                 </td>

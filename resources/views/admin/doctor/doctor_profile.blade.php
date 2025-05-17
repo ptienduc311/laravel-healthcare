@@ -3,6 +3,13 @@
         <div class="ibox float-e-margins show-loading-bottom">
             <div class="ibox-title">
                 <h5>Thông tin cá nhân</h5>
+                @if ($doctor->status != 1)
+                <div class="ibox-tools">
+                    <button type="button" class="btn btn-danger btn-xs">
+                        <i class="fa fa-ban"></i> Tạm dừng
+                    </button>
+                </div>      
+                @endif
             </div>
             <div>
                 <div class="ibox-content">

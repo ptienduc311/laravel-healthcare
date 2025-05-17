@@ -70,9 +70,14 @@
                                         {{ $item->email }}
                                     </td>
                                     <td>
-                                        @foreach ($item->roles as $role)
-                                            <span class="badge {{ $role->name }}">{{ $role->name }}</span>
-                                        @endforeach
+                                        @if (!empty($item->roles) && count($item->roles) > 0)
+                                            @foreach ($item->roles as $role)
+                                                <span class="badge {{ $role->name }}">{{ $role->name }}</span>
+                                            @endforeach
+                                        @else
+                                            <span class="no-cat">Chưa có quyền</span>
+                                        @endif
+
                                     </td>
                                     <td>
                                         <a href="{{ route('user.edit', $item->id) }}" title="Sửa" class="edit">

@@ -34,7 +34,7 @@ Route::post('send-link-reset', [LoginController::class, 'sendLinkResetEmail'])->
 Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name('new.pass');
 Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
 
-Route::group(['middleware' => ['auth', 'checkActive', 'checkRole: admin,doctor'], 'prefix' => 'admin'], function(){
+Route::group(['middleware' => ['auth', 'checkActive', 'checkRole:admin,doctor,quan-ly-bai-viet,demo-quan-ly-bai-viet'], 'prefix' => 'admin'], function(){
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile/update', [AdminController::class, 'profile_update'])->name('admin.profile_update');

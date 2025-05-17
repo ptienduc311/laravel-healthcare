@@ -75,29 +75,6 @@
         </script>
     @endif
 
-    @if (session('disabled'))
-        <script>
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "progressBar": true,
-                "preventDuplicates": false,
-                "positionClass": "toast-top-right",
-                "onclick": null,
-                "showDuration": "400",
-                "hideDuration": "10000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
-            toastr.error("{{session('disabled')}}")
-        </script>
-    @endif
-
     @if (session('success'))
         <script>
             toastr.options = {
@@ -118,6 +95,52 @@
             }
 
             toastr.success("{{session('success')}}")
+        </script>
+    @endif
+
+    @if (session('blocked'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "60000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("Vui lòng liên hệ với quản trị viên", "{{session('blocked')}}")
+        </script>
+    @endif
+
+    @if (session('no-access'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "60000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('no-access')}}")
         </script>
     @endif
 @endsection

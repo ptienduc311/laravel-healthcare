@@ -61,7 +61,7 @@ class FrontedController extends Controller
             $query->where('degree', $request->degree_id);
         }
     
-        $doctors = $query->orderbyDesc('created_date_int')->paginate(12)->withQueryString();
+        $doctors = $query->where('status', 1)->orderbyDesc('created_date_int')->paginate(12)->withQueryString();
 
         return view('themes.list-doctor', compact('doctors', 'specialties', 'academicTitles', 'degrees'));
     }

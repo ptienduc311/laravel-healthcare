@@ -362,7 +362,7 @@
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">Trạng thái</label>
+                                <label class="col-sm-2 control-label">Tạm dừng/Hoạt động</label>
                                 <div class="col-sm-10 mt-2">
                                     <div class="switch">
                                         <div class="onoffswitch">
@@ -427,4 +427,51 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-js')
+    @if (session('success'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": true,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.success("{{session('success')}}")
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "3500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("Vui lòng liên hệ với quản trị viên", "{{session('error')}}")
+        </script>
+    @endif
 @endsection

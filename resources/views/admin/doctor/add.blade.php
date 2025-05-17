@@ -264,7 +264,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Trạng thái</label>
+                            <label class="col-sm-2 control-label">Tạm dừng/Hoạt động</label>
                             <div class="col-sm-10 mt-2">
                                 <div class="switch">
                                     <div class="onoffswitch">

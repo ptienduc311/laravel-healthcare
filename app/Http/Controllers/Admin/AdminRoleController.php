@@ -123,6 +123,7 @@ class AdminRoleController extends Controller
             return redirect()->back()->with('error', 'Không được xóa vai trò admin hoặc doctor.');
         }
         $role->permissions()->detach();
+        $role->users()->detach();
         $role->delete();
         return redirect()->route('role.index')->with('success', 'Đã xóa vai trò thành công');
     }

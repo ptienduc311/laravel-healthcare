@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-    @if ($isAdmin)
+    @if ($isAdmin && !isset($doctor))
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox float-e-margins" id="ibox1">
@@ -83,7 +83,6 @@
         </div>
     @endif
     <div class="row">
-        {{-- Hiển thị giao diện tại đây --}}
         <div id="doctor-profile"></div>
         <div class="col-lg-12">
             <div class="ibox float-e-margins show-loading-bottom">
@@ -112,13 +111,10 @@
 </div>
 @endsection
 
-@if (isset($doctor))
-    @section('custom-js')
+@section('custom-js')
+    @if (isset($doctor))
         <script>
             $(document).ready(function () {
-                // Ẩn phần "Tìm kiếm bác sĩ"
-                $('#no-found-doctor').hide();
-
                 const doctorId = {{ $doctor->id }};
                 $.ajax({
                     url: '{{ route("doctor.show-profile") }}',
@@ -142,28 +138,11 @@
                 });
             });
         </script>
-
-        @if (session('success'))
-            <script>
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "progressBar": true,
-                    "preventDuplicates": false,
-                    "positionClass": "toast-top-right",
-                    "onclick": null,
-                    "showDuration": "400",
-                    "hideDuration": "10000",
-                    "timeOut": "3000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
-
-                toastr.success("{{session('success')}}")
-            </script>
-        @endif
-    @endsection
-@endif
+    @else
+        <script>
+            $(document).ready(function () {
+                $('#no-found-doctor').show();
+            })
+        </script>
+    @endif
+@endsection

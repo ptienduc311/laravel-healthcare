@@ -81,20 +81,13 @@ class AdminDoctorController extends Controller
         ];
         $specialties = MedicalSpecialty::where('status', 1)->get();
 
-        // if (!$doctorId) {
-        //     return view('admin.doctor.info', compact('academicTitles', 'degrees', 'specialties'));
-        // }
-
-        // $doctor = Doctor::where('id', $doctorId)->first();
-        // return view('admin.doctor.info', compact('doctor', 'academicTitles', 'degrees', 'specialties'));
-
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $isDoctor = $user->hasRole('doctor');
         $isAdmin = $user->hasRole('admin');
 
         //Doctor
-        if ($isDoctor && !$isAdmin) {
+        if ($isDoctor) {
             $doctor = Doctor::where('user_id', Auth::id())->first();
 
             if (!$doctor) {
@@ -300,9 +293,13 @@ class AdminDoctorController extends Controller
         $isDoctor = $user->hasRole('doctor');
         $isAdmin = $user->hasRole('admin');
 
-        $doctor = Doctor::with('doctor_prizes', 'doctor_training', 'doctor_works')->find($id);
+        $doctor = Doctor::find($id);
         $oldImage = $doctor->image;
         $image_id = $oldImage->id ?? null;
+
+        if($isDoctor && $doctor->status != 1){
+            return redirect()->back()->with('error', 'Bác sĩ đã bị tạm dừng hoạt động');
+        }
 
         $validator = Validator::make($request->all(),
             [
@@ -405,6 +402,7 @@ class AdminDoctorController extends Controller
             $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
         }
 
+
         $created_by = Auth::id();
         $doctor->update([
             'name' => $name,
@@ -475,10 +473,7 @@ class AdminDoctorController extends Controller
             }
         }
 
-        if($isDoctor){
-            return redirect('admin/doctor')->with('success', 'Cập nhật thành công');
-        }
-        return redirect('admin/doctor/profile-doctor')->with('success', 'Cập nhật thành công');
+        return redirect()->back()->with('success', 'Cập nhật thành công');
     }
 
     public function destroy(string $id)
