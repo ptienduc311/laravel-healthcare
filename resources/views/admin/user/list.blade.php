@@ -83,9 +83,11 @@
                                         <a href="{{ route('user.edit', $item->id) }}" title="Sửa" class="edit">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="{{ route('user.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                        @if (Auth::id() != $item->id)
+                                            <a href="{{ route('user.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                <i class="fa fa-trash"></i>
+                                            </a> 
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -120,6 +122,28 @@
             }
 
             toastr.success("{{session('success')}}")
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
         </script>
     @endif
 @endsection

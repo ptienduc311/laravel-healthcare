@@ -124,7 +124,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-primary" type="submit">Cập nhật</button>
+                                <button class="btn btn-primary ladda-button ladda-button-edit" type="submit">Cập nhật</button>
                             </div>
                         </div>
                     </form>
@@ -177,5 +177,39 @@
             $('.connect-doctor').hide();
             $('.show-doctor-connect').hide();
         }
+
+        Ladda.bind('.ladda-button-edit');
+
+        document.querySelector('.form-horizontal').addEventListener('submit', function(event) {
+            var buttonClicked = event.submitter;
+            
+            if (buttonClicked) {
+                var laddaButton = Ladda.create(buttonClicked);
+                laddaButton.start();
+            }
+        });
     </script>
+
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
+        </script>
+    @endif
 @endsection

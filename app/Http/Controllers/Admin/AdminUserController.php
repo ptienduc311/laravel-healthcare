@@ -86,9 +86,9 @@ class AdminUserController extends Controller
         $role = Role::find($roleId);
         $isAdmin = $role->slug_role === 'admin';
         $isDoctor = $role->slug_role === 'doctor';
-        // dd($role, $isAdmin, $isDoctor);
+        // dd($role, $isAdmin, $isDoctor, $doctorId);
 
-        if ($isDoctor) {
+        if ($isDoctor && !empty($doctorId)) {
             $checkDoctor = Doctor::where('id', $doctorId)->whereNull('user_id')->exists();
             if(!$checkDoctor){
                 return redirect()->back()->with('error', 'Bác sĩ không tồn tại hoặc đã liên kết tài khoản.');
@@ -188,66 +188,69 @@ class AdminUserController extends Controller
         );
         $isDoctor = $user->hasRole('doctor');
         $roleIdNew = $request->input('role');
-        $roleIdOld = optional($user->roles->first())->id;
+        $roleIdOld = $user->roles->first()->id;
         $roleDoctor = Role::where('slug_role', 'doctor')->first()->id;
         $doctorIdNew = $request->input('doctor_id');
         $doctorIdOld = $user->doctor?->id;
         // dd($request, $isDoctor, $roleIdNew, $roleIdOld, $roleDoctor, $doctorIdNew, $doctorIdOld);
+        $name = $request->input('name');
+        $email = $request->input('email');
 
-        //Nếu user là doctor
+        if ($roleIdNew == $roleDoctor && !empty($doctorId) && $doctorIdNew != $doctorIdOld) {
+            $checkDoctor = Doctor::where('id', $doctorIdNew)->whereNull('user_id')->exists();
+            if(!$checkDoctor){
+                return redirect()->back()->with('error', 'Bác sĩ không tồn tại hoặc đã liên kết tài khoản.');
+            }
+        }
+
+        $dataUser = [
+            'name' => $name,
+            'email' => $email,
+        ];
+        if ($request->filled('password')) {
+            $dataUser['password'] = Hash::make($request->input('password'));
+        }
+        $user->update($dataUser);
+        $user->roles()->sync($roleIdNew);
+
         if($isDoctor){
-            //Là bác sĩ
             if($roleIdNew ==  $roleDoctor){
-                //Nếu có doctor_id
                 if($doctorIdNew){
-                    if($doctorIdNew == $doctorIdOld){
-                        dd('Vai trò vẫn là bác sĩ, vẫn là bác sĩ cũ')   ;
-                    }
-                    else{
-                        dd('Vai trò vẫn là bác sĩ, nhưng là bác sĩ mới');
+                    if ($doctorIdNew != $doctorIdOld) {
+                        $user->doctor?->update(['user_id' => null]);
+                        Doctor::where('id', $doctorIdNew)->update(['user_id'=> $user->id]);
                     }
                 }
                 else{
-                    dd('Vai trò vẫn là bác sĩ, nhưng chưa chọn bác sĩ');
+                    $user->doctor?->update(['user_id' => null]);
+                    Doctor::create([
+                        'name' => $name,
+                        'slug_name' => Str::slug($name),
+                        'status' => 1,
+                        'created_date_int' => time(),
+                        'user_id' => $user->id,
+                    ]);
                 }
             }
             else{
-                dd('Đã từng là bác sĩ');
+                $user->doctor->update(['user_id' => null]);
             }
         }
-        else{
-            //Nếu vẫn là role cũ
-            if($roleIdNew == $roleIdOld){
-                dd('Vẫn là vai trò cũ');
+        elseif ($roleIdNew == $roleDoctor) {
+            if($doctorIdNew){
+                Doctor::where('id', $doctorIdNew)->update(['user_id'=> $user->id]);
             }
             else{
-                //Nếu là doctor
-                if($roleIdNew == $roleDoctor){
-                    //Nếu có doctor_id
-                    if($doctorIdNew){
-                        dd('Chuyển đổi vai trò thành bác sĩ và đã lựa chọn bác sĩ');
-                    }
-                    else{
-                        dd('Chuyển đổi vai trò thành bác sĩ và chưa chọn bác sĩ');
-                    }
-                }
-                else{
-                    dd('Chuyển đổi vai trò');
-                }
+                Doctor::create([
+                    'name' => $name,
+                    'slug_name' => Str::slug($name),
+                    'status' => 1,
+                    'created_date_int' => time(),
+                    'user_id' => $user->id,
+                ]);
             }
         }
-        dd('hỏng');
-
-        // $data = [
-        //     'name' => $request->input('name'),
-        //     'email' => $request->input('email'),
-        // ];
-        // if ($request->filled('password')) {
-        //     $data['password'] = Hash::make($request->input('password'));
-        // }
-        // $user->update($data);
-        // $user->roles()->sync($request->input('roles'));
-        // return redirect('admin/user')->with('success', 'Cập nhật người dùng thành công.');
+        return redirect('admin/user')->with('success', 'Cập nhật người dùng thành công.');
     }
 
     /**
@@ -255,6 +258,9 @@ class AdminUserController extends Controller
      */
     public function destroy(User $user)
     {
+        if(Auth::id() == $user->id){
+            return redirect()->back()->with('error', 'Không được xóa tài khoản của bạn.');
+        }
         $user->roles()->detach();
         $user->delete();
         return redirect('admin/user')->with('success', 'Xóa người dùng thành công.');
