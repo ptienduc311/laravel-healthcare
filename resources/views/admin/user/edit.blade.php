@@ -111,7 +111,7 @@
                             <label class="col-sm-2 control-label">Kich hoạt tài khoản</label>
                             <div class="col-sm-10">
                                 <div class="checkbox checkbox-danger">
-                                    <input id="activate" type="checkbox" name="is_activate">
+                                    <input id="activate" type="checkbox" name="is_activate" {{ $user->email_verified_at ? 'checked' : '' }}>
                                     <label for="activate">Kích hoạt</label>
                                 </div>
                             </div>

@@ -61,7 +61,7 @@
     margin-bottom: 0;
 }
 
-.edit, .delete, .start{
+.edit, .delete, .start, .blocked, .active{
     font-size: 14px;
     color: #000;
     margin-right: 10px;
@@ -77,6 +77,14 @@
 
 .start:hover{
     color: #007bff;
+}
+
+.blocked{
+    color: red;
+}
+
+.active{
+    color: green;
 }
 
 .ck-editor__editable_inline {

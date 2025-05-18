@@ -20,10 +20,39 @@ class AdminUserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(10);
-        return view('admin.user.list', compact('users'));
+        $roles = Role::all();
+
+        $users = User::with('roles')
+        ->when($request->filled('role_id'), function ($query) use ($request) {
+            $query->whereHas('roles', function ($q) use ($request) {
+                $q->where('roles.id', $request->role_id);
+            });
+        })
+        ->when($request->filled('is_account'), function ($query) use ($request) {
+            if ($request->is_account == 1) {
+                $query->whereNotNull('email_verified_at');
+            } elseif ($request->is_account == 2) {
+                $query->whereNull('email_verified_at');
+            }
+        })
+        ->when($request->filled('is_block'), function ($query) use ($request) {
+            if ($request->is_block == 1) {
+                $query->where('status', 1);
+            } elseif ($request->is_block == 2) {
+                $query->where('status', 2);
+            }
+        })
+        ->when($request->filled('keyword'), function ($query) use ($request) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhere('email', 'like', '%' . $keyword . '%');
+            });
+        })
+        ->paginate(10)->withQueryString();
+        return view('admin.user.list', compact('roles', 'users'));
     }
 
     /**
@@ -188,7 +217,6 @@ class AdminUserController extends Controller
         );
         $isDoctor = $user->hasRole('doctor');
         $roleIdNew = $request->input('role');
-        $roleIdOld = $user->roles->first()->id;
         $roleDoctor = Role::where('slug_role', 'doctor')->first()->id;
         $doctorIdNew = $request->input('doctor_id');
         $doctorIdOld = $user->doctor?->id;
@@ -264,5 +292,14 @@ class AdminUserController extends Controller
         $user->roles()->detach();
         $user->delete();
         return redirect('admin/user')->with('success', 'Xóa người dùng thành công.');
+    }
+
+    public function updateStatus(int $userId, int $statusCode){
+        if(Auth::id() == $userId){
+            return redirect()->back()->with('error', 'Không được chặn tài khoản của bạn.');
+        }
+
+        User::where('id', $userId)->update(['status' => $statusCode]);
+        return redirect()->back()->with('success', 'Cập nhật người dùng thành công.');
     }
 }

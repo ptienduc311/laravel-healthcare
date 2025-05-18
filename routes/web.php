@@ -34,7 +34,7 @@ Route::post('send-link-reset', [LoginController::class, 'sendLinkResetEmail'])->
 Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name('new.pass');
 Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
 
-Route::group(['middleware' => ['auth', 'checkActive', 'checkRole:admin,doctor,quan-ly-bai-viet,demo-quan-ly-bai-viet'], 'prefix' => 'admin'], function(){
+Route::group(['middleware' => ['auth', 'CheckActiveAccount', 'checkRole:admin,doctor,quan-ly-bai-viet,demo-quan-ly-bai-viet'], 'prefix' => 'admin'], function(){
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile/update', [AdminController::class, 'profile_update'])->name('admin.profile_update');
@@ -138,6 +138,8 @@ Route::group(['middleware' => ['auth', 'checkActive', 'checkRole:admin,doctor,qu
         Route::get('/edit/{user}', [AdminUserController::class, 'edit'])->name('edit')->middleware('can:user.edit');
         Route::post('/update/{user}', [AdminUserController::class, 'update'])->name('update')->middleware('can:user.edit');
         Route::get('/destroy/{user}', [AdminUserController::class, 'destroy'])->name('destroy')->middleware('can:user.destroy');
+
+        Route::get('/status/{userId}/{statusCode} ', [AdminUserController::class, 'updateStatus'])->name('status-update')->middleware('can:user.edit');
     });
    
     //Book

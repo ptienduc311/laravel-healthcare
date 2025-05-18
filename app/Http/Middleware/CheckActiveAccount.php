@@ -18,7 +18,7 @@ class CheckActiveAccount
     {
         $user = Auth::user();
 
-        if (!$user || $user->deleted_at || $user->status != 1) {
+        if ($user->status != 1) {
             Auth::logout();
             return redirect('/login')->with('blocked', 'Tài khoản đã bị chặn');
         }

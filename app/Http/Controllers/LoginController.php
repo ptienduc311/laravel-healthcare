@@ -57,7 +57,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
-            if (is_null($user->email_verified_at)) {
+            if (is_null($user->email_verified_at) || is_null($user->status)) {
                 Auth::logout();
                 return redirect()->back()->with('error', 'Vui lòng kiểm tra email để xác nhận');
             }
