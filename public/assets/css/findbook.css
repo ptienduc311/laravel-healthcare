@@ -103,3 +103,12 @@
     min-width: 150px;
     color: #333;
 }
+
+.filter-province .select-btn{
+    height: 37.6px;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.filter-province .options-content {
+    width: 100%;
+}

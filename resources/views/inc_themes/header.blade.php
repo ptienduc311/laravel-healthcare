@@ -28,10 +28,28 @@
                 </a>
             </div>
             <div class="header-account">
-                <div class="account-not-login">
-                    <a href="/register" class="action action-register">Đăng ký</a>
-                    <a href="/login" class="action action-login">Đăng nhập</a>
-                </div>
+                @php
+                    $user = Auth::user();
+                @endphp
+
+                @if ($user && $user->roles->contains('slug_role', 'benh-nhan'))
+                    <div class="account-login">
+                        <div class="name-role">Bệnh nhân</div>
+                        <ul class="action-user">
+                            <li>
+                                <a href="{{ route('patient.info') }}">Tài khoản</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <div class="account-not-login">
+                        <a href="{{ route('register') }}" class="action action-register">Đăng ký</a>
+                        <a href="{{ route('login') }}" class="action action-login">Đăng nhập</a>
+                    </div>
+                @endif
             </div>
             <div class="d-flex">
                 <a class="search-open icon-sm"></a>
@@ -46,10 +64,24 @@
             </div>
             <a class="menu-close icon-sm"></a>
             <div class="header-account">
-                <div class="account-not-login">
-                    <a href="/register" class="action action-register">Đăng ký</a>
-                    <a href="/login" class="action action-login">Đăng nhập</a>
-                </div>
+                @if ($user && $user->roles->contains('slug_role', 'benh-nhan'))
+                    <div class="account-login">
+                        <div class="name-role">Bệnh nhân</div>
+                        <ul class="action-user">
+                            <li>
+                                <a href="{{ route('patient.info') }}">Tài khoản</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <div class="account-not-login">
+                        <a href="{{ route('register') }}" class="action action-register">Đăng ký</a>
+                        <a href="{{ route('login') }}" class="action action-login">Đăng nhập</a>
+                    </div>
+                @endif
             </div>
             <ul class="main-menu">
                 <li>
@@ -85,28 +117,6 @@
                 <li>
                     <a href="/tra-cuu-lich-hen">Tra cứu lịch hẹn</a>
                 </li>
-                {{-- <li class="has-submenu">
-                    <a href="/">Chuyên gia</a>
-                    <i class="fa-solid fa-angle-down submenu-toggle"></i>
-                    <ul class="sub-menu">
-                        <strong class="menu-title">Chuyên gia</strong>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                        <li>
-                            <a href="" target="_blank">Dịch vụ bảo hiểm</a>
-                        </li>
-                    </ul>
-                </li> --}}
             </ul>
             <div class="header-nav-bottom">
                 <div class="header-hotline">
@@ -122,6 +132,9 @@
                     </a>
                 </div>
             </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
     </div>
 </div>

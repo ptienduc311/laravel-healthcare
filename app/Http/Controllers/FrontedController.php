@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\ServiceSpecialty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FrontedController extends Controller
 {

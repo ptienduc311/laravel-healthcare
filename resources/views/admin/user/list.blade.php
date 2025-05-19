@@ -114,16 +114,16 @@
                                         <a href="{{ route('user.edit', $item->id) }}" title="Cập nhật" class="edit">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        @if ($item->status == 1)
-                                            <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 2]) }}" title="Chặn" class="blocked">
-                                                <i class="fa fa-ban"></i>
-                                            </a>
-                                        @else
-                                            <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 1]) }}" title="Bỏ chặn" class="active">
-                                                <i class="fa fa-check"></i>
-                                            </a>
-                                        @endif
                                         @if (Auth::id() != $item->id)
+                                            @if ($item->status == 1)
+                                                <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 2]) }}" title="Chặn" class="blocked">
+                                                    <i class="fa fa-ban"></i>
+                                                </a>
+                                            @else
+                                                <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 1]) }}" title="Bỏ chặn" class="active">
+                                                    <i class="fa fa-check"></i>
+                                                </a>
+                                            @endif
                                             <a href="{{ route('user.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                 <i class="fa fa-trash"></i>
                                             </a> 

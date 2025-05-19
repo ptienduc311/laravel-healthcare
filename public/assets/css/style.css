@@ -172,6 +172,79 @@
     align-items: center;
 }
 
+/* Account */
+.account-login{
+    position: relative;
+}
+
+.account-login::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 0;
+    height: 8px;
+    width: 100%;
+    background: transparent;
+    z-index: 1;
+}
+
+.account-login .name-role{
+    color: #fff;
+    font-weight: 600;
+    padding: 8px 16px;
+    background: red;
+    width: fit-content;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.account-login .name-role:hover{
+    background: #e20000;
+}
+
+.account-login .action-user{
+    border: 1px solid #c6c6c6;
+    position: absolute;
+    top: 130%;
+    right: 0;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #dbdbdb;
+    transition: all 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.account-login:hover .action-user {
+    top: calc(100% + 8px);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.account-login .action-user li{
+    padding: 10px;
+}
+
+.account-login .action-user li:first-child{
+    border-bottom: 1px solid #fff;
+}
+
+.account-login .action-user li a{
+    color: #6c6c6c;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.account-login .action-user li:hover a{
+    color: #000;
+}
+/* End */
+
 .header-account .action {
     color: #0750ed;
     font-weight: 600;

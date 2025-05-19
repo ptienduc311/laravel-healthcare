@@ -30,14 +30,14 @@
                         <div class="form">
                             <div class="row">
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Họ và tên <sup>*</sup></label>
+                                    <label>Họ và tên <span class="claim">*</span></label>
                                     <div class="control">
                                         <input type="text" name="name" class="form-control" id="patientName" placeholder="Nhập họ và tên">
                                         <div class="error" id="patientName-error"></div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Số điện thoại <sup>*</sup></label>
+                                    <label>Số điện thoại <span class="claim">*</span></label>
                                     <div class="control">
                                         <input type="text" name="phone" id="phone" class="form-control" placeholder="Nhập số điện thoại">
                                         <div class="error" id="phone-error"></div>
@@ -46,14 +46,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Ngày sinh <sup>*</sup></label>
+                                    <label>Ngày sinh <span class="claim">*</span></label>
                                     <div class="control">
-                                        <input type="date" name="birth" class="form-control" id="patientBirthDate">
+                                        <input type="text" name="birth" class="form-control" id="patientBirthDate">
                                         <div class="error" id="patientBirthDate-error"></div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Email <sup>*</sup></label>
+                                    <label>Email <span class="claim">*</span></label>
                                     <div class="control">
                                         <input type="text" name="email" id="email" class="form-control" placeholder="Nhập email">
                                         <div class="error" id="email-error"></div>
@@ -62,18 +62,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Giới tính <sup>*</sup></label>
+                                    <label>Giới tính <span class="claim">*</span></label>
                                     <div class="control">
                                         <select name="gender" class="form-control" id="patientSex">
                                             <option>Chọn giới tính</option>
-                                            <option value="male">Nam</option>
-                                            <option value="female">Nữ</option>
+                                            <option value="1">Nam</option>
+                                            <option value="2">Nữ</option>
                                         </select>
                                         <div class="error" id="patientSex-error"></div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Tỉnh/Thành phố <sup>*</sup></label>
+                                    <label>Tỉnh/Thành phố <span class="claim">*</span></label>
                                     <div class="control filter-province">
                                         <div class="select-btn form-control">
                                             <span style="color: 4f4f4f;opacity: 0.5;font-weight: 600;"></span>
@@ -93,7 +93,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Quận/Huyện <sup>*</sup></label>
+                                    <label>Quận/Huyện <span class="claim">*</span></label>
                                     <div class="control">
                                         <select class="form-control" id="district">
                                         </select>
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-xs-12 form-group">
-                                    <label>Phường/Xã <sup>*</sup></label>
+                                    <label>Phường/Xã <span class="claim">*</span></label>
                                     <div class="control">
                                         <select class="form-control" id="ward">
                                         </select>
@@ -111,7 +111,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 form-group">
-                                    <label>Địa chỉ <sup>*</sup></label>
+                                    <label>Địa chỉ <span class="claim">*</span></label>
                                     <div class="control">
                                         <input type="text" name="address" id="address" class="form-control" placeholder="Nhập địa chỉ">
                                         <div class="error" id="address-error"></div>
@@ -148,7 +148,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 form-group">
-                                    <label>Ngày khám <sup>*</sup></label>
+                                    <label>Ngày khám <span class="claim">*</span></label>
                                     <div class="control">
                                         <input type="date" name="appointmentDate" id="appointmentDate" class="form-control">
                                         <div class="error" id="appointmentDate-error"></div>
@@ -157,7 +157,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 form-group">
-                                    <label>Chọn giờ <sup>*</sup></label>
+                                    <label>Chọn giờ <span class="claim">*</span></label>
                                     <div class="control list-times" id="time-slot-list">
                                         <div class="error-message">Vui lòng chọn ngày để xem giờ khám.</div>
                                     </div>
@@ -166,7 +166,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 form-group">
-                                    <label>Nội dung yêu cầu <sup>*</sup></label>
+                                    <label>Nội dung yêu cầu <span class="claim">*</span></label>
                                     <div class="control">
                                         <textarea name="reason" id="reasonNote" class="form-control" placeholder="Tôi cảm thấy..."></textarea>
                                         <div class="error" id="reasonNote-error"></div>
@@ -176,7 +176,7 @@
                             <input type="hidden" name="province_id" id="province-id">
                             <input type="hidden" name="district_id" id="district-id">
                             <input type="hidden" name="ward_id" id="ward-id">
-                            <button type="submit" class="btn-book btn btn-primary">Đặt lịch</button>
+                            <button type="submit" class="btn-book btn btn-primary ladda-button">Đặt lịch hẹn</button>
                         </div>
                     </form>
                 </div>
@@ -187,7 +187,7 @@
 @endsection
 
 @section('custom-js')
-    @if (session('success'))
+    @if (session('success') && session('patient_info'))
         <script>
             toastr.options = {
                 "closeButton": false,
@@ -207,6 +207,15 @@
             }
 
             toastr.success("{{session('success')}}", "Đặt lịch hẹn thành công")
+            const patient = @json(session('patient_info'));
+            localStorage.setItem('patientInfo', JSON.stringify(patient));
+            
+            const btn = document.querySelector('.ladda-button');
+            if (btn) {
+                const ladda = Ladda.create(btn);
+                ladda.stop();
+                btn.querySelector('.ladda-label').textContent = 'Đặt lịch hẹn';
+            }
         </script>
     @endif
     @if (session('error'))
@@ -233,12 +242,17 @@
     @endif
     <script>
         $(document).ready(function () {
+            $('#patientBirthDate').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true
+            });
+
+            //Chọn bác sĩ
             const specialtySelect = $('#specialty-id');
             const doctorList = $('.show-list-doctor');
             const showNameDoctor = $('.show-name-doctor');
             const doctorIdInput = $('#doctor-id');
             const groupDoctor = $('.group-doctor');
-
             let doctorsData = [];
 
             showNameDoctor.on('click', function () {
@@ -335,16 +349,53 @@
                 doctorList.empty().hide();
                 showNameDoctor.addClass('disabled').text('Chọn bác sĩ');
             });
+            //End
 
-            $(document).on('click', function (e) {
-                const target = $(e.target);
-                const isInsideDoctorGroup = target.closest('.group-doctor').length > 0;
+            //Lấy dữ liệu bệnh nhân
+            const savedPatient = localStorage.getItem('patientInfo');
 
-                if (!isInsideDoctorGroup) {
-                    doctorList.hide();
+            const loggedInPatient = {!! auth()->check() && auth()->user()->roles->contains('slug_role', 'benh-nhan')
+                ? json_encode([
+                    'name' => auth()->user()->name,
+                    'phone' => auth()->user()->phone,
+                    'birth' => auth()->user()->birth,
+                    'email' => auth()->user()->email,
+                    'gender' => auth()->user()->gender,
+                    'address' => auth()->user()->address,
+                    'province_id' => auth()->user()->province_id,
+                    'district_id' => auth()->user()->district_id,
+                    'ward_id' => auth()->user()->ward_id,
+                ])
+                : 'null'
+            !!};
+
+            const data = loggedInPatient ?? (savedPatient ? JSON.parse(savedPatient) : null);
+
+            if (data) {
+                $('input[name="name"]').val(data.name || '');
+                $('input[name="phone"]').val(data.phone || '');
+                $('input[name="birth"]').val(data.birth || '');
+                $('input[name="email"]').val(data.email || '');
+                $('input[name="address"]').val(data.address || '');
+                $('input[name="province_id"]').val(data.province_id || '');
+                $('input[name="district_id"]').val(data.district_id || '');
+                $('input[name="ward_id"]').val(data.ward_id || '');
+
+                if (typeof data.gender !== 'undefined') {
+                    $('#patientSex').val(data.gender);
                 }
-            });
-
+                if (data.province_id) {
+                    $('#province-id').val(data.province_id).trigger('change');
+                    $('.filter-province .select-btn span').text($('#province option[value="' + data.province_id + '"]').text());
+                }
+                if (data.district_id) {
+                    $('#district-id').val(data.district_id);
+                }
+                if (data.ward_id) {
+                    $('#ward-id').val(data.ward_id);
+                }
+            }
+            //End
         });
     </script>
 @endsection

@@ -125,11 +125,6 @@ class ApiController extends Controller
             return redirect()->back()->with('error', 'Thời gian khám này đã có người đăng ký.');
         }
 
-        //Cập nhật lịch hẹn
-        Appointment::where('id', $appointment_id)->update([
-            'is_appointment' => 1
-        ]);
-
         //Tạo mã khám bệnh và lưu lịch hẹn
         do {
             $book_code = strtoupper(Str::random(12));
@@ -152,6 +147,11 @@ class ApiController extends Controller
             'appointment_id' => $appointment_id ,
             'specialty_id' => $specialty_id ,
             'doctor_id' => $doctor_id ,
+        ]);
+
+        //Cập nhật lịch hẹn
+        Appointment::where('id', $appointment_id)->update([
+            'is_appointment' => 1
         ]);
 
         //Gửi email
@@ -181,7 +181,18 @@ class ApiController extends Controller
             'link_confirm_book' => $link_confirm_book,
         ];
         Mail::to($email)->send(new SendMailBook($data));
-        return redirect()->back()->with('success', 'Vui lòng kiểm tra email để xác nhận lịch hẹn.');
+        return redirect()->back()->with('success', 'Vui lòng kiểm tra email để xác nhận lịch hẹn.')
+        ->with('patient_info', [
+            'name' => $name,
+            'phone' => $phone,
+            'birth' => $birth,
+            'email' => $email,
+            'gender' => $gender,
+            'address' => $address,
+            'province_id' => $province_id,
+            'district_id' => $district_id,
+            'ward_id' => $ward_id,
+        ]);
     }
     
     public function confirmBook(string $code){

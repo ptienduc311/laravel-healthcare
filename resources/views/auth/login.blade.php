@@ -42,6 +42,12 @@
                     <a class="text-primary-600 hover:underline" href="{{ route('reset.pass') }}">Quên mật khẩu?</a>
                 </div>
                 <button class="btn btn-solid w-full" type="submit">Đăng nhập</button>
+                <a class="login-google" href="{{ route('login-google') }}">
+                    <div class="img-google">
+                        <img src="{{ asset('auth/icon-google.png') }}" alt="">
+                    </div>
+                    Đăng nhập bằng Google
+                </a>
                 <div class="mt-4 text-center">
                     <span>Bạn chưa có tài khoản?</span>
                     <a class="text-primary-600 hover:underline" href="{{ route('register') }}">Đăng ký</a>

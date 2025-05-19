@@ -272,6 +272,32 @@ document.addEventListener("DOMContentLoaded", function () {
                         provinceList.appendChild(listItem);
                     });
                     setupSearchEvent();
+
+                    const savedProvinceId = document.getElementById("province-id").value;
+                    if (savedProvinceId) {
+                        const selectedProvince = listProvince.find(p => p.id == savedProvinceId);
+                        if (selectedProvince) {
+                            selectBtn.firstElementChild.innerText = selectedProvince.name;
+                            selectBtn.firstElementChild.style.color = "#000";
+                            selectBtn.firstElementChild.style.opacity = "1";
+                            selectBtn.firstElementChild.style.fontWeight  = "normal";
+
+                            // Load quận/huyện
+                            loadDistricts(savedProvinceId, () => {
+                                const savedDistrictId = document.getElementById("district-id").value;
+                                if (savedDistrictId) {
+                                    districtSelect.value = savedDistrictId;
+                                    loadWards(savedDistrictId, () => {
+                                        const savedWardId = document.getElementById("ward-id").value;
+                                        if (savedWardId) {
+                                            wardSelect.value = savedWardId;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+
                 }
             })
             .catch(error => {
@@ -315,10 +341,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     
         // Tải danh sách quận/huyện
-        function loadDistricts(provinceId) {
+        function loadDistricts(provinceId, callback = null) {
             districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
             districtSelect.disabled = true;
-        
+
             fetch(`/api-get-districts?province_id=${provinceId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -331,6 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             districtSelect.appendChild(option);
                         });
                         districtSelect.disabled = false;
+                        if (callback) callback();
                     } else {
                         alert(data.message || 'Không thể tải danh sách quận/huyện.');
                     }
@@ -338,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(() => {
                     alert('Lỗi khi lấy dữ liệu quận/huyện.');
                 });
-        }        
+        } 
     
         // Chọn quận/huyện
         districtSelect.addEventListener("change", function () {
@@ -351,10 +378,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     
         // Tải danh sách phường/xã
-        function loadWards(districtId) {
+        function loadWards(districtId, callback = null) {
             wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
             wardSelect.disabled = true;
-        
+
             fetch(`/api-get-wards?district_id=${districtId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -367,6 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             wardSelect.appendChild(option);
                         });
                         wardSelect.disabled = false;
+                        if (callback) callback();
                     } else {
                         alert(data.message || 'Không thể tải danh sách phường/xã.');
                     }
@@ -615,10 +643,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!isValid) {
                 e.preventDefault();
+
+                const btn = document.querySelector('.ladda-button');
+                if (btn) {
+                    const ladda = Ladda.create(btn);
+                    ladda.stop();
+                    btn.querySelector('.ladda-label').textContent = 'Đặt lịch';
+                }
+
+                return;
+            }
+
+            const btn = document.querySelector('.ladda-button');
+            if (btn) {
+                const ladda = Ladda.create(btn);
+                btn.querySelector('.ladda-label').textContent = 'Đang đặt lịch hẹn';
+                ladda.start();
             }
         });
     }
-
 
     const fieldsToWatch = [
         'patientName', 'phone', 'patientBirthDate', 'email', 'patientSex',
@@ -660,4 +703,18 @@ window.addEventListener('scroll', () => {
 
 backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+$(document).on('click', function (e) {
+    const target = $(e.target);
+    const hasDoctorGroup = target.closest('.group-doctor').length > 0;
+    const hasFilterProvince = target.closest('.filter-province').length > 0;
+
+    if (!hasDoctorGroup) {
+        $('.show-list-doctor').hide();
+    }
+
+    if(!hasFilterProvince){
+        $('.filter-province').removeClass('active');
+    }
 });

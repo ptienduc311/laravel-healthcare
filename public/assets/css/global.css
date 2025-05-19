@@ -72,3 +72,10 @@ img{
 #toast-container > div{
     opacity: 1 !important;
 }
+
+.claim {
+    font-size: 12px;
+    font-weight: 500;
+    color: red;
+    margin-left: 5px;
+}

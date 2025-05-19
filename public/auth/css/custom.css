@@ -107,3 +107,26 @@
 .back-home:hover{
     color: #6ba7fd;
 }
+
+.login-google{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border: 1px solid #1a48ff;
+    border-radius: 5px;
+    margin-top: 15px;
+    color: #292929;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.login-google:hover{
+    background-color: #1a48ff;
+    color: #fff;
+}
+
+.login-google .img-google{
+    max-width: 30px;
+}

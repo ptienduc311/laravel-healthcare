@@ -52,6 +52,7 @@ class AdminRoleController extends Controller
                 'slug_role.unique' => 'Mã vai trò đã tồn tại',
                 'description.required' => 'Mô tả không được để trống',
                 'permission_id.required' => 'Bạn phải chọn ít nhất một quyền',
+                'permission_id.array' => 'Quyền không đúng định dạng',
                 'permission_id.min' => 'Bạn phải chọn ít nhất một quyền',
                 'permission_id.*.exists' => 'Danh sách quyền không tồn tại'
             ]
@@ -81,12 +82,16 @@ class AdminRoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
+        if($role->slug_role == 'benh-nhan'){
+            return redirect()->back()->with('warning', 'Không được cập nhật vai trò này.');
+        }
+
         $request->validate(
             [
                 'name' => 'required|max:255|unique:roles,name,' . $role->id,
                 'slug_role' => 'required|max:255|unique:roles,slug_role,' . $role->id,
                 'description' => 'required',
-                'permission_id' => 'nullable|array',
+                'permission_id' => 'required|array|min:1',
                 'permission_id.*' => 'exists:permissions,id'
             ],
             [
@@ -98,6 +103,7 @@ class AdminRoleController extends Controller
                 'slug_role.unique' => 'Mã vai trò đã tồn tại',
                 'description.required' => 'Mô tả không được để trống',
                 'permission_id.required' => 'Bạn phải chọn ít nhất một quyền',
+                'permission_id.array' => 'Quyền không đúng định dạng',
                 'permission_id.min' => 'Bạn phải chọn ít nhất một quyền',
                 'permission_id.*.exists' => 'Danh sách quyền không tồn tại'
             ]
@@ -121,6 +127,9 @@ class AdminRoleController extends Controller
     {
         if (in_array($role->slug_role, ['admin', 'doctor'])) {
             return redirect()->back()->with('error', 'Không được xóa vai trò admin hoặc doctor.');
+        }
+        if ($role->slug_role == 'benh-nhan' ) {
+            return redirect()->back()->with('error', 'Không được xóa vai trò bệnh nhân.');
         }
         $role->permissions()->detach();
         $role->users()->detach();

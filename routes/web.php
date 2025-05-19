@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\FrontedController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 //Login
 Route::get('login', [LoginController::class, 'login'])->name('login');
 Route::post('login/handle', [LoginController::class, 'handle'])->name('login.handle');
+Route::get('login/google', [LoginController::class, 'loginGoogle'])->name('login-google');
+Route::get('login/google/callback', [LoginController::class, 'handleLoginGoogleCallback']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 //Register
@@ -34,7 +37,7 @@ Route::post('send-link-reset', [LoginController::class, 'sendLinkResetEmail'])->
 Route::get('new-pass/{reset_token}', [LoginController::class, 'newPass'])->name('new.pass');
 Route::post('new-pass/{reset_token}', [LoginController::class, 'updatePass'])->name('update.pass');
 
-Route::group(['middleware' => ['auth', 'CheckActiveAccount', 'checkRole:admin,doctor,quan-ly-bai-viet,demo-quan-ly-bai-viet'], 'prefix' => 'admin'], function(){
+Route::group(['middleware' => ['auth', 'CheckBlockedAccount', 'checkRole:admin,doctor,quan-ly-bai-viet,demo-quan-ly-bai-viet'], 'prefix' => 'admin'], function(){
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile/update', [AdminController::class, 'profile_update'])->name('admin.profile_update');
@@ -154,6 +157,11 @@ Route::group(['middleware' => ['auth', 'CheckActiveAccount', 'checkRole:admin,do
         Route::get('/search-doctor', [AdminBookController::class, 'searchDoctor'])->middleware('can:book.show');
         Route::post('/cancel-appointment', [AdminBookController::class, 'cancelAppointment'])->name('cancel')->middleware('can:book.show');
     });
+});
+
+Route::group(['middleware' => ['auth', 'CheckBlockedAccount', 'checkRole:benh-nhan'], 'prefix' => 'patient', 'as' => 'patient.'], function(){
+    Route::get('/info', [PatientController::class, 'info'])->name('info');
+    Route::post('/update', [PatientController::class, 'update'])->name('update');
 });
 
 //API

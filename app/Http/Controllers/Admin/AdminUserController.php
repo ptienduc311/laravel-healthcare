@@ -220,6 +220,9 @@ class AdminUserController extends Controller
         $roleDoctor = Role::where('slug_role', 'doctor')->first()->id;
         $doctorIdNew = $request->input('doctor_id');
         $doctorIdOld = $user->doctor?->id;
+        $is_activate = $request->has('is_activate');
+        $time_active = $user->email_verified_at ? $user->email_verified_at : now();
+        $email_verified_at = $is_activate ? $time_active : null;
         // dd($request, $isDoctor, $roleIdNew, $roleIdOld, $roleDoctor, $doctorIdNew, $doctorIdOld);
         $name = $request->input('name');
         $email = $request->input('email');
@@ -234,6 +237,7 @@ class AdminUserController extends Controller
         $dataUser = [
             'name' => $name,
             'email' => $email,
+            'email_verified_at' => $email_verified_at
         ];
         if ($request->filled('password')) {
             $dataUser['password'] = Hash::make($request->input('password'));

@@ -70,13 +70,15 @@
                                         {{ date("d/m/Y", $item->created_date_int) }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('role.edit', $item->id) }}" title="Sửa" class="edit">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        @if (!in_array($item->slug_role, ['admin', 'doctor']))
-                                            <a href="{{ route('role.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                <i class="fa fa-trash"></i>
+                                        @if ($item->slug_role != 'benh-nhan')
+                                            <a href="{{ route('role.edit', $item->id) }}" title="Sửa" class="edit">
+                                                <i class="fa fa-pencil"></i>
                                             </a>
+                                            @if (!in_array($item->slug_role, ['admin', 'doctor']))
+                                                <a href="{{ route('role.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -125,7 +127,7 @@
                 "onclick": null,
                 "showDuration": "400",
                 "hideDuration": "1000",
-                "timeOut": "31231314000",
+                "timeOut": "5000",
                 "extendedTimeOut": "1000",
                 "showEasing": "swing",
                 "hideEasing": "linear",

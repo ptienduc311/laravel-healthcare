@@ -75,10 +75,10 @@
                                 <label class="col-sm-3 control-label">Giới tính</label>
                                 <div class="col-sm-9">
                                     <select class="form-control m-b" name="gender">
-                                        <option value="male" {{ old('gender', $book->gender) == 'male' ? 'selected' : '' }}>
+                                        <option value="1" {{ old('gender', $book->gender) == '1' ? 'selected' : '' }}>
                                             Nam
                                         </option>
-                                        <option value="female" {{ old('gender', $book->gender) == 'female' ? 'selected' : '' }}>
+                                        <option value="2" {{ old('gender', $book->gender) == '2' ? 'selected' : '' }}>
                                             Nữ
                                         </option>
                                     </select>

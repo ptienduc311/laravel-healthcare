@@ -28,7 +28,7 @@
                         <input type="text" name="booking_token" id="booking_token" class="form-control mb-3" placeholder="Nhập mã lịch hẹn (ưu tiên)">
                     </div>
                     <div class="col-12 text-center my-3">
-                        <p>Hoặc tra cứu bằng ngày sinh và ngày hẹn</p>
+                        <h5>Hoặc tra cứu bằng email và ngày khám</h5>
                     </div>
                     <div class="col-md-5">
                         <label for="email" class="form-label">Email</label>

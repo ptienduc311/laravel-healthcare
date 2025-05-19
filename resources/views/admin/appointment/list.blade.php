@@ -191,7 +191,7 @@
                 showLoaderOnConfirm: false
             }, function(isConfirm) {
                 if (isConfirm) {
-                    console.log(hoursAppointment, appointmentIds, date, doctorId)
+                    // console.log(hoursAppointment, appointmentIds, date, doctorId)
                     const $btn = $('.sweet-alert .confirm');
                     $btn.addClass('ladda-button')
                     const ladda = Ladda.create($btn[0]);

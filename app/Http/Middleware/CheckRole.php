@@ -31,6 +31,6 @@ class CheckRole
         }
 
         Auth::logout();
-        return redirect('/login')->with('no-access', 'Không có quyền truy cập vào trang quản trị');;
+        return redirect('/login')->with('no-access', 'Bạn không có quyền truy cập');;
     }
 }

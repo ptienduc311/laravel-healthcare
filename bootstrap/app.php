@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'CheckActiveAccount' => \App\Http\Middleware\CheckActiveAccount::class,
+            'CheckBlockedAccount' => \App\Http\Middleware\CheckBlockedAccount::class,
             'checkRole' => \App\Http\Middleware\CheckRole::class,
         ]);
     })

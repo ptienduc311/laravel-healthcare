@@ -20,6 +20,10 @@
     <link href="{{ asset('assets/css/plugins/toastr.min.css') }}" rel="stylesheet">
     <!-- Sweet Alert -->
     <link href="{{ asset('assets/css/plugins/sweetalert.css') }}" rel="stylesheet">
+    <!-- Date Picker -->
+    <link href="{{ asset('assets/css/plugins/datepicker3.css') }}" rel="stylesheet">
+    <!-- Ladda style -->
+    <link href="{{ asset('assets/css/plugins/ladda-themeless.min.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('assets/css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/global.css ') }}">
@@ -52,6 +56,12 @@
     <script src="{{asset('assets/js/plugins/toastr.min.js') }}"></script>
     <!-- Sweet alert -->
     <script src="{{asset('assets/js/plugins/sweetalert.min.js') }}"></script>
+    <!-- Date picker -->
+    <script src="{{asset('assets/js/plugins/bootstrap-datepicker.js') }}"></script>
+    <!-- Ladda -->
+    <script src="{{asset('assets/js/plugins/spin.min.js') }}"></script>
+    <script src="{{asset('assets/js/plugins/ladda.min.js') }}"></script>
+    <script src="{{asset('assets/js/plugins/ladda.jquery.min.js') }}"></script>
     <script src="{{asset('assets/js/index.js')}}"></script>
     @yield('custom-js')
 </body>
