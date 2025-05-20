@@ -101,7 +101,6 @@
     
     <!-- Custome Js -->
     <script src="{{ asset('admin/js/custom.js') }}"></script>
-    @yield('custom-js')
 
     <script type="module">
         import {
@@ -112,58 +111,63 @@
             SimpleUploadAdapter
         } from 'ckeditor5';
 
-        const editorElement = document.querySelector('#editor');
+        const allEditors = [];
+        window.allEditors = allEditors;
         
-        if(editorElement) {
-        ClassicEditor
-            .create(document.querySelector('#editor'), {
-                licenseKey: 'GPL',
-                plugins: [
-                    Heading, Highlight, HorizontalLine, Font, Emoji, Mention,
-                    Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline, Indent, IndentBlock,
-                    CodeBlock, FindAndReplace,
-                    Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageInsert,
-                    AutoLink, Link,
-                    Undo, Alignment, Table, TableToolbar, List,
-                    SimpleUploadAdapter
-                ],
-                toolbar: 
-                {
-                    items: [
-                        'undo', 'redo', '|', 'heading', '|',
-                        'bold', 'italic', 'underline','strikethrough', 'subscript', 'superscript', '|', 
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                        'highlight', 'alignment', 'emoji', '|',
-                        'link', 'insertImage', 'insertTable', '|',
-                        'bulletedList', 'numberedList', '|',
-                        'horizontalLine', 
-                        'code', '|', 
-                        'outdent', 'indent', '|',
-                        'codeBlock', 'findAndReplace',
-                        
+        document.querySelectorAll('.editor').forEach((element, index) => {
+            ClassicEditor
+                .create(element, {
+                    licenseKey: 'GPL',
+                    plugins: [
+                        Heading, Highlight, HorizontalLine, Font, Emoji, Mention,
+                        Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline, Indent, IndentBlock,
+                        CodeBlock, FindAndReplace,
+                        Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageInsert,
+                        AutoLink, Link,
+                        Undo, Alignment, Table, TableToolbar, List,
+                        SimpleUploadAdapter
                     ],
-                    shouldNotGroupWhenFull: true
-                },
-                image: {
-                    toolbar: [ 'toggleImageCaption', 'imageTextAlternative', 'insertImageViaUrl' ],
-                },
-                link: {
-                    toolbar: [ 'linkPreview', '|', 'editLink', 'linkProperties', 'unlink' ]
-                },
-                simpleUpload: {
-                    uploadUrl: '/admin/upload-image',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    toolbar: 
+                    {
+                        items: [
+                            'undo', 'redo', '|', 'heading', '|',
+                            'bold', 'italic', 'underline','strikethrough', 'subscript', 'superscript', '|', 
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                            'highlight', 'alignment', 'emoji', '|',
+                            'link', 'insertImage', 'insertTable', '|',
+                            'bulletedList', 'numberedList', '|',
+                            'horizontalLine', 
+                            'code', '|', 
+                            'outdent', 'indent', '|',
+                            'codeBlock', 'findAndReplace',
+                            
+                        ],
+                        shouldNotGroupWhenFull: true
+                    },
+                    image: {
+                        toolbar: [ 'toggleImageCaption', 'imageTextAlternative', 'insertImageViaUrl' ],
+                    },
+                    link: {
+                        toolbar: [ 'linkPreview', '|', 'editLink', 'linkProperties', 'unlink' ]
+                    },
+                    simpleUpload: {
+                        uploadUrl: '/admin/upload-image',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
                     }
-                }
-            })
-            .then(editor => {
-                window.editor = editor;
-            })
-            .catch(error => {
-                console.error('CKEditor initialization error:', error);
-            });
-        }
+                })
+                .then(editor => {
+                    // window.editor = editor;
+                    allEditors.push({
+                        domElement: element,
+                        instance: editor
+                    });
+                })
+                .catch(error => {
+                    console.error('CKEditor initialization error:', error);
+                });
+        });
     </script>
 
     <script>
@@ -265,6 +269,7 @@
 
         });
     </script>
+    @yield('custom-js')
 </body>
 
 </html>

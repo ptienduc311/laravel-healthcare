@@ -64,11 +64,6 @@ class AdminMakeAppointmentController extends Controller
 
     public function create($doctorId = null)
     {
-        // $type = null;
-        // $specialties = MedicalSpecialty::where('status', 1)->get();
-        // $doctor = Doctor::findOrFail($doctorId);
-        // return view('admin.appointment.add', compact('doctor', 'specialties', 'type'));
-
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $isAdmin = $user->hasRole('admin');
@@ -120,7 +115,7 @@ class AdminMakeAppointmentController extends Controller
             return redirect()->back()->withErrors(['doctor_id' => 'Bác sĩ đã bị vô hiệu hóa.'])->withInput();
         }
 
-        $today = Carbon::today()->startOfDay();;
+        $today = Carbon::today()->startOfDay();
         $day_examination = Carbon::createFromFormat('d-m-Y', $request->day_examination)->startOfDay();
         if ($day_examination->lt($today)) {
             return redirect()->back()->withErrors(['day_examination' => 'Không được chọn ngày trong quá khứ.'])->withInput();

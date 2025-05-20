@@ -153,6 +153,7 @@ Route::group(['middleware' => ['auth', 'CheckBlockedAccount', 'checkRole:admin,d
         Route::get('/show/{book}', [AdminBookController::class, 'show'])->name('show')->middleware('can:book.show');
         Route::post('/update/{book}', [AdminBookController::class, 'update'])->name('update')->middleware('can:book.show');
         Route::get('/start-examination/{book}', [AdminBookController::class, 'startExamination'])->name('start_examination')->middleware('can:book.show');
+        Route::post('/handle-examination/{book}', [AdminBookController::class, 'handleExamination'])->name('handle_examination')->middleware('can:book.show');
         
         Route::get('/search-doctor', [AdminBookController::class, 'searchDoctor'])->middleware('can:book.show');
         Route::post('/cancel-appointment', [AdminBookController::class, 'cancelAppointment'])->name('cancel')->middleware('can:book.show');
@@ -184,7 +185,7 @@ Route::get('doi-ngu-chuyen-gia', [FrontedController::class, 'listDoctor']);
 Route::get('doi-ngu-chuyen-gia/{slug}', [FrontedController::class, 'doctor']);
 
 Route::get('dat-lich-kham', [FrontedController::class, 'book']);
-Route::get('tra-cuu-lich-hen', [FrontedController::class, 'lookAppointment']);
+Route::get('tra-cuu-lich-hen', [FrontedController::class, 'lookAppointment'])->name('look_appointment');
 
 Route::get('chuyen-khoa', [FrontedController::class, 'specialty']);
 Route::get('chuyen-khoa/{slug}', [FrontedController::class, 'specialtyPage']);

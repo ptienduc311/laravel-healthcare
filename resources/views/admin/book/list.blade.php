@@ -147,9 +147,14 @@
                                             <i class="fa fa-window-close"></i>
                                         </a>
                                     @endif
-                                    @if ($item->status != 1 && $item->status != 3)
+                                    @if ($item->status == 2 || $item->status == 4)
                                         <a href="{{ route('book.start_examination', $item->id) }}" title="Bắt đầu khám" class="start">
-                                            <i class="fa fa-play-circle-o"></i>
+                                            <i class="fa fa-play"></i>
+                                        </a>
+                                    @endif
+                                    @if ($item->status == 5 || $item->status == 6)
+                                        <a href="{{ route('book.start_examination', $item->id) }}" title="Kết quả khám" class="start">
+                                            <i class="fa fa-file-text-o"></i>
                                         </a>
                                     @endif
                                 </td>

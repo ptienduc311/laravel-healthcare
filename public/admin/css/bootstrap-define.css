@@ -56,10 +56,6 @@
 .gap-5 {
     gap: 3rem !important;
 }
-.text-muted {
-    --bs-text-opacity: 1;
-    color: var(--bs-secondary-color) !important;
-}
 .fw-lighter {
     font-weight: lighter !important;
 }

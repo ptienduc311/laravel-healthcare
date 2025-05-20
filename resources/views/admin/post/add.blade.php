@@ -51,7 +51,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Nội dung bài viết<span class="claim">*</span></label>
                             <div class="col-sm-10">
-                                <textarea id="editor" class="form-control message-input" name="content">{{old('content')}}</textarea>
+                                <textarea class="editor form-control message-input" name="content">{{old('content')}}</textarea>
                                 @error('content')
                                     <p class="error">{{ $message }}</p>
                                 @enderror

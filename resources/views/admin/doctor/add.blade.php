@@ -156,7 +156,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Giới thiệu bác sĩ</label>
                             <div class="col-sm-10">
-                                <textarea id="editor" name="introduce">{{old('introduce')}}</textarea>
+                                <textarea class="editor" name="introduce">{{old('introduce')}}</textarea>
                                 @error('introduce')
                                     <p class="error">{{ $message }}</p>
                                 @enderror

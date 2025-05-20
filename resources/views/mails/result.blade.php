@@ -14,7 +14,7 @@
                 <p>Chúng tôi xin thông báo kết quả khám bệnh của bạn từ ngày <strong>{{ $examination_date }}</strong> đã được cập nhật.</p>
 
                 <p style="margin-top: 15px; background: #f1f1f1; padding: 12px 15px; border-left: 4px solid #007BFF; border-radius: 6px;">
-                    <strong>Mã khám bệnh:</strong> <span style="color: #007BFF;">{{ $appointment_code }}</span><br>
+                    <strong>Mã khám bệnh:</strong> <span style="color: #007BFF;">{{ $book_code }}</span><br>
                     Bạn có thể tra cứu kết quả khám bệnh của mình bất kỳ lúc nào bằng cách truy cập liên kết sau:<br>
                     <a href="{{ $lookup_url }}" style="color: #007BFF; text-decoration: underline;">{{ $lookup_url }}</a>
                 </p>
@@ -76,7 +76,7 @@
                 </blockquote>
 
                 <p style="margin-top: 30px;">Trân trọng,</p>
-                <p><em>Phòng khám HealthCare</em></p>
+                <p><em><strong style="font-family: 'Brush Script MT', cursive; display: block; margin-top: 10px;">HealthCare</strong></em></p>
             </td>
         </tr>
     </table>

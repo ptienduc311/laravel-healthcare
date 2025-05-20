@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendMailCancelBook;
+use App\Mail\SendMailResultExamination;
 use App\Models\Book;
 use App\Models\Doctor;
+use App\Models\ExaminationResult;
 use App\Models\MedicalSpecialty;
 use App\Models\User;
 use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -109,7 +112,6 @@ class AdminBookController extends Controller
         $book->update([
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),
-            'email' => $request->input('email'),
             'birth' => $request->input('birth'),
             'gender' => $request->input('gender'),
             'address' => $request->input('address'),
@@ -117,16 +119,6 @@ class AdminBookController extends Controller
         ]);
 
         return redirect()->route('book.show', $book->id)->with('success', 'Cập nhật thông tin bệnh nhân thành công.');
-    }
-
-    public function startExamination(Book $book){
-        if($book->status == 1){
-            return redirect()->back()->with('error', 'Chưa xác nhận lịch hẹn.');
-        }
-        if($book->status == 3){
-            return redirect()->back()->with('error', 'Lịch hẹn này đã bị hủy.');
-        }
-        //Chưa xử lý
     }
 
     public function searchDoctor(Request $request){
@@ -191,5 +183,85 @@ class AdminBookController extends Controller
         Mail::to($email)->send(new SendMailCancelBook($data));
 
         return response()->json(['status' => 'success', 'message' => 'Lịch hẹn đã được hủy.']);
+    }
+
+    //Khám bệnh
+    public function startExamination(Book $book){
+        if($book->status == 1){
+            return redirect('/admin/book')->with('error', 'Chưa xác nhận lịch hẹn.');
+        }
+        if($book->status == 3){
+            return redirect('/admin/book')->with('error', 'Lịch hẹn này đã bị hủy.');
+        }
+
+        if($book->status == 2){
+            $book->update(['status'=>4]);
+        }
+        $examinationResult = ExaminationResult::where('book_id', $book->id)->first();
+        return view('admin.book.start-examination', compact('book', 'examinationResult'));
+    }
+
+    public function handleExamination(Request $request, Book $book){
+        $re_examination_date = $request->re_examination_date;
+        $re_examination_date_format = null;
+
+        if($re_examination_date){
+            $today = Carbon::today();
+            $re_examination_date_format = Carbon::createFromFormat('d-m-Y', $re_examination_date);
+            if ($re_examination_date_format->lt($today)) {
+                return redirect()->back()->with(['warning' => 'Không được chọn ngày trong quá khứ.'])->withInput();
+            }
+        }
+
+        $diagnose = $request->input('diagnose');
+        $clinical_examination = $request->input('clinical_examination');
+        $conclude = $request->input('conclude');
+        $treatment = $request->input('treatment');
+        $medicine = $request->input('medicine');
+        $action = $request->input('action');
+
+        if($action === 'waiting_result'){
+            $book->update(['status'=>5]);
+        }
+        else{
+            $book->update(['status'=>6]);
+        }
+
+        if ($action == 'return_result_to_email') {
+            $email = $book->email;
+            $patient_name = $book->name;
+            $examination_date = date('d/m/Y', $book->date_examination_int);
+            $book_code = $book->book_code;
+            $lookup_url = route('look_appointment');
+
+            $data = [
+                'book_code' => $book_code,
+                'patient_name' => $patient_name,
+                'examination_date' => $examination_date,
+                'diagnose' => $diagnose,
+                'clinical_examination' => $clinical_examination,
+                'conclude' => $conclude,
+                'treatment' => $treatment,
+                'medicine' => $medicine,
+                're_examination_date' => $re_examination_date_format ? $re_examination_date_format->format('d/m/Y') : null,
+                'lookup_url' => $lookup_url
+            ];
+            Mail::to($email)->send(new SendMailResultExamination($data));
+        }
+
+        ExaminationResult::updateOrCreate(
+            ['book_id' => $book->id],
+            [
+                'diagnose' => $diagnose,
+                'clinical_examination' => $clinical_examination,
+                'conclude' => $conclude,
+                'treatment' => $treatment,
+                'medicine' => $medicine,
+                're_examination_date' => $re_examination_date_format?->timestamp,
+                'created_date_int' => time()
+            ]
+        );
+
+        return redirect()->route('book.index')->with('success', 'Đã cập nhật kết quả khám bệnh.');
     }
 }

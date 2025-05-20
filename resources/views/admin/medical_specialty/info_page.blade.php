@@ -126,7 +126,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Cơ sở vật chất - Trang thiết bị</label>
                             <div class="col-sm-10">
-                                <textarea id="editor" name="content"></textarea>
+                                <textarea class="editor" name="content" id="specialty-content"></textarea>
                                 @error('content')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
@@ -317,11 +317,15 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
+                        console.log(response);
                         $('.ibox-content').removeClass('active');
                         $("#name_specialty").html('');
                         $("#specialty_id").val('');
                         $("#description").val('');
-                        editor.setData('');
+                        // editor.setData('');
+                        allEditors.forEach(({ instance }) => {
+                            instance.setData('');
+                        });
                         $('#main-service .main-service-item').remove();
                         $('.btn-add-service-item').before(renderServiceItem());
 
@@ -335,7 +339,11 @@
 
                         if(response.result.page_specialty){
                             $("#description").val(response.result.page_specialty.description || '');
-                            editor.setData(response.result.page_specialty.content || '');
+                            // editor.setData(response.result.page_specialty.content || '');
+                            const editorObj = allEditors.find(ed => ed.domElement.id === 'specialty-content');
+                            if (editorObj) {
+                                editorObj.instance.setData(response.result.page_specialty.content || '');
+                            }
                         }
 
                         if(response.result.service_id){

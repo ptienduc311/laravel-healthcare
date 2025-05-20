@@ -4,7 +4,7 @@
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Lịch hẹn</h2>
+        <h2>Thông tin lịch hẹn</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="/">Trang chủ</a>
@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Email<span class="claim">*</span></label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="email" name="email" value="{{old('email', $book->email)}}">
+                                    <input type="text" class="form-control" id="email" name="email" value="{{ $book->email }}" readonly>
                                     @error('email')
                                         <p class="error">{{ $message }}</p>
                                     @enderror
