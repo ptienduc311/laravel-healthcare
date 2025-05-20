@@ -216,7 +216,7 @@ class ApiController extends Controller
         $email = $request->query('email');
         $appointment_date = $request->query('appointment_date');
 
-        $query = Book::with(['doctor', 'specialty', 'appointment']);
+        $query = Book::with(['doctor', 'specialty', 'appointment', 'result_examination']);
 
         if ($booking_token) {
             $query->where('book_code', $booking_token);
@@ -230,11 +230,11 @@ class ApiController extends Controller
             ]);
         }
 
-        $bookings = $query->get();
-        if ($bookings->count() > 0) {
+        $book = $query->get();
+        if ($book->count() > 0) {
             return response()->json([
                 'status' => 'success',
-                'data' => $bookings
+                'data' => $book
             ]);
         }
 

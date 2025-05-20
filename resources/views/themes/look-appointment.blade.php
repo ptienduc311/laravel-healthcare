@@ -49,6 +49,27 @@
             <div id="booking-list" class="row gy-3"></div>
         </div>
     </div>
+    <div id="show-model"></div>
+    {{-- <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated flipInY">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Kết quả khám bệnh</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white"
+                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div> --}}
 </div>
 <div id="loading-overlay" style="display: none;">
     <div class="loading-content">
@@ -156,7 +177,7 @@
                     overlay.style.display = "none";
 
                     if (response.status === 'success' && response.data.length > 0) {
-                        console.log(response.data)
+                        console.log(response)
                         const listContainer = document.getElementById("booking-list");
                         listContainer.innerHTML = "";
 
@@ -170,7 +191,7 @@
                                 actionButtons += `<button class="btn btn-danger btn-sm me-2 cancel-booking" data-id="${data.id}">Hủy lịch hẹn</button>`;
                             }
                             if (data.status === 6) {
-                                actionButtons += `<a href="/ket-qua-kham/${data.id}" class="btn btn-success btn-sm">Xem kết quả khám</a>`;
+                                actionButtons += `<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalResult${data.id}">Xem kết quả khám</button>`;
                             }
 
                             card.innerHTML = `
@@ -208,8 +229,85 @@
                                     </div>
                                 </div>
                             `;
-
                             listContainer.appendChild(card);
+
+                            if (data.status === 6 && data.result_examination) {
+                                const modalContainer = document.getElementById("show-model");
+                                const result = data.result_examination;
+
+                                let content = `
+                                    <div class="modal inmodal" id="modalResult${data.id}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog animated bounceInRight">
+                                            <div class="modal-content animated fadeIn">
+                                                <div class="modal-header bg-success text-white">
+                                                    <button type="button" class="close text-danger" data-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                        <span class="sr-only">Close</span>
+                                                    </button>
+                                                    <h5 class="modal-title">Kết quả khám bệnh</h5>
+                                                </div>
+                                                <div class="modal-body">`;
+
+                                if (result.diagnose) {
+                                    content += `
+                                        <div class="mb-3 p-3 rounded bg-light border">
+                                            <strong>Chẩn đoán:</strong>
+                                            <p>${result.diagnose}</p>
+                                        </div>`;
+                                }
+                                
+                                if (result.clinical_examination) {
+                                    content += `
+                                        <div class="mb-3 p-3 rounded bg-info-subtle border">
+                                            <strong>Khám lâm sàng:</strong>
+                                            <p>${result.clinical_examination}</p>
+                                        </div>`;
+                                }
+                                
+                                if (result.conclude) {
+                                    content += `
+                                        <div class="mb-3 p-3 rounded bg-success-subtle border">
+                                            <strong>Kết luận:</strong>
+                                            <p>${result.conclude}</p>
+                                        </div>`;
+                                }
+                                
+                                if (result.treatment) {
+                                    content += `
+                                        <div class="mb-3 p-3 rounded bg-warning-subtle border">
+                                            <strong>Hướng điều trị:</strong>
+                                            <p>${result.treatment}</p>
+                                        </div>`;
+                                }
+                                
+                                if (result.medicine) {
+                                    content += `
+                                        <div class="mb-3 p-3 rounded bg-secondary-subtle border">
+                                            <strong>Thuốc kê:</strong>
+                                            <p>${result.medicine}</p>
+                                        </div>`;
+                                }
+                                
+                                if (result.re_examination_date) {
+                                    const reExamDate = new Date(result.re_examination_date * 1000).toLocaleDateString();
+                                    content += `
+                                        <div class="mb-3 p-3 rounded bg-danger-subtle border">
+                                            <strong>Ngày tái khám:</strong>
+                                            <p>${reExamDate}</p>
+                                        </div>`;
+                                }
+
+                                content += `
+                                                </div>
+                                                <div class="modal-footer bg-light">
+                                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+
+                                modalContainer.innerHTML += content;
+                            }
                         });
 
                         document.getElementById("booking-result").style.display = "block";

@@ -157,6 +157,11 @@
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
                                     @endif
+                                    @if ($item->status == 6)
+                                        <a href="{{ route('book.print', $item->id) }}" title="In kết quả" class="print">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

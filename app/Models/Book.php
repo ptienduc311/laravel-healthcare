@@ -42,4 +42,9 @@ class Book extends Model
     {
         return $this->belongsTo(Appointment::class, 'appointment_id', 'id');
     }
+
+    public function result_examination()
+    {
+        return $this->hasOne(ExaminationResult::class, 'book_id');
+    }
 }

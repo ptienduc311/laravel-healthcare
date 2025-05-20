@@ -109,7 +109,7 @@
                                     @if ($book->status != 3)
                                         <button class="btn btn-primary" type="submit">Cập nhật</button>
                                     @endif
-                                    @if ($book->status != 1 && $book->status != 3)
+                                    @if ($book->status == 2 && $book->status == 4)
                                         <a href="{{ route('book.start_examination', $book->id) }}" class="btn btn-success">
                                             Bắt đầu khám <i class="fa fa-play-circle"></i>
                                         </a>

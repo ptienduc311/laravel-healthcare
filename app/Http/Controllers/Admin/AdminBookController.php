@@ -9,12 +9,12 @@ use App\Models\Book;
 use App\Models\Doctor;
 use App\Models\ExaminationResult;
 use App\Models\MedicalSpecialty;
-use App\Models\User;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminBookController extends Controller
 {
@@ -209,7 +209,7 @@ class AdminBookController extends Controller
             $today = Carbon::today();
             $re_examination_date_format = Carbon::createFromFormat('d-m-Y', $re_examination_date);
             if ($re_examination_date_format->lt($today)) {
-                return redirect()->back()->with(['warning' => 'Không được chọn ngày trong quá khứ.'])->withInput();
+                return redirect()->back()->with(['warning' => 'Không được chọn ngày trong quá khứ.']);
             }
         }
 
@@ -263,5 +263,47 @@ class AdminBookController extends Controller
         );
 
         return redirect()->route('book.index')->with('success', 'Đã cập nhật kết quả khám bệnh.');
+    }
+
+    public function printResultPDF(Book $book){
+        if($book->status != 6){
+            return redirect()->route('book.index')->with(['error' => 'Chưa có kết quả khám bệnh.']);
+        }
+
+        $site = Site::first();
+        $doctor = $book->doctor?->name;
+        $specialty = $book->specialty?->name;
+        $date_examination = $book->date_examination;
+        $hour_examination = $book->appointment?->hour_examination;
+        $doctor_specialty = $specialty ? "$doctor - $specialty" : $doctor;
+        $time_examination = $hour_examination ? "$hour_examination - $date_examination" : $date_examination;
+        $today = 'Ngày ' . now()->day . ' tháng ' . now()->month . ' năm ' . now()->year;
+
+        $examinationResult = ExaminationResult::where('book_id', $book->id)->first();
+
+        $data = [
+            'address_clinic' => $site->address,
+            'hotline' => $site->hotline,
+            'book_code' => $book->book_code,
+            'patient_name' => $book->name,
+            'patient_birth' => $book->birth,
+            'patient_gender' => $book->gender == 1 ? 'Nam' : 'Nữ',
+            'patient_address' => $book->address,
+            'patient_email' => $book->email,
+            'patient_phone' => $book->phone,
+            'doctor' => $doctor,
+            'doctor_specialty' => $doctor_specialty,
+            'time_examination' => $time_examination,
+            'today' => $today,
+            'diagnose' => $examinationResult->diagnose,
+            'clinical_examination' => $examinationResult->clinical_examination,
+            'conclude' => $examinationResult->conclude,
+            'treatment' => $examinationResult->treatment,
+            'medicine' => $examinationResult->medicine,
+            're_examination_date' => $examinationResult->re_examination_date_format ? $examinationResult->re_examination_date_format->format('d/m/Y') : null,
+        ];
+
+        $pdf = Pdf::loadView('admin.book.print', $data);
+        return $pdf->download('phieu-ket-qua-' . time() . '.pdf');
     }
 }

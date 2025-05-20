@@ -154,6 +154,7 @@ Route::group(['middleware' => ['auth', 'CheckBlockedAccount', 'checkRole:admin,d
         Route::post('/update/{book}', [AdminBookController::class, 'update'])->name('update')->middleware('can:book.show');
         Route::get('/start-examination/{book}', [AdminBookController::class, 'startExamination'])->name('start_examination')->middleware('can:book.show');
         Route::post('/handle-examination/{book}', [AdminBookController::class, 'handleExamination'])->name('handle_examination')->middleware('can:book.show');
+        Route::get('/print-result/{book}', [AdminBookController::class, 'printResultPDF'])->name('print')->middleware('can:book.show');
         
         Route::get('/search-doctor', [AdminBookController::class, 'searchDoctor'])->middleware('can:book.show');
         Route::post('/cancel-appointment', [AdminBookController::class, 'cancelAppointment'])->name('cancel')->middleware('can:book.show');

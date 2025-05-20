@@ -309,7 +309,6 @@ class AdminMakeAppointmentController extends Controller
         return redirect()->back()->with('success', 'Xóa lịch khám thành công.');
     }
 
-
     public function checkAppointment(Request $request){
         // dd($request);
          $request->validate([

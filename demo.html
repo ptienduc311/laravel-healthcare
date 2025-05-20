@@ -1,84 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <meta charset="utf-8">
-    <title>Kết quả khám bệnh - HealthCare</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Phiếu chụp X-quang</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, Arial, sans-serif;
+            color: #000;
+            padding: 40px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+        }
+        .hospital {
+            text-align: left;
+        }
+        .info-table, .result-table {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .info-table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+        h2 {
+            color: red;
+            text-align: center;
+        }
+        h3.title {
+            text-transform: uppercase;
+            margin-top: 20px;
+            text-align: center;
+        }
+        h3.cat{
+            color: #007BFF;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #999;
+            border-radius: 6px;
+        }
+        .wrapper .section:nth-of-type(even) {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+
+        .wrapper .section:nth-of-type(odd) {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 50px;
+            display: flex;
+            font-size: 13px;
+        }
+
+        .signature {
+            text-align: right;
+            margin-left: auto;
+        }
+        .small {
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
 </head>
-<body style="font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f9f9f9; padding: 20px; color: #333;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 700px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 30px;">
+<body>
+    <div class="hospital">
+        <strong>PHÒNG KHÁM HEALTHCARE</strong><br>
+        Địa chỉ: 78 Giai Phóng - Đống Đa - Hà Nội<br>
+        Điện thoại: 0243xxxxxxx
+    </div>
+
+    <div style="position: absolute; top: 40px; right: 40px; font-size: 13px;">
+        Mã lịch hẹn: <strong>{{ $patient_code }}</strong>
+    </div>
+
+    <h2>PHIẾU KẾT QUẢ KHÁM BỆNH</h2>
+
+    <table class="info-table">
         <tr>
-            <td>
-                <h2 style="color: #007BFF; border-bottom: 1px solid #eee; padding-bottom: 10px;">Kết quả khám bệnh của bạn đã sẵn sàng!</h2>
-
-                <p>Xin chào <strong>{{ $patient_name }}</strong>,</p>
-                <p>Chúng tôi xin thông báo kết quả khám bệnh của bạn từ ngày <strong>{{ $examination_date }}</strong> đã được cập nhật.</p>
-
-                <p style="margin-top: 15px; background: #f1f1f1; padding: 12px 15px; border-left: 4px solid #007BFF; border-radius: 6px;">
-                    <strong>Mã khám bệnh:</strong> <span style="color: #007BFF;">{{ $appointment_code }}</span><br>
-                    Bạn có thể tra cứu kết quả khám bệnh của mình bất kỳ lúc nào bằng cách truy cập liên kết sau:<br>
-                    <a href="{{ $lookup_url }}" style="color: #007BFF; text-decoration: underline;">{{ $lookup_url }}</a>
-                </p>
-
-                <p>Dưới đây là thông tin kết quả khám bệnh của bạn:</p>
-
-                <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;">
-
-                @if (!empty($diagnose))
-                    <h3 style="color: #444;">Chẩn đoán ban đầu</h3>
-                    <div style="background: #f2f6fc; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px;">
-                        {!! $diagnose !!}
-                    </div>
-                @endif
-
-                @if (!empty($clinical_examination))
-                    <h3 style="color: #444;">Khám lâm sàng</h3>
-                    <div style="background: #f9f9f9; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px;">
-                        {!! $clinical_examination !!}
-                    </div>
-                @endif
-
-                @if (!empty($conclude))
-                    <h3 style="color: #444;">Kết luận</h3>
-                    <div style="background: #f2f6fc; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px;">
-                        {!! $conclude !!}
-                    </div>
-                @endif
-
-                @if (!empty($treatment))
-                    <h3 style="color: #444;">Hướng dẫn điều trị</h3>
-                    <div style="background: #f9f9f9; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px;">
-                        {!! $treatment !!}
-                    </div>
-                @endif
-
-                @if (!empty($medicine))
-                    <h3 style="color: #444;">Kê đơn thuốc</h3>
-                    <div style="background: #f2f6fc; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px;">
-                        {!! $medicine !!}
-                    </div>
-                @endif
-
-                @if (!empty($re_examination_date))
-                    <h3 style="color: #444;">Ngày tái khám</h3>
-                    <div style="background: #fff3cd; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; color: #856404;">
-                        <strong>{{ $re_examination_date }}</strong>
-                    </div>
-                @endif
-
-                <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-
-                <p style="font-size: 15px;">Cảm ơn bạn đã tin tưởng <strong>Phòng khám HealthCare</strong>. Chúng tôi hy vọng bạn có trải nghiệm tốt và sức khỏe được cải thiện.</p>
-
-                <p style="font-size: 15px;">Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi. Hẹn gặp lại bạn trong lần tái khám tới.</p>
-
-                <blockquote style="margin: 20px 0; padding-left: 15px; border-left: 4px solid #007BFF; color: #555;">
-                    <strong>HealthCare:</strong> <em>Đặt niềm tin - Nhận chăm sóc tận tâm</em>
-                </blockquote>
-
-                <p style="margin-top: 30px;">Trân trọng,</p>
-                <p><em>Phòng khám HealthCare</em></p>
-            </td>
+            <td><strong>Họ và tên:</strong> {{ $patient_name }}</td>
+            <td><strong>Ngày sinh:</strong> {{ $patient_age }}</td>
+            <td><strong>Giới tính:</strong> {{ $patient_gender }}</td>
+        </tr>
+        <tr>
+            <td><strong>Địa chỉ:</strong> {{ $patient_address }}</td>
+            <td><strong>Email:</strong> {{ $patient_address }}</td>
+            <td><strong>Số điên thoại:</strong> {{ $patient_address }}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Bác sĩ chỉ định:</strong> {{ $diagnose }}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Lịch hẹn:</strong> {{ $department }}</td>
         </tr>
     </table>
+
+    <h3 class="title">KẾT QUẢ</h3>
+    <div class="wrapper">
+        @if ($diagnose)
+            <h3 class="cat">Chẩn đoán ban đầu</h3>
+            <div class="section">
+                {!! $diagnose !!}
+            </div>
+        @endif
+
+        @if ($clinical_examination)
+            <h3 class="cat">Khám lâm sàng</h3>
+            <div class="section">
+                {!! $clinical_examination !!}
+            </div>
+        @endif
+
+        @if ($conclude)
+            <h3 class="cat">Kết luận</h3>
+            <div class="section">
+                {!! $conclude !!}
+            </div>
+        @endif
+
+        @if ($treatment)
+            <h3 class="cat">Hướng dẫn điều trị</h3>
+            <div class="section">
+                {!! $treatment !!}
+            </div>
+        @endif
+
+        @if ($medicine)
+            <h3 class="cat">Kê đơn thuốc</h3>
+            <div class="section">
+                {!! $medicine !!}
+            </div>
+        @endif
+
+        @if ($re_examination_date)
+            <h3 class="cat">Ngày tái khám</h3>
+            <div class="section">
+                <strong>{{ $re_examination_date }}</strong>
+            </div>
+        @endif
+    </div>
+
+    <div class="footer">
+        <div class="signature">
+            Ngày {{ $printed_date }}<br>
+            <strong>Bác sĩ</strong><br><br><br>
+            <em>{{ $reader }}</em>
+        </div>
+    </div>
 </body>
 </html>
