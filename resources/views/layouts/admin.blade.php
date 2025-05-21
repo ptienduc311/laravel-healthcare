@@ -19,6 +19,7 @@
     <link href="{{ asset('admin/css/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/css/plugins/select2/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('ckeditor5/ckeditor5.css')}}" rel="stylesheet">
     <link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
 
@@ -84,6 +85,9 @@
     
     <!-- Sweet alert -->
     <script src="{{ asset('admin/js/plugins/sweetalert/sweetalert.min.js') }}"></script>
+
+    <!-- Select2 -->
+    <script src="{{ asset('admin/js/plugins/select2/select2.full.min.js') }}"></script>
     
     <!-- Ladda -->
     <script src="{{ asset('admin/js/plugins/ladda/spin.min.js') }}"></script>

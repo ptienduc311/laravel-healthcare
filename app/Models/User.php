@@ -4,11 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -22,7 +24,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'name', 'email', 'phone', 'birth', 'gender', 'province_id', 'district_id', 'ward_id', 'address', 'password', 'status',
+        'name', 'email', 'image_id', 'phone', 'birth', 'gender', 'province_id', 'district_id', 'ward_id', 'address', 'password', 'status',
         'google_id', 'remember_token', 'email_verified_at', 'reset_token', 'confirm_token', 'cancel_token'
     ];
 
@@ -78,5 +80,18 @@ class User extends Authenticatable
             }
         }
         return false;
+    }
+
+    public function image(): BelongsTo{
+        return $this->BelongsTo(Image::class, 'image_id', 'id');
+    }
+
+    public function getAvatarUserAttribute()
+    {
+        if ($this->image?->src) {
+            return Storage::url($this->image->src);
+        }
+
+        return asset('admin/img/admin.png');
     }
 }

@@ -2,9 +2,10 @@
     <div class="sidebar-collapse">
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
-                <div class="dropdown profile-element"> <span>
-                        <img alt="image" class="img-circle" src="{{asset('admin/img/profile_small.jpg')}}" />
-                    </span>
+                <div class="dropdown profile-element"> 
+                    <div class="avatar-manager">
+                        <img alt="image" class="img-circle" src="{{ Auth::user()->avatar_user }}" />
+                    </div>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ Auth::user()->name }}</strong>
                             </span> <span class="text-white text-xs block">{{ Auth::user()->roles?->pluck('name')->join(', ') }} <b

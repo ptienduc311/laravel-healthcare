@@ -465,3 +465,13 @@ label.timeline-item.have-appointment:not(:has(input:checked)){
     top: 3px;
     outline: 0;
 }
+
+.avatar-manager{
+    width: 48px;
+    height: 48px;
+}
+
+.avatar-manager img{
+    width: 100%;
+    height: auto;
+}
