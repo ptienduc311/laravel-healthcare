@@ -7,7 +7,7 @@
         <h2>Lịch hẹn</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Lịch hẹn</a>
@@ -95,78 +95,80 @@
                             </div>
                         </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Mã lịch hẹn</th>
-                                <th>Tên bệnh nhân</th>
-                                <th>Thời gian khám</th>
-                                <th>Bác sĩ</th>
-                                <th>Trạng thái</th>
-                                <th>Tác vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($books as $key => $item)
-                            <tr>
-                                <td>{{$key + 1}}</td>
-                                <td>
-                                    <a href="{{ route('book.show', $item->id) }}">
-                                        <span class="text-danger fw-semibold">
-                                            {{ $item->book_code }}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Mã lịch hẹn</th>
+                                    <th>Tên bệnh nhân</th>
+                                    <th>Thời gian khám</th>
+                                    <th>Bác sĩ</th>
+                                    <th>Trạng thái</th>
+                                    <th>Tác vụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($books as $key => $item)
+                                <tr>
+                                    <td>{{$key + 1}}</td>
+                                    <td>
+                                        <a href="{{ route('book.show', $item->id) }}">
+                                            <span class="text-danger fw-semibold">
+                                                {{ $item->book_code }}
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold text-dark">{{ $item->name }}</span>
+                                        <span class="d-block">{{ $item->email }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold">
+                                            {{ $item->appointment ? $item->appointment->hour_examination . ' - ' : '' }}{{ $item->date_examination }}
                                         </span>
-                                    </a>
-                                </td>
-                                <td>
-                                    <span class="fw-semibold text-dark">{{ $item->name }}</span>
-                                    <span class="d-block">{{ $item->email }}</span>
-                                </td>
-                                <td>
-                                    <span class="fw-semibold">
-                                        {{ $item->appointment ? $item->appointment->hour_examination . ' - ' : '' }}{{ $item->date_examination }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-bold">{{ $item->doctor?->name }}</span>
-                                    {{ $item->doctor_id && $item->specialty_id ? " - " : "" }}
-                                    <span class="text-muted font-bold">{{ $item->specialty?->name }}</span>
-                                </td>
-                                <td>
-                                    @php
-                                        $status = $statusMap[$item->status] ?? ['name' => 'Không rõ', 'color' => 'dark'];
-                                    @endphp
-                                    <span class="fw-semibold text-{{ $status['color'] }}">{{ $status['name'] }}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('book.show', $item->id) }}" title="Thông tin chi tiết" class="edit">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    @if ($item->status == 1 || $item->status == 2)
-                                        <a title="Hủy lịch hẹn" class="delete" id="btn-cancel-appointment" data-book-id="{{ $item->id }}" data-email={{ $item->email }}>
-                                            <i class="fa fa-window-close"></i>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted font-bold">{{ $item->doctor?->name }}</span>
+                                        {{ $item->doctor_id && $item->specialty_id ? " - " : "" }}
+                                        <span class="text-muted font-bold">{{ $item->specialty?->name }}</span>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $status = $statusMap[$item->status] ?? ['name' => 'Không rõ', 'color' => 'dark'];
+                                        @endphp
+                                        <span class="fw-semibold text-{{ $status['color'] }}">{{ $status['name'] }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('book.show', $item->id) }}" title="Thông tin chi tiết" class="edit">
+                                            <i class="fa fa-eye"></i>
                                         </a>
-                                    @endif
-                                    @if ($item->status == 2 || $item->status == 4)
-                                        <a href="{{ route('book.start_examination', $item->id) }}" title="Bắt đầu khám" class="start">
-                                            <i class="fa fa-play"></i>
-                                        </a>
-                                    @endif
-                                    @if ($item->status == 5 || $item->status == 6)
-                                        <a href="{{ route('book.start_examination', $item->id) }}" title="Kết quả khám" class="start">
-                                            <i class="fa fa-file-text-o"></i>
-                                        </a>
-                                    @endif
-                                    @if ($item->status == 6)
-                                        <a href="{{ route('book.print', $item->id) }}" title="In kết quả" class="print">
-                                            <i class="fa fa-print"></i>
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                                        @if ($item->status == 1 || $item->status == 2)
+                                            <a title="Hủy lịch hẹn" class="delete" id="btn-cancel-appointment" data-book-id="{{ $item->id }}" data-email={{ $item->email }}>
+                                                <i class="fa fa-window-close"></i>
+                                            </a>
+                                        @endif
+                                        @if ($item->status == 2 || $item->status == 4)
+                                            <a href="{{ route('book.start_examination', $item->id) }}" title="Bắt đầu khám" class="start">
+                                                <i class="fa fa-play"></i>
+                                            </a>
+                                        @endif
+                                        @if ($item->status == 5 || $item->status == 6)
+                                            <a href="{{ route('book.start_examination', $item->id) }}" title="Kết quả khám" class="start">
+                                                <i class="fa fa-file-text-o"></i>
+                                            </a>
+                                        @endif
+                                        @if ($item->status == 6)
+                                            <a href="{{ route('book.print', $item->id) }}" title="In kết quả" class="print">
+                                                <i class="fa fa-print"></i>
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     {{$books->links()}}
                 </div>
             </div>

@@ -7,7 +7,7 @@
         <h2>Danh mục bài viết</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Danh mục bài viết</a>
@@ -48,37 +48,39 @@
                             </div>
                         </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tên danh mục</th>
-                                <th>Trạng thái</th>
-                                <th>Người tạo</th>
-                                <th>Hoạt động</th>
-                            </tr>
-                        </thead>
-                        @foreach($categories as $key => $item)
-                            <tr>
-                                <td>{{$key + 1}}</td>
-                                <td>{{$item->name}}</td>
-                                <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                <td>
-                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                </td>
-                                <td>
-                                    @if ($item->slug != 'khac')
-                                        <a href="{{ route('post_category.edit', $item->id) }}" title="Sửa" class="edit">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a href="{{ route('post_category.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người tạo</th>
+                                    <th>Hoạt động</th>
+                                </tr>
+                            </thead>
+                            @foreach($categories as $key => $item)
+                                <tr>
+                                    <td>{{$key + 1}}</td>
+                                    <td>{{$item->name}}</td>
+                                    <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
+                                    <td>
+                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                    </td>
+                                    <td>
+                                        @if ($item->slug != 'khac')
+                                            <a href="{{ route('post_category.edit', $item->id) }}" title="Sửa" class="edit">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="{{ route('post_category.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
                     {{$categories->links()}}
                 </div>
             </div>

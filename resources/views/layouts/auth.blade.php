@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <title>@yield('title')</title>
+    
+    {{-- ngrok --}}
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
     <link href="{{ asset('auth/css/font-awesome.css') }}" rel="stylesheet">
     <!-- Toastr style -->

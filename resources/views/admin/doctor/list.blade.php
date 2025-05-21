@@ -7,7 +7,7 @@
         <h2>Bác sĩ</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Bác sĩ</a>
@@ -78,61 +78,63 @@
                             </div>
                         </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Ảnh đại diện</th>
-                                <th colspan="2">Tên bác sĩ</th>
-                                <th>Chuyên khoa</th>
-                                <th>Học hàm</th>
-                                <th>Học vị</th>
-                                <th>Trạng thái</th>
-                                <th>Người tạo</th>
-                                <th>Hoạt động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($doctors as $key => $item)
-                            <tr>
-                                <td>{{$key + 1}}</td>
-                                <td>
-                                    <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}" class="thumb">
-                                </td>
-                                <td>
-                                    <a href="{{ route('doctor.profile-doctor', $item->id) }}">
-                                        <span class="text-muted fw-semibold" data-toggle="tooltip" data-placement="top" title="Thông tin bác sĩ">{{ $item->name }}</span>
-                                    </a>
-                                    <a href="{{ route('appointment.add', $item->id) }}" class="link-appointment">Thêm lịch khám</a>
-                                </td>
-                                <td>
-                                    <span class="fw-semibold {{ $item->gender == 1 ? "text-danger" : "text-info" }}">Bác sĩ {{ $item->gender == 1 ? "nam" : "nữ" }}</span>
-                                </td>
-                                <td>
-                                    @if ($item->specialty_id)
-                                        <span class="{{ $item->specialty?->status == 1 ? 'active-cat' : 'inactive-cat' }}">{{ $item->specialty?->name }}</span>
-                                    @else
-                                        <span class="no-cat">Chưa chọn chuyên khoan</span>
-                                    @endif
-                                </td>
-                                <td>{{ $academicTitles[$item->academic_title] ?? '' }}</td>
-                                <td>{{ $degrees[$item->degree] ?? '' }}</td>
-                                <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Tạm dừng"}}</td>
-                                <td>
-                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('doctor.edit', $item->id) }}" title="Sửa" class="edit">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a href="{{ route('doctor.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Ảnh đại diện</th>
+                                    <th colspan="2">Tên bác sĩ</th>
+                                    <th>Chuyên khoa</th>
+                                    <th>Học hàm</th>
+                                    <th>Học vị</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người tạo</th>
+                                    <th>Hoạt động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($doctors as $key => $item)
+                                <tr>
+                                    <td>{{$key + 1}}</td>
+                                    <td>
+                                        <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}" class="thumb">
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('doctor.profile-doctor', $item->id) }}">
+                                            <span class="text-muted fw-semibold" data-toggle="tooltip" data-placement="top" title="Thông tin bác sĩ">{{ $item->name }}</span>
+                                        </a>
+                                        <a href="{{ route('appointment.add', $item->id) }}" class="link-appointment">Thêm lịch khám</a>
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold {{ $item->gender == 1 ? "text-danger" : "text-info" }}">Bác sĩ {{ $item->gender == 1 ? "nam" : "nữ" }}</span>
+                                    </td>
+                                    <td>
+                                        @if ($item->specialty_id)
+                                            <span class="{{ $item->specialty?->status == 1 ? 'active-cat' : 'inactive-cat' }}">{{ $item->specialty?->name }}</span>
+                                        @else
+                                            <span class="no-cat">Chưa chọn chuyên khoan</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $academicTitles[$item->academic_title] ?? '' }}</td>
+                                    <td>{{ $degrees[$item->degree] ?? '' }}</td>
+                                    <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Tạm dừng"}}</td>
+                                    <td>
+                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('doctor.edit', $item->id) }}" title="Sửa" class="edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="{{ route('doctor.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     {{$doctors->links()}}
                 </div>
             </div>

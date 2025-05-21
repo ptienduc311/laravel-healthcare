@@ -33,7 +33,7 @@ class AdminPostController extends Controller
             $query->where('title', 'like', '%' . $request->keyword . '%');
         }
 
-        $posts = $query->orderByDesc('created_date_int')->paginate(1)->withQueryString();
+        $posts = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
 
         return view('admin.post.list', compact('categories', 'posts'));
     }

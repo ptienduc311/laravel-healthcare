@@ -7,7 +7,7 @@
         <h2>Thông tin lịch hẹn</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Lịch hẹn</a>

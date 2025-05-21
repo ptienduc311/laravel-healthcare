@@ -7,7 +7,7 @@
         <h2>Chuyên khoa y tế</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Chuyên khoa y tế</a>

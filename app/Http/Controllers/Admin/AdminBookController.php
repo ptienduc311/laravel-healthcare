@@ -304,6 +304,6 @@ class AdminBookController extends Controller
         ];
 
         $pdf = Pdf::loadView('admin.book.print', $data);
-        return $pdf->download('phieu-ket-qua-' . time() . '.pdf');
+        return $pdf->stream('phieu-ket-qua-' . time() . '.pdf');
     }
 }

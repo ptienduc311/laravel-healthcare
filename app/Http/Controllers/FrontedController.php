@@ -21,7 +21,7 @@ class FrontedController extends Controller
             })
             ->where('status', 1)
             ->orderByDesc('created_date_int')
-            ->limit(4)
+            ->limit(8)
             ->get();
 
         $doctors = Doctor::where('status', 1)->where('is_outstanding', 1)->orderByDesc('created_date_int')->limit(8)->get();

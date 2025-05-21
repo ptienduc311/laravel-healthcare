@@ -7,7 +7,7 @@
         <h2>Thiết lập site</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li class="active">
                 <a>Thiết lập site</a>

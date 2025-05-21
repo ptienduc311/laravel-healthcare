@@ -60,18 +60,16 @@ $(document).ready(function () {
         let specialtyId = $('#specialty-id').val().trim();
         let doctorName = $('#doctor-name').val().trim();
 
-        //Profile doctor
-        $('#doctor-profile').html('');
-        $('#no-found-doctor').show();
-        //End
-
+        $('.appointment-form').attr('action', `#`);
+        $('#submit-button').prop('disabled', true);
         if($('#doctor-id')){
             $('#doctor-id').val('');
         }
 
-        if($('#submit-form')){
-            $('#submit-button').prop('disabled', true);
-        }
+        //Profile doctor
+        $('#doctor-profile').html('');
+        $('#no-found-doctor').show();
+        //End
 
         if (!specialtyId && !doctorName) {
             $('#ibox1').find('.ibox-content').removeClass('sk-loading');
@@ -255,15 +253,15 @@ $(document).ready(function () {
                 day_examination: dayExamination
             },
             success: function (response) {
-                console.log(response)
+                // console.log(response)
                 if (response.status === 'success') {
                     let interval = parseInt(response.data.type);
                     
                     if (isManualIntervalChange) {
-                        interval = parseInt($('#time-interval').val()); // dùng giá trị người chọn
-                        isManualIntervalChange = false; // reset lại flag
+                        interval = parseInt($('#time-interval').val());
+                        isManualIntervalChange = false;
                     } else {
-                        $('#time-interval').val(interval); // chỉ cập nhật khi load thường
+                        $('#time-interval').val(interval);
                     }
 
                     const checkedTimes = response.data.hour_examinations || [];
@@ -405,7 +403,7 @@ $(document).ready(function () {
 
         //Xử lý lấy lịch hẹn
         $('#selected-doctor-name').text(doctorName);
-        $('#appointment-form').attr('action', `/admin/appointment/store/${doctorId}`);
+        $('.appointment-form').attr('action', `/admin/appointment/store/${doctorId}`);
         if ($('#doctor-id').length) {
             $('#doctor-id').val(doctorId);
         } else {
@@ -418,7 +416,7 @@ $(document).ready(function () {
         const is_profile = $('#is-profile');
         if(is_profile.length && is_profile.val() === "true"){
             $('.show-loading-bottom').find('.ibox-content').addClass('sk-loading');
-            $.ajax({
+            $.ajax({   
                 url: '/admin/show-profile-doctor',
                 type: 'GET',
                 data: {

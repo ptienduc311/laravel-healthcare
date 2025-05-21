@@ -7,7 +7,7 @@
         <h2>Chuyên khoa y tế</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Chuyên khoa y tế</a>
@@ -48,43 +48,45 @@
                             </div>
                         </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tên chuyên khoa</th>
-                                <th>Ảnh icon chuyên khoa</th>
-                                <th>Ảnh chuyên khoa</th>
-                                <th>Trạng thái</th>
-                                <th>Người tạo</th>
-                                <th>Hoạt động</th>
-                            </tr>
-                        </thead>
-                        @foreach($medical_specialties as $key => $item)
-                            <tr>
-                                <td>{{$key + 1}}</td>
-                                <td>{{$item->name}}</td>
-                                <td>
-                                    <img src="{{ Storage::url($item->image_icon?->src) }}" alt="Ảnh icon {{$item->title}}" class="thumb">
-                                </td>
-                                <td>
-                                    <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}" class="thumb">
-                                </td>
-                                <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                <td>
-                                    <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('medical-specialty.edit', $item->id) }}" title="Sửa" class="edit">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a href="{{ route('medical-specialty.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên chuyên khoa</th>
+                                    <th>Ảnh icon chuyên khoa</th>
+                                    <th>Ảnh chuyên khoa</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người tạo</th>
+                                    <th>Hoạt động</th>
+                                </tr>
+                            </thead>
+                            @foreach($medical_specialties as $key => $item)
+                                <tr>
+                                    <td>{{$key + 1}}</td>
+                                    <td>{{$item->name}}</td>
+                                    <td>
+                                        <img src="{{ Storage::url($item->image_icon?->src) }}" alt="Ảnh icon {{$item->title}}" class="thumb">
+                                    </td>
+                                    <td>
+                                        <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}" class="thumb">
+                                    </td>
+                                    <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
+                                    <td>
+                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('medical-specialty.edit', $item->id) }}" title="Sửa" class="edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="{{ route('medical-specialty.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
                     {{$medical_specialties->links()}}
                 </div>
             </div>

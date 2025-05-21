@@ -7,7 +7,7 @@
         <h2>Vai trò</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Vai trò</a>
@@ -42,49 +42,51 @@
                             </div>
                         </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Vai trò</th>
-                                <th>Mã vai trò</th>
-                                <th>Mô tả</th>
-                                <th>Ngày tạo</th>
-                                <th>Tác vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($roles as $key => $item)
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>
-                                        {{ $item->name }}
-                                    </td>
-                                    <td>
-                                        {{ $item->slug_role }}
-                                    </td>
-                                    <td>
-                                        {{ $item->description }}
-                                    </td>
-                                    <td>
-                                        {{ date("d/m/Y", $item->created_date_int) }}
-                                    </td>
-                                    <td>
-                                        @if ($item->slug_role != 'benh-nhan')
-                                            <a href="{{ route('role.edit', $item->id) }}" title="Sửa" class="edit">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            @if (!in_array($item->slug_role, ['admin', 'doctor']))
-                                                <a href="{{ route('role.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                            @endif
-                                        @endif
-                                    </td>
+                                    <th>#</th>
+                                    <th>Vai trò</th>
+                                    <th>Mã vai trò</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Tác vụ</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($roles as $key => $item)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>
+                                            {{ $item->name }}
+                                        </td>
+                                        <td>
+                                            {{ $item->slug_role }}
+                                        </td>
+                                        <td>
+                                            {{ $item->description }}
+                                        </td>
+                                        <td>
+                                            {{ date("d/m/Y", $item->created_date_int) }}
+                                        </td>
+                                        <td>
+                                            @if ($item->slug_role != 'benh-nhan')
+                                                <a href="{{ route('role.edit', $item->id) }}" title="Sửa" class="edit">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                @if (!in_array($item->slug_role, ['admin', 'doctor']))
+                                                    <a href="{{ route('role.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     {{$roles->links()}}
                 </div>
             </div>

@@ -9,6 +9,11 @@
                 @csrf
             </form>
             <li>
+                <a href="/admin/profile" >
+                    <i class="fa fa-drivers-license-o" aria-hidden="true"></i> Hồ sơ
+                </a>
+            </li>
+            <li>
                 <a href="javscript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fa fa-sign-out"></i> Đăng xuất
                 </a>

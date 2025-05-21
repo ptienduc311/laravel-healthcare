@@ -7,7 +7,7 @@
         <h2>Thành viên</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">Trang chủ</a>
+                <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
             </li>
             <li>
                 <a>Thành viên</a>
@@ -65,74 +65,76 @@
                             </div>
                         </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tên</th>
-                                <th>Email</th>
-                                <th>Vai trò</th>
-                                <th colspan="2">Trạng thái</th>
-                                <th>Tác vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $key => $item)
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>
-                                        {{ $item->name }}
-                                    </td>
-                                    <td>
-                                        {{ $item->email }}
-                                    </td>
-                                    <td>
-                                        @if (!empty($item->roles) && count($item->roles) > 0)
-                                            @foreach ($item->roles as $role)
-                                                <span class="badge {{ $role->name }}">{{ $role->name }}</span>
-                                            @endforeach
-                                        @else
-                                            <span class="no-cat">Chưa cấp quyền</span>
-                                        @endif
-
-                                    </td>
-                                    <td>
-                                        @if ($item->email_verified_at)
-                                            <span class="fw-semibold text-success">Kích hoạt</span>
-                                        @else
-                                            <span class="fw-semibold text-danger">Chưa kích hoạt</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($item->status == 1)
-                                            <span class="fw-semibold text-success">Hoạt động</span>
-                                        @else
-                                            <span class="fw-semibold text-danger">Chặn</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('user.edit', $item->id) }}" title="Cập nhật" class="edit">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        @if (Auth::id() != $item->id)
-                                            @if ($item->status == 1)
-                                                <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 2]) }}" title="Chặn" class="blocked">
-                                                    <i class="fa fa-ban"></i>
-                                                </a>
-                                            @else
-                                                <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 1]) }}" title="Bỏ chặn" class="active">
-                                                    <i class="fa fa-check"></i>
-                                                </a>
-                                            @endif
-                                            <a href="{{ route('user.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                <i class="fa fa-trash"></i>
-                                            </a> 
-                                        @endif
-                                    </td>
+                                    <th>#</th>
+                                    <th>Tên</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th colspan="2">Trạng thái</th>
+                                    <th>Tác vụ</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $key => $item)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>
+                                            {{ $item->name }}
+                                        </td>
+                                        <td>
+                                            {{ $item->email }}
+                                        </td>
+                                        <td>
+                                            @if (!empty($item->roles) && count($item->roles) > 0)
+                                                @foreach ($item->roles as $role)
+                                                    <span class="badge {{ $role->name }}">{{ $role->name }}</span>
+                                                @endforeach
+                                            @else
+                                                <span class="no-cat">Chưa cấp quyền</span>
+                                            @endif
+
+                                        </td>
+                                        <td>
+                                            @if ($item->email_verified_at)
+                                                <span class="fw-semibold text-success">Kích hoạt</span>
+                                            @else
+                                                <span class="fw-semibold text-danger">Chưa kích hoạt</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->status == 1)
+                                                <span class="fw-semibold text-success">Hoạt động</span>
+                                            @else
+                                                <span class="fw-semibold text-danger">Chặn</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('user.edit', $item->id) }}" title="Cập nhật" class="edit">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            @if (Auth::id() != $item->id)
+                                                @if ($item->status == 1)
+                                                    <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 2]) }}" title="Chặn" class="blocked">
+                                                        <i class="fa fa-ban"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('user.status-update', ['userId' => $item->id, 'statusCode' => 1]) }}" title="Bỏ chặn" class="active">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                @endif
+                                                <a href="{{ route('user.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                    <i class="fa fa-trash"></i>
+                                                </a> 
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     {{$users->links()}}
                 </div>
             </div>

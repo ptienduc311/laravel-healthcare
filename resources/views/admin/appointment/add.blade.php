@@ -7,7 +7,7 @@
             <h2>Bác sĩ</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="/">Trang chủ</a>
+                    <a href="{{ route('admin.dashboard') }}">Trang chủ</a>
                 </li>
                 <li>
                     <a>Bác sĩ</a>
@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="wrapper wrapper-content animated fadeInRight">
-        @if ($isAdmin)
+        @if ($isAdmin && !isset($doctor))
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins" id="ibox1">
@@ -101,7 +101,7 @@
                         </div>
                         <form method="POST" id="form-submit"
                             action="{{ isset($doctor) ? route('appointment.store', $doctor->id) : '#' }}"
-                            class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
+                            class="form-horizontal appointment-form" enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Ngày khám <span class="claim">*</span></label>
