@@ -16,13 +16,13 @@
                 </div>
             </div>
             <div class="header-hotline">
-                <a href="tel:{{ $site->hotline }}">
+                <a href="tel:{{ $site->hotline ?? '' }}">
                     <span>Đường dây nóng</span>
-                    <strong>{{ $site->hotline }}</strong>
+                    <strong>{{ $site->hotline ?? '' }}</strong>
                 </a>
             </div>
             <div class="header-contact">
-                <a href="{{ $site->link_facebook ? $site->link_facebook : '/' }}" target="_blank">
+                <a href="{{ !empty($site->link_facebook) ? $site->link_facebook : '/' }}" target="_blank">
                     <span>Liên hệ</span>
                     <strong>Hỗ trợ khách hàng</strong>
                 </a>
@@ -120,9 +120,9 @@
             </ul>
             <div class="header-nav-bottom">
                 <div class="header-hotline">
-                    <a href="tel:{{ $site->hotline }}">
+                    <a href="tel:{{ $site->hotline ?? '' }}">
                         <span>Đường dây nóng</span>
-                        <strong>{{ $site->hotline }}</strong>
+                        <strong>{{ $site->hotline ?? '' }}</strong>
                     </a>
                 </div>
                 <div class="header-contact">

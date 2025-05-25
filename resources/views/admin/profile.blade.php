@@ -13,7 +13,7 @@
                 <a>Hồ sơ</a>
             </li>
             <li class="active">
-                <strong>Cập nhật hồ sơ</strong>
+                <strong>Cập nhật hồ sơ tài khoản</strong>
             </li>
         </ol>
     </div>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Mật khẩu</label>
+                            <label class="col-sm-3 control-label">Mật khẩu mới</label>
                             <div class="col-sm-9">
                                 <input type="password" class="form-control pe-5" value="" name="password">
                                 <div class="toggle-password">

@@ -156,35 +156,86 @@ class FrontedController extends Controller
         $services = $specialty->serviceSpecialties;
 
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
-        $doctors = Doctor::where('specialty_id', $specialty->id)->orderByDesc('created_date_int')->limit(10)->get();
+        $doctors = Doctor::where('specialty_id', $specialty->id)->where('status', 1)->orderByDesc('created_date_int')->limit(10)->get();
         return view('themes.specialty-page', compact('specialty', 'page_specialty', 'services', 'list_lastest_news', 'doctors'));
     }
 
     public function searchDoctor(Request $request){
         $keyword = $request->query('keyword');
-        $doctors = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+        $limit = 10;
+        $offset = 0;
+        $type = 'doctor';
+        $doctors = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->offset($offset)->limit($limit)->get();
 
         $total_post = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->count();
         $total_doctor = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->count();
         $total = $total_post + $total_doctor;
 
+        if(empty($keyword)){
+            $total = 0;
+        }
+
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
         $list_featured_news = Post::where('status', 1)->where('is_outstanding', 1)->latest()->limit(5)->get();
 
-        return view('themes.search-doctor', compact('doctors', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news', 'list_featured_news'));
+        return view('themes.search-doctor', compact('doctors', 'keyword', 'limit', 'offset', 'type', 'total_post', 'total_doctor', 'total', 'list_lastest_news', 'list_featured_news'));
     }
     
     public function searchPost(Request $request){
         $keyword = $request->query('keyword');
-        $posts = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+        $limit = 10;
+        $offset = 0;
+        $type = 'post';
+        $posts = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->offset($offset)->limit($limit)->get();
 
         $total_post = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->count();
         $total_doctor = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->count();
         $total = $total_post + $total_doctor;
 
+        if(empty($keyword)){
+            $total = 0;
+        }
+
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
         $list_featured_news = Post::where('status', 1)->where('is_outstanding', 1)->latest()->limit(5)->get();
 
-        return view('themes.search-post', compact('posts', 'keyword', 'total_post', 'total_doctor', 'total', 'list_lastest_news', 'list_featured_news'));
+        return view('themes.search-post', compact('posts', 'keyword', 'limit', 'offset', 'type', 'total_post', 'total_doctor', 'total', 'list_lastest_news', 'list_featured_news'));
+    }
+
+    public function loadMoreData(Request $request){
+        $keyword = $request->query('keyword');
+        $type = $request->query('type');
+        $offset = (int) $request->query('offset');
+        $limit = (int) $request->query('limit');
+
+        if(empty($keyword) || ($type != "post" && $type != "doctor")){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Dữ liệu không đầy đủ'
+            ]);
+        }
+
+        if($type == 'post'){
+            $data = Post::where('title', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->offset($offset)->limit($limit)->get();
+
+            $html = view('themes.partials.more-post', compact('data'))->render();
+
+            return response()->json([
+                'status' => 'success',
+                'html' => $html,
+                'has_more' => $data->count() == $limit
+            ]);
+        }
+        else{
+            $data = Doctor::where('name', 'like', '%' . $keyword . '%')->where('status', 1)->orderByDesc('created_date_int')->offset($offset)->limit($limit)->get();
+
+            $html = view('themes.partials.more-doctor', compact('data'))->render();
+
+            return response()->json([
+                'status' => 'success',
+                'html' => $html,
+                'has_more' => $data->count() == $limit
+            ]);
+        }
     }
 }

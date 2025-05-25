@@ -25,19 +25,6 @@ class LoginController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'email' => 'exists:users,email',
-                'password' => 'required|string|min:8',
-            ],
-            [
-                'email.exists' => 'E-mail không tồn tại trong hệ thống.',
-                'password.required' => 'Vui lòng nhập mật khẩu của bạn.',
-                'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
-            ]
-        );
-
-        $validator = Validator::make(
-            $request->all(),
-            [
                 'email' => 'required|email|exists:users,email',
                 'password' => 'required|string|min:8',
             ],
@@ -190,7 +177,10 @@ class LoginController extends Controller
 
                     $role = Role::where('slug_role', 'benh-nhan')->first();
                     if ($role) {
-                        $userNew->roles()->attach($role->id);
+                        $userNew->roles()->attach($role->id, [
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
                     }
 
                     Auth::login($userNew);

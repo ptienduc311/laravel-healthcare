@@ -123,7 +123,7 @@
                                         <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('doctor.edit', $item->id) }}" title="Sửa" class="edit">
+                                        <a href="{{ route('doctor.edit', $item->id) }}" title="Cập nhật" class="edit">
                                             <i class="fa fa-pencil"></i>
                                         </a>
                                         <a href="{{ route('doctor.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('wards', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('district_id');
+            $table->foreignId('district_id')->nullable()->constrained('districts')->nullOnDelete();
             $table->string('name', 255);
             $table->tinyInteger('type');
         });

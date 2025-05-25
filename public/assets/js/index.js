@@ -64,7 +64,6 @@ menu_close.addEventListener("click", () => {
     overlay.style.display = "none";
 })
 
-
 //Swipper
 const swiper = new Swiper('.swiperSlider', {
     direction: 'horizontal',
@@ -691,6 +690,68 @@ document.getElementById('btn_search').addEventListener('click', function (e) {
     }
 });
 
+//Load more data tìm kiếm
+$(document).ready(function () {
+    $('#load-more-data').on('click', function () {
+        var $btn = $(this);
+        var offset = parseInt($btn.data('offset'));
+        var limit = parseInt($btn.data('limit'));
+        var type = $btn.data('type');
+        var keyword = $btn.data('keyword');
+
+        $btn.prop('disabled', true);
+        $btn.html(`<i class="fa-solid fa-spinner fa-spin"></i> Đang tải...`);
+
+        $.ajax({
+            url: '/load-more-data',
+            type: 'GET',
+            data: {
+                keyword: keyword,
+                offset: offset,
+                type: type,
+                limit: limit
+            },
+            success: function (response) {
+                console.log(response);
+                if(response.status == 'success'){
+                    $('#show-more-data').append(response.html);
+
+                    if (response.has_more) {
+                        $btn.data('offset', offset + limit);
+                        $btn.prop('disabled', false);
+                        $btn.html('Xem thêm');
+                    } else {
+                        $btn.remove();
+                    }
+                }else{
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "progressBar": false,
+                        "preventDuplicates": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "10000",
+                        "timeOut": "4000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr.error(response.message);
+                    $btn.prop('disabled', false);
+                    $btn.html('Xem thêm');
+                }
+            },
+            error: function () {
+                $btn.html('Lỗi tải dữ liệu');
+            }
+        });
+    });
+});
+
 //Back to Top
 const backToTop = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
@@ -717,4 +778,69 @@ $(document).on('click', function (e) {
     if(!hasFilterProvince){
         $('.filter-province').removeClass('active');
     }
+});
+
+//Danh sách trạng thái lịch hẹn
+const statusMap = {
+    1: { label: 'Chưa xác nhận', color: 'secondary' },
+    2: { label: 'Đã xác nhận', color: 'primary' },
+    3: { label: 'Đã hủy', color: 'danger' },
+    4: { label: 'Đang khám', color: 'warning' },
+    5: { label: 'Chờ kết quả', color: 'info' },
+    6: { label: 'Đã có kết quả', color: 'success' }
+};
+
+//Hủy lịch hẹn
+$(document).on('click', '.cancel-booking', function () {
+    var $btn = $(this); 
+    var bookingId = $(this).data('book-id');
+    var bookingCode = $(this).data('book-code');
+
+    swal({
+        title: "Bạn chắc chắn muốn hủy?",
+        text: "Lịch hẹn này sẽ không thể khôi phục!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Đồng ý, hủy lịch!",
+        cancelButtonText: "Không",
+        closeOnConfirm: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý ...');
+            swal.close();
+
+            $.ajax({
+                url: '/api-cancel-book',
+                type: 'POST',
+                data: {
+                    bookingId: bookingId,
+                    bookingCode: bookingCode
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    const status = statusMap[response.status];
+                    if (response.status !== undefined) {
+                        $(`.status-apm-${bookingId}`).removeClass().addClass(`badge bg-${status.color} status-apm-${bookingId}`).text(status.label);
+                    }
+                    else{
+                        $(`.status-apm-${bookingId}`).removeClass().addClass(`badge bg-dark`).text('Không rõ');
+                    }
+
+                    $btn.remove();
+                    if (response.type === 'success') {
+                        swal("Đã hủy!", response.message, "success");
+                    } else {
+                        swal("Thông báo!", response.message, "warning");
+                    }
+                },
+                error: function () {
+                    swal("Lỗi!", "Đã xảy ra lỗi khi gửi yêu cầu.", "error");
+                    $btn.prop('disabled', false).html('Hủy lịch hẹn');
+                }
+            });
+        }
+    });
 });

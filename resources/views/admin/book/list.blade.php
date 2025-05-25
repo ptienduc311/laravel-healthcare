@@ -140,7 +140,7 @@
                                         <span class="fw-semibold text-{{ $status['color'] }}">{{ $status['name'] }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('book.show', $item->id) }}" title="Thông tin chi tiết" class="edit">
+                                        <a href="{{ route('book.show', $item->id) }}" title="Thông tin lịch hẹn" class="edit">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         @if ($item->status == 1 || $item->status == 2)

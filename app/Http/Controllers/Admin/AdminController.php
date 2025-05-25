@@ -185,7 +185,15 @@ class AdminController extends Controller
 
     public function site()
     {
-        $site = Site::findOrFail(1);
+        $site = Site::firstOrCreate(['id' => 1], [
+            'phone' => '',
+            'hotline' => '',
+            'email' => '',
+            'address' => '',
+            'link_facebook' => '',
+            'link_zalo' => '',
+            'link_youtube' => '',
+        ]);
         return view('admin.site', compact('site'));
     }
 

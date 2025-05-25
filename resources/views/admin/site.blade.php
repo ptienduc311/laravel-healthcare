@@ -28,49 +28,49 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Số điện thoại</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('phone', $site->phone) }}" name="phone">
+                                <input type="text" class="form-control" value="{{ old('phone', $site?->phone) }}" name="phone">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Hotline</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('hotline', $site->hotline) }}" name="hotline">
+                                <input type="text" class="form-control" value="{{ old('hotline', $site?->hotline) }}" name="hotline">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('email', $site->email) }}" name="email">
+                                <input type="text" class="form-control" value="{{ old('email', $site?->email) }}" name="email">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Địa chỉ</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('address', $site->address) }}" name="address">
+                                <input type="text" class="form-control" value="{{ old('address', $site?->address) }}" name="address">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Link Facebook</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('link_facebook', $site->link_facebook) }}" name="link_facebook">
+                                <input type="text" class="form-control" value="{{ old('link_facebook', $site?->link_facebook) }}" name="link_facebook">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Link Zalo</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('link_zalo', $site->link_zalo) }}" name="link_zalo">
+                                <input type="text" class="form-control" value="{{ old('link_zalo', $site?->link_zalo) }}" name="link_zalo">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Link Youtube</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ old('link_youtube', $site->link_youtube) }}" name="link_youtube">
+                                <input type="text" class="form-control" value="{{ old('link_youtube', $site?->link_youtube) }}" name="link_youtube">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>

@@ -163,7 +163,7 @@
                 hideMethod: "fadeOut"
             };
 
-            toastr.error("{{ $errors->first('doctor_id') }}");
+            toastr.error("{{ $errors->doctor_id }}");
         </script>
     @endif
     @if (session('confirm_remove'))

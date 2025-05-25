@@ -1037,6 +1037,8 @@ ul.list-cates li:hover a{
 .header-category .breadcrumb > .active {
     color: #ffffff;
     font-weight: 700;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 .header-category .breadcrumb > li + li:before {

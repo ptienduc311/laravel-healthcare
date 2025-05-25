@@ -6,11 +6,11 @@
             </div>
             <div class="text">
                 <span>Hotline</span>
-                <strong>{{ $site->hotline }}</strong>
+                <strong>{{ $site->hotline ?? '' }}</strong>
             </div>
         </div>
         <p>Liên hệ ngay với số hotline của HealthCare để được phục vụ và sử dụng các dịch vụ khám, chữa bệnh hiện đại & cao cấp nhất.</p>
-        <a href="tel:{{ $site->hotline }}" class="btn btn-primary">Liên hệ với chúng tôi</a>
+        <a href="tel:{{ $site->hotline ?? '' }}" class="btn btn-primary">Liên hệ với chúng tôi</a>
     </div>
     <div class="sidebar-banner">
         <a href="" target="_blank">

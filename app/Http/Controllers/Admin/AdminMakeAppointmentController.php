@@ -149,16 +149,25 @@ class AdminMakeAppointmentController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Thêm lịch khám thành công!');
+        return redirect('admin/appointment')->with('success', 'Thêm lịch khám thành công!');
     }
 
     public function edit(string $doctorId, string $date)
     {
         $doctor = Doctor::findOrFail($doctorId);
         $appointments = DoctorAppointments::where('doctor_id', $doctorId)->where('day_examination', $date)->first();
+
         if(!$appointments){
             return abort(404);
         }
+        
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        if($isDoctor && $user->doctor->id != $doctorId){
+            return abort(404);
+        }
+
         $type = $appointments->type;
         return view('admin.appointment.edit', compact('type', 'doctor', 'doctorId', 'date'));
     }
@@ -276,10 +285,6 @@ class AdminMakeAppointmentController extends Controller
 
     public function destroy(string $doctorId, string $date)
     {
-        $appointments = Appointment::where('doctor_id', $doctorId)
-            ->where('day_examination', $date)
-            ->get();
-
         $bookAppointments = Appointment::where('doctor_id', $doctorId)
             ->where('day_examination', $date)
             ->where('is_appointment', 1)

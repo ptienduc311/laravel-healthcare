@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('doctor_id')->nullable()->constrained('doctors')->nullOnDelete();
             $table->string('hour_examination', 255);
             $table->integer('day_examination');
-            $table->tinyInteger('is_appointment')->default('2')->comment('1 là đã có hẹn, 2 là chưa có hẹn');
+            $table->tinyInteger('is_appointment')->default('2')->comment('1 là đã có hẹn, 2 là chưa có hẹn, 3 là xóa');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('created_date_int');
             $table->timestamps();

@@ -52,7 +52,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Mật khẩu</label>
+                            <label class="col-sm-2 control-label">Mật khẩu mới</label>
                             <div class="col-sm-10">
                                 <input type="password" class="form-control pe-5" name="password">
                                 <div class="toggle-password">

@@ -175,9 +175,11 @@ Route::post('api-save-book', [ApiController::class, 'saveBook']);
 Route::get('confirm-book/{code}', [ApiController::class, 'confirmBook'])->name('book.confirm');
 Route::get('api-get-book-appointment', [ApiController::class, 'getBookAppointment']);
 Route::get('api-get-doctors', [ApiController::class, 'getDoctors']);
+Route::post('api-cancel-book', [ApiController::class, 'cancelBook']);
 
 Route::get('tim-kiem-bac-si', [FrontedController::class, 'searchDoctor']);
 Route::get('tim-kiem-bai-viet', [FrontedController::class, 'searchPost']);
+Route::get('load-more-data', [FrontedController::class, 'loadMoreData']);
 
 Route::get('/', [FrontedController::class, 'index'])->name('home');
 Route::get('gioi-thieu', [FrontedController::class, 'introduce']);

@@ -23,35 +23,39 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $roles = Role::all();
+        $authId = Auth::id();
 
         $users = User::with('roles')
-        ->when($request->filled('role_id'), function ($query) use ($request) {
-            $query->whereHas('roles', function ($q) use ($request) {
-                $q->where('roles.id', $request->role_id);
-            });
-        })
-        ->when($request->filled('is_account'), function ($query) use ($request) {
-            if ($request->is_account == 1) {
-                $query->whereNotNull('email_verified_at');
-            } elseif ($request->is_account == 2) {
-                $query->whereNull('email_verified_at');
-            }
-        })
-        ->when($request->filled('is_block'), function ($query) use ($request) {
-            if ($request->is_block == 1) {
-                $query->where('status', 1);
-            } elseif ($request->is_block == 2) {
-                $query->where('status', 2);
-            }
-        })
-        ->when($request->filled('keyword'), function ($query) use ($request) {
-            $keyword = $request->keyword;
-            $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%')
-                  ->orWhere('email', 'like', '%' . $keyword . '%');
-            });
-        })
-        ->paginate(10)->withQueryString();
+            ->when($request->filled('role_id'), function ($query) use ($request) {
+                $query->whereHas('roles', function ($q) use ($request) {
+                    $q->where('roles.id', $request->role_id);
+                });
+            })
+            ->when($request->filled('is_account'), function ($query) use ($request) {
+                if ($request->is_account == 1) {
+                    $query->whereNotNull('email_verified_at');
+                } elseif ($request->is_account == 2) {
+                    $query->whereNull('email_verified_at');
+                }
+            })
+            ->when($request->filled('is_block'), function ($query) use ($request) {
+                if ($request->is_block == 1) {
+                    $query->where('status', 1);
+                } elseif ($request->is_block == 2) {
+                    $query->where('status', 2);
+                }
+            })
+            ->when($request->filled('keyword'), function ($query) use ($request) {
+                $keyword = $request->keyword;
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('email', 'like', '%' . $keyword . '%');
+                });
+            })
+            ->orderByRaw("id = ? DESC", [$authId])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)->withQueryString();
+
         return view('admin.user.list', compact('roles', 'users'));
     }
 
@@ -132,7 +136,7 @@ class AdminUserController extends Controller
             'email_verified_at' => $is_create || $isAdmin ? now() : $email_verified_at,
         ];
 
-        if (!$is_create && !$isAdmin) {
+        if (!$is_create) {
             $userData['confirm_token'] = $confirm_token;
             $userData['cancel_token'] = $cancel_token;
         }
@@ -160,7 +164,7 @@ class AdminUserController extends Controller
             }
         }
         
-        if (!$is_create || !$isAdmin) {
+        if (!$is_create) {
             $mailData = [
                 'username' => $name,
                 'email' => $email,

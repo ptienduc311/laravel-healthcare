@@ -230,14 +230,25 @@ class AdminMedicalSpecialtyController extends Controller
     public function destroy(string $id)
     {
         $medical_specialty = MedicalSpecialty::find($id);
-        PageSpecialty::where('medical_specialty_id', $id)->delete();
-        ServiceSpecialty::where('medical_specialty_id', $id)->delete();
-        $medical_specialty->delete();
+        $page_specialty = PageSpecialty::where('medical_specialty_id', $id)->first();
         $oldImage = $medical_specialty->image;
+        $oldImageIcon = $medical_specialty->image_icon;
+        $oldImageDesc = $page_specialty->image;
         if ($oldImage && Storage::disk('public')->exists($oldImage->src)) {
             Storage::disk('public')->delete($oldImage->src);
             $oldImage->delete();
         }
+        if ($oldImageIcon && Storage::disk('public')->exists($oldImageIcon->src)) {
+            Storage::disk('public')->delete($oldImageIcon->src);
+            $oldImageIcon->delete();
+        }
+        if ($oldImageDesc && Storage::disk('public')->exists($oldImageDesc->src)) {
+            Storage::disk('public')->delete($oldImageDesc->src);
+            $oldImageDesc->delete();
+        }
+        ServiceSpecialty::where('medical_specialty_id', $id)->delete();
+        $page_specialty->delete();
+        $medical_specialty->delete();
         return redirect('admin/medical-specialty')->with('success', 'Đã xóa thành công');
     }
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Đội ngũ chuyên gia')
+@section('title', 'Tra cứu lịch hẹn')
 @section('custom-css')
     <link rel="stylesheet" href="{{ asset('assets/css/findbook.css ') }}">
 @stop
@@ -50,26 +50,6 @@
         </div>
     </div>
     <div id="show-model"></div>
-    {{-- <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content animated flipInY">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span
-                            aria-hidden="true">&times;</span><span
-                            class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Kết quả khám bệnh</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white"
-                        data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 </div>
 <div id="loading-overlay" style="display: none;">
     <div class="loading-content">
@@ -128,14 +108,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector(".booking-search-form");
         const overlay = document.getElementById("loading-overlay");
-        const statusMap = {
-            1: { label: 'Chưa xác nhận', color: 'secondary' },
-            2: { label: 'Đã xác nhận', color: 'primary' },
-            3: { label: 'Đã hủy', color: 'danger' },
-            4: { label: 'Đang khám', color: 'warning' },
-            5: { label: 'Chờ kết quả', color: 'info' },
-            6: { label: 'Đã có kết quả', color: 'success' }
-        };
     
         form.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -188,7 +160,7 @@
 
                             let actionButtons = '';
                             if (data.status === 1 || data.status === 2) {
-                                actionButtons += `<button class="btn btn-danger btn-sm me-2 cancel-booking" data-id="${data.id}">Hủy lịch hẹn</button>`;
+                                actionButtons += `<button class="btn btn-danger btn-sm me-2 cancel-booking" data-book-id="${data.id}" data-book-code="${data.book_code}">Hủy lịch hẹn</button>`;
                             }
                             if (data.status === 6) {
                                 actionButtons += `<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalResult${data.id}">Xem kết quả khám</button>`;
@@ -217,7 +189,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <strong>Trạng thái:</strong>
-                                            <span class="badge bg-${status.color}">${status.label}</span>
+                                            <span class="badge bg-${status.color} status-apm-${data.id}">${status.label}</span>
                                         </div>
                                         <div class="col-12">
                                             <strong>Ghi chú:</strong>

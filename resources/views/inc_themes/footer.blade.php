@@ -46,17 +46,17 @@
                 <h2 class="title">Liên kết</h2>
                 <ul class="link">
                     <li>
-                        <a href="{{ $site->link_facebook ? $site->link_facebook : '/' }}">
+                        <a href="{{ !empty($site->link_facebook) ? $site->link_facebook : '/' }}">
                             <img src="{{ asset('assets/images/facebook.svg') }}" alt="">
                         </a>
                     </li>
                     <li>
-                        <a href="{{ $site->link_youtube ? $site->link_youtube : '/' }}">
+                        <a href="{{ !empty($site->link_youtube) ? $site->link_youtube : '/' }}">
                             <img src="{{ asset('assets/images/youtube.svg') }}" alt="">
                         </a>
                     </li>
                     <li>
-                        <a href="{{ $site->link_zalo ? $site->link_zalo : '/' }}">
+                        <a href="{{ !empty($site->link_zalo) ? $site->link_zalo : '/' }}">
                             <img src="{{ asset('assets/images/zalo.svg') }}" alt="">
                         </a>
                     </li>

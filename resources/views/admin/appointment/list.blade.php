@@ -144,29 +144,6 @@
             toastr.success("{{session('success')}}")
         </script>
     @endif
-
-    @if ($errors->has('doctor_id'))
-        <script>
-            toastr.options = {
-                closeButton: false,
-                debug: false,
-                progressBar: true,
-                preventDuplicates: false,
-                positionClass: "toast-top-right",
-                onclick: null,
-                showDuration: "400",
-                hideDuration: "10000",
-                timeOut: "5000",
-                extendedTimeOut: "1000",
-                showEasing: "swing",
-                hideEasing: "linear",
-                showMethod: "fadeIn",
-                hideMethod: "fadeOut"
-            };
-
-            toastr.error("{{ $errors->first('doctor_id') }}");
-        </script>
-    @endif
     @if (session('confirm_remove'))
         <script>
             const hoursAppointment = {!! json_encode(session('hoursAppointment')) !!};

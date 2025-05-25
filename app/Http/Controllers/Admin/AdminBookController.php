@@ -111,6 +111,7 @@ class AdminBookController extends Controller
 
         $book->update([
             'name' => $request->input('name'),
+            'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'birth' => $request->input('birth'),
             'gender' => $request->input('gender'),

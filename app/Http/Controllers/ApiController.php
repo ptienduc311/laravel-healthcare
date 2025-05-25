@@ -267,4 +267,39 @@ class ApiController extends Controller
             'doctors' => $data
         ]);
     }
+
+    public function cancelBook(Request $request){
+        $bookingId =  $request->bookingId;
+        $bookingCode =  $request->bookingCode;
+        $book = Book::where('id', $bookingId)->where('book_code', $bookingCode)->first();
+
+        if(empty($book)){
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Không tìm thấy lịch hẹn.'
+            ]);
+        }
+        if($book->status == 3){
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Lịch hẹn này đã được hủy trước đó.',
+                'status' => 3
+            ]);
+        }
+        if(in_array($book->status, [4, 5, 6])){
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Lịch hẹn này không được hủy.',
+                'status' => $book->status
+            ]);
+        }
+
+        $book->status = 3;
+        $book->save();
+        return response()->json([
+            'type' => 'success',
+            'message' => 'Đã hủy lịch hẹn thành công.',
+            'status' => 3
+        ]);
+    }
 }

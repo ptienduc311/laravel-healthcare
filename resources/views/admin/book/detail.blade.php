@@ -56,6 +56,9 @@
                                 <label class="col-sm-3 control-label">Email<span class="claim">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="email" name="email" value="{{ $book->email }}" readonly>
+                                    <div class="edit-email">
+                                        <i class="fa fa-edit"></i>
+                                    </div>
                                     @error('email')
                                         <p class="error">{{ $message }}</p>
                                     @enderror

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('size');
             $table->tinyInteger('type');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->integer('created_date_int');
             $table->timestamps();
         });
     }

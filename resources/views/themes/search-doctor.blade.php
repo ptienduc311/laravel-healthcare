@@ -16,15 +16,13 @@
                 <li>
                     <a href="/">Trang chủ</a>
                 </li>
-                <li class="active">Kết quả tìm kiếm: {{ $keyword }}</li>
+                <li class="active">Kết quả tìm kiếm bác sĩ: {{ $keyword }}</li>
             </ol>
         </div>
     </div>
     <div class="container">
         @if ($total != 0)
             <h2 class="search-wrapper-title">Hiển thị {{ $total }} kết quả theo từ khóa <span style="display: inline-block;">“{{ $keyword }}”</span></h2>
-        @else
-            <h2 class="search-wrapper-title">Không có kết quả theo từ khóa “ {{ $keyword }}”</h2>
         @endif
         <div class="row">
             <div class="col-xs-12 col-lg-8">
@@ -34,7 +32,7 @@
                             <li><a href="/tim-kiem-bai-viet?keyword={{ $keyword }}">Bài viết ({{ $total_post }})</a></li>
                             <li class="active"><a href="/tim-kiem-bac-si?keyword={{ $keyword }}">Bác sĩ ({{ $total_doctor }})</a></li>
                         </ul>
-                        <div class="team-items">
+                        <div class="team-items" id="show-more-data">
                             @foreach ($doctors as $item)
                                 <div class="team-item">
                                     <div class="team-item-info">
@@ -66,11 +64,22 @@
                                 </div>
                             @endforeach
                         </div>
-                        {{ $doctors->links('vendor.pagination.custom-pagination') }}
+                        @if ($total_doctor > $limit)
+                            <div class="text-center mt-4">
+                                <button id="load-more-data" type="button" class="btn btn-primary"
+                                    data-offset="{{ count($doctors) }}"
+                                    data-limit="{{ $limit }}"
+                                    data-type="{{ $type }}"
+                                    data-keyword="{{ $keyword }}">
+                                    Xem thêm
+                                </button>
+                            </div>
+                        @endif
                     @else
                         <div class="search-empty">
                             <img loading="lazy" src="{{ asset('assets/images/search-empty.png') }}" alt="Not found">
-                            <p>Không có kết quả theo từ khóa “{{ $keyword }}”</p>
+                            <p>Không có kết quả theo từ khóa “{{ $keyword }}”.</p>
+                            <small class="text-danger">Hãy tìm kiếm bác sĩ khác.</small>
                         </div>
                     @endif
                 </div>

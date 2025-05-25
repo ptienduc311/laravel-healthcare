@@ -110,7 +110,7 @@
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit" name="action" value="create">Tạo tài khoản</button>
-                                <button class="btn btn-primary ladda-button ladda-button-send-mail" type="submit" name="action" value="create_and_send"  data-style="zoom-in">Gửi email xác nhận</button>
+                                <button class="btn btn-primary ladda-button ladda-button-send-mail" type="submit" name="action" value="create_and_send" data-style="zoom-in">Gửi email xác nhận</button>
                             </div>
                         </div>
                     </form>
