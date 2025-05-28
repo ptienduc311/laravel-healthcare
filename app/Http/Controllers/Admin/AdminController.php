@@ -136,14 +136,12 @@ class AdminController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
-            $created_by = Auth::id();
 
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
 

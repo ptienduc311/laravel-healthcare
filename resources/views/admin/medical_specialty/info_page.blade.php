@@ -32,7 +32,14 @@
                             <ul class="list-group clear-list m-t" id="specialty-list">
                                 @foreach ($medical_specialties as $key=>$item)
                                     <li class="specialty-item px-2 d-flex justify-content-between align-items-center list-group-item{{$key == 0 ? " fist-item" : ""}}" data-id="{{$item->id}}">
-                                        <span>{{$item->name}}</span>
+                                        <div class="d-flex flex-column gap-2">
+                                            <span>{{$item->name}}</span>
+                                            @if ($item->pageSpecialty)
+                                                <small class="badge bg-success">Đã có trang chuyên khoa</small>
+                                            @else
+                                                <small class="badge bg-danger">Chưa có trang chuyên khoa</small>
+                                            @endif
+                                        </div>
                                         <div class="pull-right">
                                             <button class="btn {{$item->status == 1 ? "btn-primary" : "btn-danger" }} btn-circle" type="button">
                                                 <i class="fa {{$item->status == 1 ? "fa-check" : "fa-times" }}"></i>
@@ -71,26 +78,6 @@
                                 @error('title')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Ảnh đoạn mô tả</label>
-                            <div class="col-sm-10">
-                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                    <div>
-                                      <span class="btn btn-default btn-file">
-                                        <span class="fileinput-new">Chọn ảnh</span>
-                                        <span class="fileinput-exists">Thay đổi</span>
-                                        <input type="file" name="image" accept="image/*">
-                                      </span>
-                                      <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Xóa</a>
-                                    </div>
-                                    <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; border:none;line-height: 200px;"></div>
-                                    @error('image')
-                                        <p class="error">{{ $message }}</p>
-                                    @enderror
-                                </div>
                             </div>
                         </div>
 
@@ -217,6 +204,7 @@
                 });
             });
 
+            //Dịch vụ
             const $form = $(".form-horizontal");
             const $submitBtn = $form.find("button[type='submit']");
             $form.on("submit", function (event) {
@@ -251,7 +239,7 @@
                 }
             });
         
-            // Xử lý khi người dùng gõ lại => kiểm tra lại lỗi
+            // Kiểm tra lỗi khi nhập dịch vụ
             $(document).on("input", "input[name='name_service[]'], input[name='description_service[]']", function () {
                 const $item = $(this).closest(".main-service-item");
                 const name = $item.find("input[name='name_service[]']").val().trim();
@@ -293,8 +281,8 @@
         $(document).on('click', '.specialty-item', function () {
             const $this = $(this);
             if ($this.hasClass('disabled')) return;
-            
-            const service_id = $(this).data('id');
+                
+            const page_id = $(this).attr('data-id');
 
             $('.specialty-item').addClass('disabled').css('pointer-events', 'none');
             $('.specialty-item').css('background-color', '');
@@ -309,75 +297,64 @@
 
             setTimeout(function () {
                 $.ajax({
-                    url: '{{ route("medical-specialty.select-service-handle") }}',
+                    url: '{{ route("medical-specialty.select-page-specialty-handle") }}',
                     method: 'POST',
                     dataType: 'json',
                     data: { 
-                        service_id: service_id,
+                        page_id: page_id,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
                         console.log(response);
-                        $('.ibox-content').removeClass('active');
                         $("#name_specialty").html('');
                         $("#specialty_id").val('');
                         $("#description").val('');
-                        // editor.setData('');
                         allEditors.forEach(({ instance }) => {
                             instance.setData('');
                         });
                         $('#main-service .main-service-item').remove();
                         $('.btn-add-service-item').before(renderServiceItem());
 
-                        const $fileInputWrapper = $('.fileinput');
-                        $fileInputWrapper
-                            .removeClass('fileinput-exists')
-                            .addClass('fileinput-new');
-                        $fileInputWrapper.find('.fileinput-preview')
-                            .empty()
-                            .hide();
-
-                        if(response.result.page_specialty){
-                            $("#description").val(response.result.page_specialty.description || '');
-                            // editor.setData(response.result.page_specialty.content || '');
-                            const editorObj = allEditors.find(ed => ed.domElement.id === 'specialty-content');
-                            if (editorObj) {
-                                editorObj.instance.setData(response.result.page_specialty.content || '');
+                        if(response.status === 'success'){
+                            if(response.result.page_specialty){
+                                $("#description").val(response.result.page_specialty.description || '');
+                                const editorObj = allEditors.find(ed => ed.domElement.id === 'specialty-content');
+                                if (editorObj) {
+                                    editorObj.instance.setData(response.result.page_specialty.content || '');
+                                }
+                            }
+                            if(response.result.service_id){
+                                $("#specialty_id").val(response.result.service_id);
+                            }
+                            if(response.result.name){
+                                $("#name_specialty").text(response.result.name);
+                            }
+                            if(response.result.services){
+                                $('#main-service .main-service-item').remove();
+                                response.result.services.forEach(service => {
+                                    $('.btn-add-service-item').before(renderServiceItem(service.name, service.description));
+                                });
                             }
                         }
-
-                        if(response.result.service_id){
-                            $("#specialty_id").val(response.result.service_id);
+                        else{
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "progressBar": false,
+                                "preventDuplicates": false,
+                                "positionClass": "toast-top-right",
+                                "onclick": null,
+                                "showDuration": "400",
+                                "hideDuration": "1000",
+                                "timeOut": "4000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
+                            toastr.error(response.message)
                         }
-
-                        if(response.result.name){
-                            $("#name_specialty").text(response.result.name);
-                        }
-
-                        if (response.result.image) {
-                            $fileInputWrapper
-                                .removeClass('fileinput-new')
-                                .addClass('fileinput-exists');
-
-                            const imageUrl = `{{ Storage::url('') }}` + response.result.image;
-                            const imageTag = `<img src="${imageUrl}" alt="Ảnh bìa" style="max-width: 100%; max-height: 100%;">`;
-
-                            $fileInputWrapper.find('.fileinput-preview')
-                                .html(imageTag)
-                                .css('display', 'block');
-                        }
-
-                        if(response.result.services){
-                            $('#main-service .main-service-item').remove();
-                            response.result.services.forEach(service => {
-                                $('.btn-add-service-item').before(renderServiceItem(service.name, service.description));
-                            });
-                        }
-
-                        $('.specialty-item').removeClass('disabled').css('pointer-events', '');
-                        $ibox.removeClass('active');
-                        $ibox.find(':input, button, a').removeClass('disabled').css('pointer-events', '');
-                        $ibox.css('cursor', '');
                     },
                     error: function(xhr, status, error) {
                         toastr.options = {
@@ -396,15 +373,16 @@
                             "showMethod": "fadeIn",
                             "hideMethod": "fadeOut"
                         }
-                        toastr.error("Có lỗi xảy ra", "Vui lòng thử lại!")
-                        
+                        toastr.error("Vui lòng thử lại!", "Có lỗi xảy ra")
+                    },
+                    complete: function(){
                         $('.specialty-item').removeClass('disabled').css('pointer-events', '');
                         $ibox.removeClass('active');
                         $ibox.find(':input, button, a').removeClass('disabled').css('pointer-events', '');
                         $ibox.css('cursor', '');
                     }
                 });
-            }, 1500);
+            }, 1000);
         });
     </script>
 @endsection

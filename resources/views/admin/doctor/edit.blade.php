@@ -28,7 +28,7 @@
                 @csrf
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Thông tin chuyên khoa</h5>
+                        <h5>Thông tin chuyên ngành</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -356,7 +356,9 @@
                                 <div class="col-sm-10 mt-2">
                                     <div class="checkbox checkbox-danger pt-0">
                                         <input id="is_outstanding" type="checkbox" name="is_outstanding" {{ $doctor->is_outstanding == 1 ? 'checked' : '' }}>
-                                        <label></label>
+                                        <label for="is_outstanding">
+                                            Đánh dấu nổi bật
+                                        </label>
                                     </div>
                                 </div>
                             </div>

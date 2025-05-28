@@ -1,5 +1,5 @@
 <div class="col-xs-12 col-md-4">
-    <div class="sidebar-hotline" style="background-image: url(https://medlatec.vn/med/images/contactsidebar.png);">
+    <div class="sidebar-hotline" style="background-image: url({{ asset('assets/images/bg-after.png') }});">
         <div class="hotline">
             <div class="icon">
                 <i class="fa-solid fa-phone-volume"></i>
@@ -13,13 +13,13 @@
         <a href="tel:{{ $site->hotline ?? '' }}" class="btn btn-primary">Liên hệ với chúng tôi</a>
     </div>
     <div class="sidebar-banner">
-        <a href="" target="_blank">
-            <img src="https://medlatec.vn/media/41099/catalog/B%e1%bb%99+banner+2025_C%e1%bb%99t+ph%e1%ba%a3i.jpg?size=2048" alt="">
+        <a href="/">
+            <img src="{{ asset('assets/images/slider3.png') }}" alt="Banner 1">
         </a>
     </div>
     <div class="sidebar-banner">
-        <a href="" target="_blank">
-            <img src="https://medlatec.vn/media/41099/catalog/B%e1%bb%99+banner+2025_C%e1%bb%99t+ph%e1%ba%a3i.jpg?size=2048" alt="">
+        <a href="/">
+            <img src="{{ asset('assets/images/slider4.jpg') }}" alt="Banner 2">
         </a>
     </div>
     @if (isset($list_lastest_news) && $list_lastest_news->isNotEmpty())

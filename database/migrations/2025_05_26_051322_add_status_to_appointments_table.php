@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('post_categories', function (Blueprint $table) {
-            $table->foreignId('created_by')->nullable()->after('status')->constrained('users')->nullOnDelete();
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->tinyInteger('status')->default(1)->comment('1: hoạt động, 2: xóa')->after('is_appointment');
         });
     }
 
@@ -21,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('post_categories', function (Blueprint $table) {
-            $table->dropForeign(['created_by']);
-            $table->dropColumn('created_by'); 
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 };

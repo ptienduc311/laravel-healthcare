@@ -38,7 +38,7 @@ class AdminBookController extends Controller
         $user = Auth::user();
         $isDoctor = $user->hasRole('doctor');
         $isAdmin = $user->hasRole('admin');
-        if ($isDoctor && !$isAdmin) {
+        if ($isDoctor) {
             $doctor = Doctor::where('user_id', $user->id)->first();
             if ($doctor) {
                 $query->where('doctor_id', $doctor->id);
@@ -78,7 +78,13 @@ class AdminBookController extends Controller
 
     public function show(Book $book)
     {
-        // dd($book->toArray());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        if($isDoctor && $user->doctor->id != $book->doctor_id){
+            return abort(404);
+        }
+
         $statusMap = [
             1 => ['name' => 'Chưa xác nhận', 'color' => 'secondary'],
             2 => ['name' => 'Đã xác nhận', 'color' => 'primary'],
@@ -188,6 +194,13 @@ class AdminBookController extends Controller
 
     //Khám bệnh
     public function startExamination(Book $book){
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        if($isDoctor && $user->doctor->id != $book->doctor_id){
+            return abort(404);
+        }
+        
         if($book->status == 1){
             return redirect('/admin/book')->with('error', 'Chưa xác nhận lịch hẹn.');
         }
@@ -267,6 +280,13 @@ class AdminBookController extends Controller
     }
 
     public function printResultPDF(Book $book){
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isDoctor = $user->hasRole('doctor');
+        if($isDoctor && $user->doctor->id != $book->doctor_id){
+            return abort(404);
+        }
+
         if($book->status != 6){
             return redirect()->route('book.index')->with(['error' => 'Chưa có kết quả khám bệnh.']);
         }

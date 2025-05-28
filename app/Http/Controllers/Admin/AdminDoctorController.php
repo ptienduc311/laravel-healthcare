@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailCancelBook;
 use App\Models\Doctor;
 use App\Models\DoctorPrize;
 use App\Models\DoctorTraining;
 use App\Models\DoctorWork;
 use App\Models\Image;
 use App\Models\MedicalSpecialty;
+use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -41,7 +45,7 @@ class AdminDoctorController extends Controller
             $query->where('name', 'like', '%' . $request->keyword . '%');
         }
 
-        $medical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->limit(15)->get();
+        $medical_specialties = MedicalSpecialty::orderByDesc('created_date_int')->whereIn('status', [1, 2])->limit(15)->get();
 
         //Học hàm, học vị
         $academicTitles = [
@@ -59,7 +63,7 @@ class AdminDoctorController extends Controller
             7 => 'Bác sĩ cao cấp',
         ];
 
-        $doctors = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+        $doctors = $query->whereIn('status', [1, 2])->orderByDesc('created_date_int')->paginate(5)->withQueryString();
         return view('admin.doctor.list', compact('medical_specialties', 'academicTitles', 'degrees', 'doctors'));
     }
 
@@ -88,7 +92,7 @@ class AdminDoctorController extends Controller
 
         //Doctor
         if ($isDoctor) {
-            $doctor = Doctor::where('user_id', Auth::id())->first();
+            $doctor = Doctor::where('user_id', Auth::id())->whereIn('status', [1, 2])->first();
 
             if (!$doctor) {
                 abort(404);
@@ -99,7 +103,7 @@ class AdminDoctorController extends Controller
 
         //Admin
         if ($doctorId) {
-            $doctor = Doctor::find($doctorId);
+            $doctor = Doctor::where('id', $doctorId)->whereIn('status', [1, 2])->first();
 
             if (!$doctor) {
                 abort(404);
@@ -179,13 +183,11 @@ class AdminDoctorController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
-            $created_by = Auth::id();
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
         }
@@ -205,7 +207,6 @@ class AdminDoctorController extends Controller
         $introduce = $request->input('introduce');
         $status = $request->has('status') ? 1 : 2;
         $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
-        $created_by = Auth::id();
         $doctor = Doctor::create([
             'name' => $name,
             'slug_name' => $slug_name,
@@ -223,7 +224,6 @@ class AdminDoctorController extends Controller
             'introduce' => $introduce,
             'status' => $status,
             'is_outstanding' => $is_outstanding,
-            'created_by' => $created_by,
             'created_date_int' => time()
         ]);
         $doctor_id = $doctor->id;
@@ -281,7 +281,7 @@ class AdminDoctorController extends Controller
         $user = Auth::user();
         $isAdmin = $user->hasRole('admin');
         
-        $doctor = Doctor::find($id);
+        $doctor = Doctor::where('id', $id)->whereIn('status', [1, 2])->first();
         $specialties = MedicalSpecialty::where('status', 1)->get();
         return view('admin.doctor.edit', compact('doctor', 'specialties', 'isAdmin'));
     }
@@ -359,13 +359,11 @@ class AdminDoctorController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
-            $created_by = Auth::id();
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
 
@@ -402,8 +400,6 @@ class AdminDoctorController extends Controller
             $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
         }
 
-
-        $created_by = Auth::id();
         $doctor->update([
             'name' => $name,
             'slug_name' => $slug_name,
@@ -421,7 +417,6 @@ class AdminDoctorController extends Controller
             'introduce' => $introduce,
             'status' => $status,
             'is_outstanding' => $is_outstanding,
-            'created_by' => $created_by,
         ]);
 
         $time_training_process = $request->input('time_training_process');
@@ -476,19 +471,71 @@ class AdminDoctorController extends Controller
         return redirect()->back()->with('success', 'Cập nhật thành công');
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        $doctor = Doctor::find($id);
-        $doctor->doctor_prizes()->delete();
-        $doctor->doctor_training()->delete();
-        $doctor->doctor_works()->delete();
-        $doctor->delete();
-        $oldImage = $doctor->image;
-        if ($oldImage && Storage::disk('public')->exists($oldImage->src)) {
-            Storage::disk('public')->delete($oldImage->src);
-            $oldImage->delete();
+        $doctor = Doctor::where('id', $id)->whereIn('status', [1, 2])->first();
+        if (!$doctor) {
+            return redirect()->back()->with('error', 'Không tìm thấy bác sĩ.');
         }
-        return redirect('admin/doctor')->with('success', 'Đã xóa thành công');
+
+        $action = $request->query('action');
+        $today = Carbon::today()->timestamp;
+        $books = $doctor->books()
+        ->where('date_examination_int', '>=', $today)
+        ->whereIn('status', [1, 2])
+        ->get();
+
+        $site = Site::first();
+        $email_web = $site?->email;
+        $phone = $site?->phone;
+        $hotline = $site?->hotline;
+
+        foreach ($books as $book) {
+            $data = [
+                'name' => $book->name,
+                'book_code' => $book->book_code,
+                'time_examination' => $book->appointment?->hour_examination,
+                'doctor_name' => $book->doctor?->name,
+                'specialty' => $book->specialty?->name,
+                'reason' => "Bác sĩ thay đổi lịch làm việc.",
+                'email_web' => $email_web,
+                'phone' => $phone,
+                'hotline' => $hotline
+            ];
+            Mail::to($book->email)->send(new SendMailCancelBook($data));
+            $book->status = 3;
+            $book->save();
+        }
+
+        if ($doctor->account) {
+            $action = $request->query('action');
+            $user = $doctor->account;
+
+            if ($action === 'create_new') {
+                $doctor->update(['status' => 3, 'user_id' => NULL]);
+
+                $slugName = Str::slug($user->name);
+                Doctor::create([
+                    'name' => $user->name,
+                    'slug_name' => $slugName,
+                    'status' => 1,
+                    'created_date_int' => time(),
+                    'user_id' => $user->id,
+                ]);
+
+                return redirect()->back()->with('success', 'Đã xóa và tạo bác sĩ mới thành công.');
+            }
+
+            if ($action === 'delete_account') {
+                $doctor->update(['status' => 3, 'user_id' => NULL]);
+                $user->roles()->detach();
+                $user->delete();
+                return redirect()->back()->with('success', 'Đã xóa bác sĩ và tài khoản liên kết thành công.');
+            }
+        }
+
+        $doctor->update(['status' => 3]);
+        return redirect()->back()->with('success', 'Đã xóa bác sĩ thành công.');
     }
 
     public function getDoctors(Request $request)
@@ -503,7 +550,7 @@ class AdminDoctorController extends Controller
             ]);
         }
 
-        $query = Doctor::where('status', 1);
+        $query = Doctor::query();
 
         if ($specialty_id) {
             $query->where('specialty_id', $specialty_id);
@@ -513,7 +560,7 @@ class AdminDoctorController extends Controller
             $query->where('name', 'like', '%' . $name . '%');
         }
 
-        $doctors = $query->where('status', 1)->get();
+        $doctors = $query->whereIn('status', [1, 2])->get();
 
         if ($doctors->isEmpty()) {
             return response()->json([
@@ -547,7 +594,7 @@ class AdminDoctorController extends Controller
             ]);
         }
 
-        $query = Doctor::whereNull('user_id');
+        $query = Doctor::whereNull('user_id')->whereIn('status', [1, 2]);
 
         if ($specialty_id) {
             $query->where('specialty_id', $specialty_id);
@@ -606,7 +653,7 @@ class AdminDoctorController extends Controller
             'BSCKII' => 'Bác Sĩ Chuyên Khoa II',
         ];
 
-        $html = view('admin.doctor.doctor_profile', compact('doctor', 'academicTitles', 'degrees'))->render();
+        $html = view('admin.doctor.partials.doctor_profile', compact('doctor', 'academicTitles', 'degrees'))->render();
 
         return response()->json([
             'status' => 'success',

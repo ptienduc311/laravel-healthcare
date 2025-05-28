@@ -90,7 +90,7 @@
                                         <td>
                                             @if (!empty($item->roles) && count($item->roles) > 0)
                                                 @foreach ($item->roles as $role)
-                                                    <span class="badge {{ $role->name }}">{{ $role->name }}</span>
+                                                    <span class="badge">{{ $role->name }}</span>
                                                 @endforeach
                                             @else
                                                 <span class="no-cat">Chưa cấp quyền</span>

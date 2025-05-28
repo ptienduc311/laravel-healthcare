@@ -35,7 +35,7 @@
                                     {{ $item->name }}
                                 </a>
                                 <div class="service-item-excerpt">
-                                    {{ $item->description }}
+                                    {{ $item->pageSpecialty?->description }}
                                 </div>
                                 <div class="service-item-actions">
                                     <a href="/chuyen-khoa/{{ $item->slug }}" class="see-detail">

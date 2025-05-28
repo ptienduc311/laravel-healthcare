@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,5 +19,15 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (HttpException $exception, Request $request) {
+            if ($request->is(['admin', 'admin/*'])) {
+                if ($exception->getStatusCode() == 404) {
+                    return response()->view("errors.404-admin", [], 404);
+                }
+            }
+
+            if ($exception->getStatusCode() == 404) {
+                return response()->view("errors.404", [], 404);
+            }
+        });
     })->create();

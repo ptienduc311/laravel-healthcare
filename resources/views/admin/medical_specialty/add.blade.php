@@ -59,16 +59,6 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Mô tả chuyên khoa</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control message-input" name="description">{{old('description')}}</textarea>
-                                @error('description')
-                                    <p class="error">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">Ảnh chuyên khoa<span class="claim">*</span></label>
                             <div class="col-sm-10">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">

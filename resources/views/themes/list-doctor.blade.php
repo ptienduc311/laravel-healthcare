@@ -111,7 +111,7 @@
                             </div>
                             <div class="col-sm-3 type-filter"></div>
                             <div class="col-sm-2 actions">
-                                <button type="submit" class="btn btn-primary btn_TimKiem">Tìm kiếm bác sĩ</button>
+                                <button type="submit" class="btn btn-primary btn_TimKiem">Lọc bác sĩ</button>
                             </div>
                         </div>
                     </form>

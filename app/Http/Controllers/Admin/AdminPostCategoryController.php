@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AdminPostCategoryController extends Controller
@@ -48,13 +47,11 @@ class AdminPostCategoryController extends Controller
         $name = $request->input('name');
         $slug = Str::slug($request->input('name'));
         $status = $request->has('status') ? 1 : 2;
-        $created_by = Auth::id();
 
         PostCategory::create([
             'name' => $name,
             'slug' => $slug,
             'status' => $status,
-            'created_by'=>$created_by,
             'created_date_int' => time()
         ]);
         return redirect('admin/post/cat')->with('success', 'Đã thêm mới thành công');

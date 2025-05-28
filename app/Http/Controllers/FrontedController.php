@@ -4,18 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use App\Models\MedicalSpecialty;
-use App\Models\PageSpecialty;
 use App\Models\Post;
 use App\Models\PostCategory;
-use App\Models\ServiceSpecialty;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class FrontedController extends Controller
 {
     public function index()
     {
-        $category = PostCategory::where('slug', 'tin-y-khoa')->first();
+        $category = PostCategory::where('slug', 'tin-tuc-y-khoa')->first();
         $posts = Post::when($category, function ($query) use ($category) {
                 $query->where('category_id', $category->id);
             })
@@ -92,7 +89,7 @@ class FrontedController extends Controller
             $query->where('status', 1)->latest()->take(5);
         }])->where('status', 1)->latest()->limit(5)->get();
         
-        $list_lastest_news = Post::where('status', 1)->latest()->limit(10)->get();
+        $list_lastest_news = Post::where('status', 1)->latest()->limit(8)->get();
         
         return view('themes.news-summary', compact('post_categories', 'list_lastest_news'));
     }
@@ -154,9 +151,10 @@ class FrontedController extends Controller
 
         $page_specialty = $specialty->pageSpecialty;
         $services = $specialty->serviceSpecialties;
+        // dd($page_specialty, $services);
 
         $list_lastest_news = Post::where('status', 1)->latest()->limit(5)->get();
-        $doctors = Doctor::where('specialty_id', $specialty->id)->where('status', 1)->orderByDesc('created_date_int')->limit(10)->get();
+        $doctors = Doctor::where('specialty_id', $specialty->id)->where('status', 1)->orderByDesc('created_date_int')->limit(8)->get();
         return view('themes.specialty-page', compact('specialty', 'page_specialty', 'services', 'list_lastest_news', 'doctors'));
     }
 

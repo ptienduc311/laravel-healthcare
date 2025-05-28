@@ -156,7 +156,7 @@
         <div class="signature">
             {{ $today }}<br>
             <strong>Bác sĩ</strong>
-            <p><em><strong style="font-family: 'Brush Script MT', cursive; display: block;">{{ $doctor }}</strong></em></p>
+            <p><em><strong style="display: block;">{{ $doctor }}</strong></em></p>
         </div>
     </div>
 </body>

@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('slug', 255);
             $table->string('description', 255);
             $table->text('content');
-            $table->tinyInteger('status');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->tinyInteger('status')->default(1)->comment('1: hoạt động, 2: tạm dừng');
             $table->foreignId('category_id')->nullable()->constrained('post_categories')->nullOnDelete();
             $table->foreignId('image_id')->nullable()->constrained('images')->nullOnDelete();
             $table->integer('created_date_int');

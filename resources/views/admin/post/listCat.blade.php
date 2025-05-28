@@ -55,7 +55,6 @@
                                     <th>#</th>
                                     <th>Tên danh mục</th>
                                     <th>Trạng thái</th>
-                                    <th>Người tạo</th>
                                     <th>Hoạt động</th>
                                 </tr>
                             </thead>
@@ -64,9 +63,6 @@
                                     <td>{{$key + 1}}</td>
                                     <td>{{$item->name}}</td>
                                     <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                    <td>
-                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                    </td>
                                     <td>
                                         @if ($item->slug != 'khac')
                                             <a href="{{ route('post_category.edit', $item->id) }}" title="Sửa" class="edit">

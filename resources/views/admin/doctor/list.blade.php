@@ -89,7 +89,6 @@
                                     <th>Học hàm</th>
                                     <th>Học vị</th>
                                     <th>Trạng thái</th>
-                                    <th>Người tạo</th>
                                     <th>Hoạt động</th>
                                 </tr>
                             </thead>
@@ -120,15 +119,18 @@
                                     <td>{{ $degrees[$item->degree] ?? '' }}</td>
                                     <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Tạm dừng"}}</td>
                                     <td>
-                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                    </td>
-                                    <td>
                                         <a href="{{ route('doctor.edit', $item->id) }}" title="Cập nhật" class="edit">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="{{ route('doctor.destroy', $item->id) }}" title="Xóa" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                        @if ($item->account)
+                                            <a title="Xóa" class="delete" onclick="confirmDeleteAccount({{ $item->id }})">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        @else
+                                            <a title="Xóa" class="delete" onclick="confirmDeleteDoctor({{ $item->id }})">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -166,4 +168,62 @@
             toastr.success("{{session('success')}}")
         </script>
     @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "4500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
+        </script>
+    @endif
+    <script src="{{ asset('admin/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script>
+        function confirmDeleteAccount(doctorId) {
+            Swal.fire({
+                title: 'Bác sĩ đang liên kết với tài khoản!',
+                text: 'Bạn muốn xử lý như thế nào?',
+                icon: 'warning',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonText: 'Xóa bác sĩ và tạo bác sĩ mới',
+                denyButtonText: 'Xóa cả tài khoản và bác sĩ',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `{{ url('admin/doctor/destroy/${doctorId}?action=create_new') }}`;
+                } else if (result.isDenied) {
+                    window.location.href = `{{ url('admin/doctor/destroy/${doctorId}?action=delete_account') }}`;
+                }
+            });
+        }
+        function confirmDeleteDoctor(doctorId) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa bác sĩ?',
+                text: 'Bạn sẽ không thể khôi phục lại!',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Hủy',
+                confirmButtonText: 'Đồng ý',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `{{ url('admin/doctor/destroy/${doctorId}') }}`;
+                }
+            });
+        }
+    </script>
 @endsection

@@ -82,7 +82,7 @@ Route::group(['middleware' => ['auth', 'CheckBlockedAccount', 'checkRole:admin,d
         Route::get('/destroy/{id}', [AdminMedicalSpecialtyController::class, 'destroy'])->name('destroy')->middleware('can:medical-specialty.destroy');  
         Route::get('/info-page', [AdminMedicalSpecialtyController::class, 'info_page'])->name('info-page')->middleware('can:medical-specialty.info-page');
         Route::post('/info-page-handle', [AdminMedicalSpecialtyController::class, 'info_page_handle'])->name('info-page-handle')->middleware('can:medical-specialty.info-page');
-        Route::post('/select-service-handle', [AdminMedicalSpecialtyController::class, 'select_service_handle'])->name('select-service-handle')->middleware('can:medical-specialty.info-page');
+        Route::post('/select-page-specialty-handle', [AdminMedicalSpecialtyController::class, 'select_page_specialty_handle'])->name('select-page-specialty-handle')->middleware('can:medical-specialty.info-page');
         Route::post('/search', [AdminMedicalSpecialtyController::class, 'search'])->name('search')->middleware('can:medical-specialty.info-page');
     });
    

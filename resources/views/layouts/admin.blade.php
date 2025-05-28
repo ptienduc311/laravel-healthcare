@@ -111,7 +111,7 @@
 
     <script type="module">
         import {
-            ClassicEditor, Heading, Highlight, HorizontalLine, Font, Emoji, Mention, Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline,
+            ClassicEditor, Heading, Highlight, HorizontalLine, Font, Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline,
             Indent, IndentBlock, CodeBlock, FindAndReplace, AutoLink, Link,
             Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageInsert,
             Undo , Alignment, Table, TableToolbar, List,
@@ -126,7 +126,7 @@
                 .create(element, {
                     licenseKey: 'GPL',
                     plugins: [
-                        Heading, Highlight, HorizontalLine, Font, Emoji, Mention,
+                        Heading, Highlight, HorizontalLine, Font,
                         Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline, Indent, IndentBlock,
                         CodeBlock, FindAndReplace,
                         Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageInsert,
@@ -140,7 +140,7 @@
                             'undo', 'redo', '|', 'heading', '|',
                             'bold', 'italic', 'underline','strikethrough', 'subscript', 'superscript', '|', 
                             'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                            'highlight', 'alignment', 'emoji', '|',
+                            'highlight', 'alignment', '|',
                             'link', 'insertImage', 'insertTable', '|',
                             'bulletedList', 'numberedList', '|',
                             'horizontalLine', 

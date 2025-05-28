@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('slug', 255);
+            $table->foreignId('image_icon_id')->nullable()->constrained('images')->nullOnDelete();
             $table->foreignId('image_id')->nullable()->constrained('images')->nullOnDelete();
-            $table->tinyInteger('status');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->tinyInteger('status')->default(1)->comment('1: hoạt động, 2: tạm dừng, 3: xóa');
             $table->integer('created_date_int');
             $table->timestamps();
         });

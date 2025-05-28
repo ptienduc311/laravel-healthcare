@@ -32,16 +32,11 @@
                                 {{ $page_specialty->description }}
                             </div>
                             <div class="img-description">
-                                @if ($page_specialty->image_id)
-                                    <img src="{{ $page_specialty->thumb }}" alt="Ảnh mô tả {{ $specialty->name }}">
+                                @if ($specialty->thumb)
+                                    <img src="{{ $specialty->thumb }}" alt="Ảnh mô tả {{ $specialty->name }}">
                                 @endif
                             </div>
-                            <h2 class="main-title">Cơ sở vật chất - Trang thiết bị</h2>
-                            <div class="specialist-material-desc">
-                                {!! $page_specialty->content !!}
-                            </div>
                         @endif
-                        
                         @if ($services->isNotEmpty())
                             <h2 class="main-title">Dịch vụ chính</h2>
                             <div class="specialist-service-list row">
@@ -51,7 +46,12 @@
                                         <p>{{ $item->description }}</p>
                                     </div>
                                 @endforeach
-
+                            </div>
+                        @endif
+                        @if ($page_specialty->content)
+                            <h2 class="main-title">Cơ sở vật chất - Trang thiết bị</h2>
+                            <div class="specialist-material-desc">
+                                {!! $page_specialty->content !!}
                             </div>
                         @endif
                     @else
@@ -61,28 +61,32 @@
                 <div class="list-doctor-specialty">
                     <h2 class="title-cat">Đội ngũ bác sĩ chuyên khoa</h2>
                     <div class="swiper slideDoctorSpecial">
-                        <ul class="swiper-wrapper list-featured-doctor">
-                            @foreach ($doctors as $item)
-                                <li class="swiper-slide item-info">
-                                    <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}" class="link-doctor">
-                                        <div class="avatar-doctor">
-                                            <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}">
-                                        </div>
-                                        <div class="info-nurse">
-                                            <span class="name">{{$item->name}}</span>
-                                            <span class="specialty-doctor">{{$item->specialty?->name}}</span>
-                                        </div>
-                                    </a>
-                                </li>     
-                            @endforeach
-                        </ul>
-                        @if (count($doctors) >= 3)
-                            <div class="navigation-button swiper-button-next active">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </div>
-                            <div class="navigation-button swiper-button-prev">
-                                <i class="fa-solid fa-angle-left"></i>
-                            </div>
+                        @if ($doctors->isNotEmpty())
+                            <ul class="swiper-wrapper list-featured-doctor">
+                                @foreach ($doctors as $item)
+                                    <li class="swiper-slide item-info">
+                                        <a href="/doi-ngu-chuyen-gia/{{$item->slug_name}}" class="link-doctor">
+                                            <div class="avatar-doctor">
+                                                <img src="{{ $item->avatar_url }}" alt="Ảnh {{$item->name}}">
+                                            </div>
+                                            <div class="info-nurse">
+                                                <span class="name">{{$item->name}}</span>
+                                                <span class="specialty-doctor">{{$item->specialty?->name}}</span>
+                                            </div>
+                                        </a>
+                                    </li>     
+                                @endforeach
+                            </ul>
+                            @if (count($doctors) > 3)
+                                <div class="navigation-button swiper-button-next active">
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </div>
+                                <div class="navigation-button swiper-button-prev">
+                                    <i class="fa-solid fa-angle-left"></i>
+                                </div>
+                            @endif
+                        @else
+                            <h3 class="error">Chuyên khoa chưa có bác sĩ.</h3>
                         @endif
                     </div>
                 </div>

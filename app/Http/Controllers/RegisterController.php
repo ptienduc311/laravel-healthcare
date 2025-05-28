@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\SendMailRegister;
 use App\Models\Doctor;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,13 +81,13 @@ class RegisterController extends Controller
                 $user->email_verified_at = $currentDateTime;
                 $user->status = 1;
                 $user->save();
-                // UserRole::create([
-                //     'role_id' => 2,
-                //     'user_id' => $user->id
-                // ]);
-                // Member::create([
-                //     'user_id' => $user->id
-                // ]);
+                $role = Role::where('slug_role', 'benh-nhan')->first();
+                if ($role) {
+                    $user->roles()->attach($role->id, [
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
                 return redirect()->route('login')->with('success', 'Xác nhận tài khoản thành công!!!');
             } else {
                 echo "<script>

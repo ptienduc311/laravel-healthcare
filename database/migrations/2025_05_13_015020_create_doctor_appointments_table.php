@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('doctor_id')->nullable()->constrained('doctors')->nullOnDelete();
             $table->integer('day_examination')->nullable();
             $table->integer('type')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('created_date_int');
             $table->timestamps();
         });

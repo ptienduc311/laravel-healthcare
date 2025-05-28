@@ -7,7 +7,6 @@ use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -19,7 +18,7 @@ class AdminPostController extends Controller
             ->limit(15)
             ->get();
 
-        $query = Post::with(['image', 'category', 'user']);
+        $query = Post::with(['image', 'category']);
 
         if ($request->query('category_id')) {
             $query->where('category_id', $request->category_id);
@@ -33,7 +32,7 @@ class AdminPostController extends Controller
             $query->where('title', 'like', '%' . $request->keyword . '%');
         }
 
-        $posts = $query->orderByDesc('created_date_int')->paginate(10)->withQueryString();
+        $posts = $query->orderByDesc('created_date_int')->paginate(5)->withQueryString();
 
         return view('admin.post.list', compact('categories', 'posts'));
     }
@@ -80,13 +79,11 @@ class AdminPostController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
-            $created_by = Auth::id();
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
-                'type' => 1,
-                'created_by'=> $created_by
+                'type' => 1
             ]);
             $image_id = $key->id;
         }
@@ -98,7 +95,6 @@ class AdminPostController extends Controller
         $status = $request->has('status') ? 1 : 2;
         $is_outstanding = $request->has('is_outstanding') ? 1 : 2;
         $category_id = $request->input('category_id');
-        $created_by = Auth::id();
         Post::create([
             'title' => $title,
             'slug' => $slug,
@@ -108,7 +104,6 @@ class AdminPostController extends Controller
             'is_outstanding' => $is_outstanding,
             'category_id' => $category_id,
             'image_id' => $image_id,
-            'created_by' => $created_by,
             'created_date_int' => time()
         ]);
         return redirect('admin/post')->with('success', 'Đã thêm mới thành công');
@@ -163,14 +158,12 @@ class AdminPostController extends Controller
             $name = time() . '_' . $image->getClientOriginalName();
             $size = $image->getSize();
             $path = $image->storeAs('uploads', $name, 'public');
-            $created_by = Auth::id();
 
             $key = Image::create([
                 'name' => $name,
                 'src' => $path,
                 'size' => $size,
                 'type' => 1,
-                'created_by'=> $created_by
             ]);
             $image_id = $key->id;
 

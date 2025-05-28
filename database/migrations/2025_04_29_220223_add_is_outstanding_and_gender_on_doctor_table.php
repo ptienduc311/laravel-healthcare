@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('doctors', function (Blueprint $table) {
-            $table->tinyInteger('is_outstanding')->default(2)->after('status')->comment('1 là nổi bật, 2 là không nổi bật');
-            $table->tinyInteger('gender')->nullable()->after('image_id')->comment('1 là nam 2 là nữ');
+            $table->tinyInteger('is_outstanding')->default(2)->after('status')->comment('1: nổi bật, 2: không nổi bật');
+            $table->tinyInteger('gender')->nullable()->after('image_id')->comment('1: nam, 2: nữ');
         });
     }
 

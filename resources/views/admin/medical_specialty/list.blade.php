@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+ @extends('layouts.admin')
 
 @section('title', 'Danh sách chuyên khoa y tế')
 @section('content')
@@ -57,7 +57,6 @@
                                     <th>Ảnh icon chuyên khoa</th>
                                     <th>Ảnh chuyên khoa</th>
                                     <th>Trạng thái</th>
-                                    <th>Người tạo</th>
                                     <th>Hoạt động</th>
                                 </tr>
                             </thead>
@@ -72,9 +71,6 @@
                                         <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}" class="thumb">
                                     </td>
                                     <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                    <td>
-                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                    </td>
                                     <td>
                                         <a href="{{ route('medical-specialty.edit', $item->id) }}" title="Sửa" class="edit">
                                             <i class="fa fa-pencil"></i>
@@ -116,6 +112,28 @@
             }
 
             toastr.success("{{session('success')}}")
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "10000",
+                "timeOut": "4500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            toastr.error("{{session('error')}}")
         </script>
     @endif
 @endsection

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Image extends Model
 {
     protected $fillable = [
-        'name', 'src', 'size', 'type', 'created_by', 'created_date_int'
+        'name', 'src', 'size', 'type', 'created_date_int'
     ];
 
     public function post(): HasOne{

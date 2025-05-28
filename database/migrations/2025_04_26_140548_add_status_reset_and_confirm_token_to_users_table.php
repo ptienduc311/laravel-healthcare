@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('status')->nullable()->after('password');
+            $table->tinyInteger('status')->default(1)->comment('1: hoạt động, 2: bị chặn')->nullable()->after('password');
             $table->string('reset_token')->nullable()->after('remember_token');
             $table->string('confirm_token')->nullable()->after('reset_token'); 
         });

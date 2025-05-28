@@ -8,17 +8,17 @@
         <div class="swiper swiperSlider">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <img src="{{asset('assets/images/demo1.jpg')}} " />
+                    <img src="{{asset('assets/images/slider1.png')}} " />
                 </div>
                 <div class="swiper-slide">
-                    <img src="{{asset('assets/images/demo2.png')}} " />
+                    <img src="{{asset('assets/images/slider2.png')}} " />
                 </div>
                 <div class="swiper-slide">
-                    <img src="{{asset('assets/images/demo3.png')}} " />
+                    <img src="{{asset('assets/images/slider3.png')}} " />
                 </div>
-                {{-- <div class="swiper-slide">
-                    <img src="{{asset('assets/images/demo4.jpg')}} " />
-                </div> --}}
+                <div class="swiper-slide">
+                    <img src="{{asset('assets/images/slider4.jpg')}} " />
+                </div>
             </div>
             <div class="swiper-pagination"></div>
 
@@ -38,8 +38,8 @@
                     <div class="swiper-wrapper list-posts">
                         @foreach ($posts as $item)
                             <div class="swiper-slide post-item">
-                                <div class="post-thumbnail">
-                                    <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}">
+                                <div class="post-item-photo">
+                                    <a href="/tin-tuc/{{ $item->slug }}-{{ $item->id }}" class="post-image-container">
                                         <img src="{{ Storage::url($item->image?->src) }}" alt="Ảnh {{$item->title}}">
                                     </a>
                                 </div>

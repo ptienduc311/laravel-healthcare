@@ -49,6 +49,11 @@ class AdminMakeAppointmentController extends Controller
                     ->where('name', 'like', '%' . $request->keyword . '%');
             });
         })
+        ->whereIn('doctor_id', function ($query) {
+            $query->select('id')
+                ->from('doctors')
+                ->whereIn('status', [1, 2]);
+        })
         ->groupBy('doctor_id', 'day_examination')
         ->orderByRaw("
             CASE 
@@ -56,6 +61,7 @@ class AdminMakeAppointmentController extends Controller
                 ELSE 1 
             END
         ")
+        ->where('status', 1)
         ->orderByDesc('created_date_int')
         ->paginate(10)->withQueryString();;
 
@@ -74,9 +80,9 @@ class AdminMakeAppointmentController extends Controller
             if (!$doctorId) {
                 return view('admin.appointment.add', compact('specialties', 'isAdmin'));
             }
-            $doctor = Doctor::findOrFail($doctorId);
+            $doctor = Doctor::where('id', $doctorId)->whereIn('status', [1, 2])->firstOrFail();
         } else {
-            $doctor = Doctor::where('user_id', Auth::id())->firstOrFail();
+            $doctor = Doctor::where('user_id', $user->id)->whereIn('status', [1, 2])->firstOrFail();
         }
 
         return view('admin.appointment.add', compact('doctor', 'specialties', 'isAdmin'));
@@ -115,7 +121,7 @@ class AdminMakeAppointmentController extends Controller
             return redirect()->back()->withErrors(['doctor_id' => 'Bác sĩ đã bị vô hiệu hóa.'])->withInput();
         }
 
-        $today = Carbon::today()->startOfDay();
+        $today = Carbon::today();
         $day_examination = Carbon::createFromFormat('d-m-Y', $request->day_examination)->startOfDay();
         if ($day_examination->lt($today)) {
             return redirect()->back()->withErrors(['day_examination' => 'Không được chọn ngày trong quá khứ.'])->withInput();
@@ -127,14 +133,12 @@ class AdminMakeAppointmentController extends Controller
             return redirect()->back()->with('error', 'Đã có lịch khám của ngày ' . $request->day_examination);
         }
 
-        $created_by = Auth::id();
         $type = $request->input('type');
 
         DoctorAppointments::create([
             'doctor_id' => $doctor->id,
             'day_examination' => $day_examination_int,
             'type' => $type,
-            'created_by' => $created_by,
             'created_date_int' => time(),
         ]);
 
@@ -144,7 +148,6 @@ class AdminMakeAppointmentController extends Controller
                 'hour_examination' => $hour,
                 'day_examination' => $day_examination_int,
                 'is_appointment' => 2,
-                'created_by' => $created_by,
                 'created_date_int' => time(),
             ]);
         }
@@ -154,7 +157,7 @@ class AdminMakeAppointmentController extends Controller
 
     public function edit(string $doctorId, string $date)
     {
-        $doctor = Doctor::findOrFail($doctorId);
+        $doctor = Doctor::where('id', $doctorId)->whereIn('status', [1, 2])->firstOrFail();
         $appointments = DoctorAppointments::where('doctor_id', $doctorId)->where('day_examination', $date)->first();
 
         if(!$appointments){
@@ -207,7 +210,7 @@ class AdminMakeAppointmentController extends Controller
         }
 
         //Kiểm tra lịch hẹn cũ không
-        $today = Carbon::today()->startOfDay();;
+        $today = Carbon::today();
         $day_examination_check = Carbon::createFromFormat('d-m-Y', $request->day_examination)->startOfDay();
         if ($day_examination_check->lt($today)) {
             return redirect()->back()->with('error', 'Không được cập nhật lịch hẹn cũ!');
@@ -222,6 +225,7 @@ class AdminMakeAppointmentController extends Controller
         $newHours = $request->input('hour_examination');
         $existingHours = Appointment::where('doctor_id', $doctorId)
             ->where('day_examination', $date)
+            ->where('status', 1)
             ->pluck('hour_examination')
             ->toArray();
 
@@ -230,9 +234,10 @@ class AdminMakeAppointmentController extends Controller
         $type = $request->input('type');
         // dd($removedHours, $hoursAdd);
 
+        //Nếu giờ thay đổi có lịch hẹn
         if($removedHours){
             $appointmentsConfirm = Appointment::where('doctor_id', $doctorId)
-                ->where('day_examination', $date)
+                ->where('day_examination', $date)->where('status', 1)
                 ->whereIn('hour_examination', $removedHours)
                 ->where('is_appointment', 1)
                 ->get();
@@ -256,8 +261,6 @@ class AdminMakeAppointmentController extends Controller
             }
         }
 
-        $created_by = Auth::id();
-
         DoctorAppointments::where('doctor_id', $doctor->id)
             ->where('day_examination', $day_examination)
             ->update([
@@ -275,7 +278,6 @@ class AdminMakeAppointmentController extends Controller
                 'hour_examination' => $hour,
                 'day_examination' => $day_examination,
                 'is_appointment' => 2,
-                'created_by' => $created_by,
                 'created_date_int' => time(),
             ]);
         }
@@ -285,24 +287,48 @@ class AdminMakeAppointmentController extends Controller
 
     public function destroy(string $doctorId, string $date)
     {
+        $todayTimestamp = Carbon::today()->timestamp;
+
+        // Lấy tất cả lịch khám đã có lịch hẹn
         $bookAppointments = Appointment::where('doctor_id', $doctorId)
             ->where('day_examination', $date)
-            ->where('is_appointment', 1)
+            ->where('is_appointment', 1)->where('status', 1)
             ->get();
 
-        if ($bookAppointments) {
-            $hoursAppointment = $bookAppointments->pluck('hour_examination')->toArray();
-            $appointmentIds = $bookAppointments->pluck('id')->toArray();
-            return redirect()
-                    ->back()
-                    ->with([
-                        'confirm_remove' => true,
-                        'doctorId' => $doctorId,
-                        'date' => $date,
-                        'hoursAppointment' => $hoursAppointment,
-                        'appointmentIds' => $appointmentIds,
-                    ]);
+        $appointmentIds = $bookAppointments->pluck('id')->toArray();
+        $hoursAppointment = $bookAppointments->pluck('hour_examination')->toArray();
+
+        //Lịch khám trong quá khứ
+        if ($date < $todayTimestamp) {
+            if (!empty($appointmentIds)) {
+                Appointment::where('doctor_id', $doctorId)
+                ->where('day_examination', $date)
+                ->whereNotIn('id', $appointmentIds)
+                ->delete();
+                Appointment::whereIn('id', $appointmentIds)->update([
+                    'status' => 2,
+                ]);
+            } else {
+                Appointment::where('doctor_id', $doctorId)
+                    ->where('day_examination', $date)
+                    ->delete();
+            }
+            DoctorAppointments::where('doctor_id', $doctorId)
+                ->where('day_examination', $date)
+                ->delete();
+            return redirect()->back()->with('success', 'Xóa lịch khám thành công.');
         }
+
+        if (!empty($appointmentIds)) {
+            return redirect()->back()->with([
+                'confirm_remove' => true,
+                'doctorId' => $doctorId,
+                'date' => $date,
+                'hoursAppointment' => $hoursAppointment,
+                'appointmentIds' => $appointmentIds,
+            ]);
+        }
+
         Appointment::where('doctor_id', $doctorId)
             ->where('day_examination', $date)
             ->delete();
@@ -332,7 +358,7 @@ class AdminMakeAppointmentController extends Controller
         }
 
         $appointments = Appointment::where('doctor_id', $request->doctor_id)
-            ->where('day_examination', $timestamp)
+            ->where('day_examination', $timestamp)->where('status', 1)
             ->get(['hour_examination', 'is_appointment']);
 
         $formattedAppointments = $appointments->map(function ($item) {
@@ -360,7 +386,6 @@ class AdminMakeAppointmentController extends Controller
         $hoursAdd = $request->input('hoursAdd', []);
         $hoursAppointment = $request->hoursAppointment;
         $appointmentIds = $request->appointmentIds;
-        $created_by = Auth::id();
 
         $site = Site::first();
         $email_web = $site->email;
@@ -370,21 +395,23 @@ class AdminMakeAppointmentController extends Controller
         //Thông báo hủy qua email bệnh nhân
         foreach($appointmentIds as $key => $item){
             $book = Book::where('appointment_id', $item)->where('doctor_id', $doctorId)->whereIn('status', [1, 2])->first();
-            $book->status = 3;
-            $book->save();
-            $data = [
-                'name' => $book->name,
-                'book_code' => $book->book_code,
-                'time_examination' => $hoursAppointment[$key],
-                'doctor_name' => $book->doctor?->name,
-                'specialty' => $book->specialty?->name,
-                'reason' => "Bác sĩ thay đổi lịch làm việc.",
-                'email_web' => $email_web,
-                'phone' => $phone,
-                'hotline' => $hotline
-            ];
-            // dd($book);
-            Mail::to($book->email)->send(new SendMailCancelBook($data));
+            if($book){
+                $book->status = 3;
+                $book->save();
+                $data = [
+                    'name' => $book->name,
+                    'book_code' => $book->book_code,
+                    'time_examination' => $hoursAppointment[$key],
+                    'doctor_name' => $book->doctor?->name,
+                    'specialty' => $book->specialty?->name,
+                    'reason' => "Bác sĩ thay đổi lịch làm việc.",
+                    'email_web' => $email_web,
+                    'phone' => $phone,
+                    'hotline' => $hotline
+                ];
+                // dd($book);
+                Mail::to($book->email)->send(new SendMailCancelBook($data));
+            }
         }
 
         //Cập nhật lịch hẹn
@@ -395,7 +422,9 @@ class AdminMakeAppointmentController extends Controller
         Appointment::where('doctor_id', $doctorId)
         ->where('day_examination', $day_examination)
         ->whereNotIn('hour_examination', $newHours)
+        ->whereNotIn('id', $appointmentIds)
         ->delete();
+        Appointment::whereIn('id', $appointmentIds)->update(['status' => 2]);
 
         foreach ($hoursAdd as $hour) {
             Appointment::create([
@@ -403,7 +432,6 @@ class AdminMakeAppointmentController extends Controller
                 'hour_examination' => $hour,
                 'day_examination' => $day_examination,
                 'is_appointment' => 2,
-                'created_by' => $created_by,
                 'created_date_int' => time(),
             ]);
         }
@@ -425,26 +453,29 @@ class AdminMakeAppointmentController extends Controller
         //Thông báo hủy qua email bệnh nhân
         foreach($appointmentIds as $key => $item){
             $book = Book::where('appointment_id', $item)->where('doctor_id', $doctorId)->whereIn('status', [1, 2])->first();
-            $book->status = 3;
-            $book->save();
-            $data = [
-                'name' => $book->name,
-                'book_code' => $book->book_code,
-                'time_examination' => $hoursAppointment[$key],
-                'doctor_name' => $book->doctor?->name,
-                'specialty' => $book->specialty?->name,
-                'reason' => "Bác sĩ thay đổi lịch làm việc.",
-                'email_web' => $email_web,
-                'phone' => $phone,
-                'hotline' => $hotline
-            ];
-            // dd($book);
-            Mail::to($book->email)->send(new SendMailCancelBook($data));
+            if($book){
+                $book->status = 3;
+                $book->save();
+                $data = [
+                    'name' => $book->name,
+                    'book_code' => $book->book_code,
+                    'time_examination' => $hoursAppointment[$key],
+                    'doctor_name' => $book->doctor?->name,
+                    'specialty' => $book->specialty?->name,
+                    'reason' => "Bác sĩ thay đổi lịch làm việc.",
+                    'email_web' => $email_web,
+                    'phone' => $phone,
+                    'hotline' => $hotline
+                ];
+                Mail::to($book->email)->send(new SendMailCancelBook($data));
+            }
         }
 
         Appointment::where('doctor_id', $doctorId)
             ->where('day_examination', $day_examination)
+            ->whereNotIn('id', $appointmentIds)
             ->delete();
+        Appointment::whereIn('id', $appointmentIds)->update(['status' => 2]);
 
         DoctorAppointments::where('doctor_id', $doctorId)
             ->where('day_examination', $day_examination)

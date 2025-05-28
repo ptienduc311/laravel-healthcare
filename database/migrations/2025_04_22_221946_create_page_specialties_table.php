@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('page_specialties', function (Blueprint $table) {
             $table->id();
             $table->text('description')->nullable();
-            $table->foreignId('image_id')->nullable()->constrained('images')->nullOnDelete();
             $table->text('content')->nullable();
             $table->foreignId('medical_specialty_id')->nullable()->constrained('medical_specialties')->nullOnDelete();
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('created_date_int');
             $table->timestamps();
         });

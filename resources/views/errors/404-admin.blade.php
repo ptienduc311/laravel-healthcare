@@ -10,9 +10,8 @@
 <body>
     <div class="page-404">
         <div class="page-404-content">
-            <img class="img-fluid" src="{{ asset('assets/images/404.gif') }}">
+            <img class="img-fluid" src="{{ asset('assets/images/404-admin.png') }}">
             <h3>Không tìm thấy trang bạn yêu cầu.</h3>
-            <!-- <p>Vui lòng thử trang khác hoặc liên hệ trực tiếp với HealthCare nhé!</p> -->
             <a href="{{ route('admin.dashboard') }}">Quay lại trang chủ</a>
         </div>
     </div>

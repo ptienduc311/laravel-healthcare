@@ -77,7 +77,8 @@ class ApiController extends Controller
             }
     
             $appointments = Appointment::where('doctor_id', $doctorId)
-                ->where('day_examination', $timestamp)
+                ->where('day_examination', $timestamp)->where('status', 1)
+                ->orderBy('hour_examination')
                 ->get(['id', 'hour_examination', 'is_appointment']);
     
             return response()->json([

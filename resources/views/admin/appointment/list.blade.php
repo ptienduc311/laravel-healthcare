@@ -96,7 +96,7 @@
                                     </td>
                                     <td>{{ date('d/m/Y', $item->day_examination) }}</td>
                                     <td>
-                                        <span class="created_by" data-toggle="tooltip" title="{{ $item->hours }}">
+                                        <span class="cursor-pointer" data-toggle="tooltip" title="{{ $item->hours }}">
                                             {{ $item->total_appointments }} lịch khám
                                         </span>
                                     </td>
@@ -168,7 +168,7 @@
                 showLoaderOnConfirm: false
             }, function(isConfirm) {
                 if (isConfirm) {
-                    // console.log(hoursAppointment, appointmentIds, date, doctorId)
+                    console.log(hoursAppointment, appointmentIds, date, doctorId)
                     const $btn = $('.sweet-alert .confirm');
                     $btn.addClass('ladda-button')
                     const ladda = Ladda.create($btn[0]);

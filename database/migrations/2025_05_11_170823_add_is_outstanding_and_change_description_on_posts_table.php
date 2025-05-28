@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->tinyInteger('is_outstanding')->default(2)->after('status')->comment('1 là nổi bật, 2 là không nổi bật');
+            $table->tinyInteger('is_outstanding')->default(2)->after('status')->comment('1: nổi bật, 2: không nổi bật');
             $table->text('description')->nullable()->change();
         });
     }

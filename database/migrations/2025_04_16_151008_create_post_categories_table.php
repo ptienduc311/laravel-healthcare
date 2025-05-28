@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('slug', 255);
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(1)->comment('1: hoạt động, 2: tạm dừng');
             $table->integer('created_date_int');
             $table->timestamps();
         });

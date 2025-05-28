@@ -68,9 +68,9 @@ menu_close.addEventListener("click", () => {
 const swiper = new Swiper('.swiperSlider', {
     direction: 'horizontal',
     loop: true, 
-    autoplay: {
-        delay: 5000,
-    },
+    // autoplay: {
+    //     delay: 5000,
+    // },
 
     pagination: {
         el: '.swiper-pagination',

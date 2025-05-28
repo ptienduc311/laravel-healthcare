@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone', 255)->nullable()->after('email');
             $table->string('birth', 255)->nullable()->after('phone');
-            $table->tinyInteger('gender')->default(1)->after('birth')->comment('1 là nam 2 là nữ');
+            $table->tinyInteger('gender')->default(1)->after('birth')->comment('1: nam 2: nữ');
             $table->string('address', 255)->nullable()->after('gender');
             $table->foreignId('province_id')->nullable()->after('gender')->constrained('provinces')->nullOnDelete();
             $table->foreignId('district_id')->nullable()->after('province_id')->constrained('districts')->nullOnDelete();

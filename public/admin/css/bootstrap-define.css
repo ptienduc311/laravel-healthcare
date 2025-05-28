@@ -32,6 +32,9 @@
 .flex-grow-1 {
     flex-grow: 1 !important;
 }
+.flex-column {
+    flex-direction: column !important;
+}
 .align-items-sm-center {
     align-items: center !important;
 }

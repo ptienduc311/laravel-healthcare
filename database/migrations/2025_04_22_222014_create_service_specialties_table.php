@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name', 255);
             $table->text('description')->nullable();
             $table->foreignId('medical_specialty_id')->nullable()->constrained('medical_specialties')->nullOnDelete();
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('created_date_int');
             $table->timestamps();
         });

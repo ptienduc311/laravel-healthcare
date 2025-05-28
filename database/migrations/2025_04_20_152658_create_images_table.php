@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('src', 120);
             $table->integer('size');
             $table->tinyInteger('type');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

@@ -66,7 +66,6 @@
                                     <th colspan="2">Tiêu đề</th>
                                     <th>Danh mục</th>
                                     <th>Trạng thái</th>
-                                    <th>Người tạo</th>
                                     <th>Hoạt động</th>
                                 </tr>
                             </thead>
@@ -81,9 +80,6 @@
                                         <span class="{{ $item->category?->status == 1 ? 'active-cat' : 'inactive-cat' }}">{{$item->category?->name}}</span>
                                     </td>
                                     <td style="color:{{$item->status == 1 ? "green" : "red"}}">{{$item->status == 1 ? "Hoạt động" : "Không hoạt động"}}</td>
-                                    <td>
-                                        <span class="created_by" data-toggle="tooltip" title="{{$item->user?->roles?->pluck('name')->join(', ')}}">{{$item->user?->name}}</span>
-                                    </td>
                                     <td>
                                         <a href="{{ route('post.edit', $item->id) }}" title="Sửa" class="edit">
                                             <i class="fa fa-pencil"></i>

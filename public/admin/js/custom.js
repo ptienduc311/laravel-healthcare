@@ -61,6 +61,7 @@ $(document).ready(function () {
         let doctorName = $('#doctor-name').val().trim();
 
         $('.appointment-form').attr('action', `#`);
+        $('#selected-doctor-name').text('[Chưa chọn]');
         $('#submit-button').prop('disabled', true);
         if($('#doctor-id')){
             $('#doctor-id').val('');

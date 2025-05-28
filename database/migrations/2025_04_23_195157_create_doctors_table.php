@@ -22,8 +22,7 @@ return new class extends Migration
             $table->tinyInteger('degree')->nullable();
             $table->text('regency')->nullable();
             $table->text('introduce')->nullable();
-            $table->tinyInteger('status');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->tinyInteger('status')->default(1)->comment('1: hoạt động, 2: tạm dừng, 3: xóa');
             $table->integer('created_date_int');
             $table->timestamps();
         });

@@ -10,15 +10,11 @@ use Illuminate\Support\Facades\Storage;
 class Doctor extends Model
 {
     protected $fillable = [
-        'name', 'slug_name', 'user_id', 'image_id', 'gender', 'address', 'email', 'phone', 'current_workplace', 'specialty_id', 'experience', 'academic_title', 'degree', 'regency', 'introduce', 'status', 'is_outstanding', 'created_by', 'created_date_int'
+        'name', 'slug_name', 'user_id', 'image_id', 'gender', 'address', 'email', 'phone', 'current_workplace', 'specialty_id', 'experience', 'academic_title', 'degree', 'regency', 'introduce', 'status', 'is_outstanding', 'created_date_int'
     ];
 
     public function image(): BelongsTo{
         return $this->BelongsTo(Image::class, 'image_id', 'id');
-    }
-
-    public function user(): BelongsTo{
-        return $this->BelongsTo(User::class, 'created_by', 'id');
     }
 
     public function account() :BelongsTo
@@ -46,6 +42,12 @@ class Doctor extends Model
     {
         return $this->hasMany(Appointment::class, 'doctor_id', 'id');
     }
+
+    public function books(): HasMany
+    {
+        return $this->hasMany(Book::class, 'doctor_id', 'id');
+    }
+
 
     //Accessor
     public function getAvatarUrlAttribute()
